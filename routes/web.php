@@ -7,11 +7,16 @@ use App\Http\Controllers\Home\FrondController;
 use App\Http\Controllers\Admin\DashboardController;
 
 use App\Http\Controllers\Admin\Configurar\RolController;
+use App\Http\Controllers\Admin\Configurar\ActaController;
 use App\Http\Controllers\Admin\Configurar\ModuloController;
 use App\Http\Controllers\Admin\Configurar\EmpresaController;
 use App\Http\Controllers\Admin\Configurar\FuncionalidadController;
 use App\Http\Controllers\Admin\Configurar\ConfiguracionCorreoController;
 use App\Http\Controllers\Admin\Configurar\NotificacionCorreoController;
+
+use App\Http\Controllers\Admin\Gestionar\UsuarioController;
+use App\Http\Controllers\Admin\Gestionar\PerfilUsuarioController;
+
 
 Route::get('/', [FrondController::class, 'index']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
@@ -55,6 +60,20 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
 
         Route::get('/empresa/list', [EmpresaController::class, 'index']);//->middleware(['security:admin/configurar/empresa','verifySource']);
         Route::post('/empresa/salve', [EmpresaController::class, 'salve']);
+
+        Route::get('/acta/list', [ActaController::class, 'index']);//->middleware(['security:admin/configurar/acta','verifySource']);
+        Route::post('/acta/salve', [ActaController::class, 'salve']);
+        Route::post('/acta/destroy', [ActaController::class, 'destroy']);
+
+        Route::post('/usuario/list', [UsuarioController::class, 'index']);//->middleware(['security:admin/gestionar/usuario','verifySource']);
+        Route::post('/usuario/list/datos', [UsuarioController::class, 'datos']);
+        Route::post('/usuario/salve', [UsuarioController::class, 'salve']);
+        Route::post('/usuario/destroy', [UsuarioController::class, 'destroy']);
+
+        Route::get('/usuario/data', [PerfilUsuarioController::class, 'index']);
+        Route::get('/usuario/consultar/perfil', [PerfilUsuarioController::class, 'perfil']);
+        Route::post('/usuario/actualizar/perfil', [PerfilUsuarioController::class, 'updatePerfil']);
+        Route::post('/usuario/actualizar/password', [PerfilUsuarioController::class, 'updatePassword']);
 
     });
 

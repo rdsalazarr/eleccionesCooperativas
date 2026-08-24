@@ -41,7 +41,7 @@ App\Http\Controllers\Home
 
 php artisan make:controller Home\FrondController
 php artisan make:controller Admin\DashboardController
-
+php artisan make:controller Admin\Configurar\ActaController
 
 php artisan migrate:fresh
 php artisan db:seed

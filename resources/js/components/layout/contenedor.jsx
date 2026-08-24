@@ -15,12 +15,17 @@ import Loader from "./loader";
 
 import Welcome from "../admin/welcome";
 import EnConstruccion from "../admin/enConstruccion";
-import MiPerfil from "../admin/enConstruccion";
+
+import Acta from "../admin/configurar/acta/list";
 import Menu from "../admin/configurar/menu/list";
 import Roles from "../admin/configurar/rol/list";
 import Correo from "../admin/configurar/correo/list";
 import Empresa from "../admin/configurar/empresa/list";
-import Acta from "../admin/configurar/acta/list";
+import Usuario from "../admin/gestionar/usuario/list";
+import MiPerfil from "../admin/gestionar/usuario/miPerfil";
+
+
+
 
 /*
 import Tipos from "../admin/gestionar/tipos/list";*/
@@ -159,7 +164,7 @@ const componenteMenu = [
     {   nombre: 'Gestionar',
         icono : 'content_paste_search',
         itemMenu: [
-            {ruta : 'admin/gestionar/usuario',     menu: 'Usuario',          icono : 'account_circle', componente : <EnConstruccion /> },
+            {ruta : 'admin/gestionar/usuario',     menu: 'Usuario',          icono : 'account_circle', componente : <Usuario /> },
             {ruta : 'admin/gestionar/tipos',       menu: 'Tipos de Órganos', icono : 'schema',         componente : <EnConstruccion /> },
             {ruta : 'admin/gestionar/informacion', menu: 'Órganos',          icono : 'account_box',    componente : <EnConstruccion /> },
             

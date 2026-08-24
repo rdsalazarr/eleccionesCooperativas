@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import TablaGeneral from '../../../layout/tablaGeneral';
 import {ShowSnackbar} from '../../../layout/snackBar';
-import { Box, Typography, Card} from '@mui/material';
-import { ModalDefault} from '../../../layout/modal';
+import { ModalDefault } from '../../../layout/modal';
+import { Box, Card, Typography} from '@mui/material';
 import {LoaderModal} from "../../../layout/loader";
 import Eliminar from '../../../layout/modalFijas';
 import instance from '../../../layout/instance';
@@ -19,12 +19,12 @@ export default function List(){
     }
 
     const modales = [
-                        <Frm tipo={'I'} />,
-                        <Frm data={modal.data} tipo={'U'} />,
-                        <Eliminar id={modal?.data?.actaid || null} ruta={'/admin/acta/destroy'} cerrarModal={cerrarModal} />
+                        <Frm tipo={'I'}  />,
+                        <Frm data={modal.data} tipo={'U'} /> ,
+                        <Eliminar id={modal?.data?.usuaid || null} ruta={'/admin/usuario/destroy'} cerrarModal={cerrarModal} />
                     ];
 
-    const tituloModal = ['Nueva acta','Editar acta',''];
+    const tituloModal = ['Nuevo usuario','Editar usuario',''];
 
     const edit = (data, tipo) =>{
         setModal({open: true, vista: tipo, data:data, titulo: tituloModal[tipo], tamano: (tipo === 2 ) ? 'smallFlot' :  'mediumFlot'});
@@ -32,10 +32,10 @@ export default function List(){
 
     const inicio = () =>{
         setLoader(true);
-        instance.get('/admin/acta/list').then(res=>{
+        instance.post('/admin/usuario/list').then(res=>{
             (res.success) ? setData(res.data) : ShowSnackbar(res.message, 'error');
             setLoader(false);
-        }) 
+        })
     }
 
     useEffect(()=>{inicio();}, []);
@@ -47,32 +47,31 @@ export default function List(){
     return (
         <Box>
             <Box>
-                <Typography component={'h2'} className={'titleGeneral'}>Gestión de acta</Typography>
+                <Typography component={'h2'} className={'titleGeneral'}>Gestión de usuarios</Typography>
             </Box>
             <Card className={'cardContainer'}>
                 <Box sx={{maxHeight: '35em', overflow:'auto'}} sm={{maxHeight: '35em', overflow:'auto'}}>
                     <TablaGeneral
                         datos={data}
-                        titulo={['Título','Contenido','Actualizar','Eliminar']}
-                        ver={["actatitulo","actacontenido"]}
+                        titulo={['Documento','Nombre','Apellidos', 'Correo', 'Nick de usuario', 'Agencia', 'Bloqueado','Cambiar contraseña','Activo','Actualizar','Eliminar']}
+                        ver={["usuadocumento","usuanombre","usuaapellidos","usuaemail","usuanick","agennombre","usuarioBloqueado","cambiarPassword","estado"]}
                         accion={[
                             {tipo: 'T', icono : 'add',    color: 'green',  funcion : (data)=>{edit(data,0)} },
                             {tipo: 'B', icono : 'edit',   color: 'orange', funcion : (data)=>{edit(data,1)} },
                             {tipo: 'B', icono : 'delete', color: 'red',    funcion : (data)=>{edit(data,2)} },
                         ]}
-                        funciones={{orderBy: false,search: false, pagination:false}}
+                        funciones={{orderBy: true,search: true, pagination:true}}
                     />
                 </Box>
+
+                <ModalDefault
+                    title   = {modal.titulo}
+                    content = {modales[modal.vista]}
+                    close   = {() =>{cerrarModal(), inicio();}}
+                    tam     = {modal.tamano}
+                    abrir   = {modal.open}
+                />
             </Card>
-
-            <ModalDefault
-                title   = {modal.titulo}
-                content = {modales[modal.vista]}
-                close   = {() =>{cerrarModal(), inicio();}}
-                tam     = {modal.tamano}
-                abrir   = {modal.open}
-            />
-
         </Box>
     )
 }
