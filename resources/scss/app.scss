@@ -1,0 +1,439 @@
+$colorTituloAcceso: var(--colorTituloAcceso);
+$colorTextoAcceso: var(--colorTextoAcceso);
+$fuentePrincipal: var(--fuentePrincipal);
+$colorSecundario: var(--colorSecundario);
+$colorPrincipal:  var(--colorPrincipal);
+$colorTerciario:  var(--colorTerciario);
+$colorBlanco:     var(--colorBlanco);
+$colorNegro:      var(--colorNegro);
+$grisOscuro:      var(--grisOscuro);
+$colorFondo:      var(--colorFondo);
+$fondoLogin:      var(--fondoLogin);
+$rojoOscuro:      var(--rojoOscuro);
+$grisClaro:       var(--grisClaro);
+$azul-900:        var(--azul-900);
+$azul-800:        var(--azul-800);
+$azul-700:        var(--azul-700);
+$azul-600:        var(--azul-600);
+$azul-400:        var(--azul-400);
+$azul-200:        var(--azul-200);
+$azul-100:        var(--azul-100);
+$azul-50:         var(--azul-50);
+$transitionSmooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.container{
+  width: 90%;
+  margin: 0 auto;
+}
+
+.tituloContenido{
+  font-family: Oswald;
+  color: $grisOscuro;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-align: center;
+  font-weight: bold;
+}
+
+.infoContenido{
+  color: $grisOscuro;
+  text-align: justify;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.cardPrincipal{
+  width: 22em;
+  margin: 2em auto;
+  border-top: 5px solid $colorSecundario;
+  border-radius: 10px !important;
+  > div{
+    background: $fondoLogin;
+  }
+  .titleCard{
+    margin: 0.5em;
+    text-align: center;
+    color: $colorSecundario; 
+    text-shadow: -0.03em 0.03em $colorTerciario, -0.08em 0.08em #e7dcd7;
+    font-weight: bold;
+    font-family: $fuentePrincipal;
+    margin-bottom: 0.5em;
+  }
+}
+
+.inputIcon{
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 1.2em;
+  position: relative;
+  div{
+    width: 100%;
+  }
+  > div:hover ~ .icono {
+    margin-bottom: 2px;
+  }
+  input:focus > div  ~ .icono {
+    margin-bottom: 2px;
+    height: 1.13em;
+  }
+  input{
+    padding-left: 1em;
+    text-indent: 2em;
+    height: 1.6em;
+    background: $colorBlanco;
+  }
+  .icono{
+    position: absolute;
+    color: $colorBlanco;
+    padding: 0.2em 5px;
+    background-color: $colorSecundario;
+    z-index: 1;
+    top: 17px;
+    left: 1px;
+    border-radius: 2px;
+  }
+  input:focus{
+    border-width: 1px 1px 0px ;
+    border-color: #6D6D6D !important;
+    border-style: solid;  
+  }
+  input:hover{
+    border-width: 1px 1px 0px ;
+    border-color: #cecece;
+    border-style: solid;
+  }
+  label{
+    text-indent: 2.5em;
+    z-index: 1;
+    cursor: text;
+    line-height: 1.5;
+  }
+}
+
+.encuestaSatisfaccion{
+
+  .tituloEncuesta {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 2.5em !important;
+    color: $colorPrincipal;
+    letter-spacing: 0.03em;
+    text-align: center;
+    margin-bottom: 1em;
+    padding: 0.4em 0;
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 0;
+      height: 3px;
+      background-color: $colorPrincipal;
+      transform: translateX(-50%);
+      animation: lineaAnimada 5s ease-in-out infinite;
+    }
+  }
+  .objetivoEncuesta{
+    text-align: justify;
+    color: $grisOscuro;
+  }
+  .imagenEncuesta {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    object-fit: contain;
+  }
+  .procesoFinalizado {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem;
+    margin: 2rem auto;
+    max-width: 520px;
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid #e8edf2;
+    box-shadow: 0 10px 25px rgba(0,0,0,.05);
+    h1 {
+      margin: 0 0 1.2rem;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #777878 !important;
+      line-height: 1.3;
+    }
+    p {
+      margin: 0;
+      max-width: 480px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #6b7280;
+    }
+  }
+  .iconoExito {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(34, 197, 94, .35);
+  }
+
+  .tituloPregunta{
+    color: $grisOscuro;
+  }
+  .tituloRespuesta{
+    color: $grisOscuro;
+  }
+}
+
+.verificacionDocumento{
+  h1{
+    text-align: center;
+    color: #797d81;
+    font-size: 2em !important;
+    font-family: Myriad Pro Bold;
+    text-shadow: -0.03px 0.03px #fff6e6, -1px 1px #e7dcd7;
+    margin: 0 0 15px;
+    font-weight: bold !important;
+  }
+  .borderTitulo {
+    width: 50%;
+    height: 2px;
+    background-color: $rojoOscuro;
+    margin: -16px auto 2em;
+  }
+  h2 {
+    color: #7a7a7a;
+  }
+}
+
+.boxSolicitudes{
+  margin-right: 1em;
+  padding-top: 2em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  .cardTipoSolicitudes{
+    min-height: 20em;
+    padding: 0.6em;
+    text-align: justify;
+    color: $grisOscuro;
+  }
+  .tituloCardSolicitud{
+    font-size: 1.4em;
+    font-weight: bold;
+    font-style: normal;
+    color: $colorPrincipal;
+    text-align: center;
+  }
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: $colorPrincipal !important; 
+  &:hover {
+    color: $grisOscuro !important;
+  }
+}
+
+.tiempoRespuesta{
+  width: 70%;
+  margin: 2em auto;
+  border-radius: 12px !important;
+  overflow: hidden;
+  .titulo{
+    margin: 0;
+    padding: 2px 10px;
+    background: $colorPrincipal;
+    color: $colorBlanco;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .listaTiempos{
+    list-style: none;
+    padding: 18px 22px;
+    margin: 0;
+    li{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      &:not(:last-child){
+        border-bottom: 1px solid #ececec;
+      }
+    }
+  }
+  .nombre{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: #555;
+    i{
+      color: #6c757d;
+      font-size: 15px;
+    }
+  }
+  .dias{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .numero{
+    color: #d84315;
+    font-weight: 700;
+    min-width: 45px;
+    text-align: right;
+  }
+  .texto{
+    color: #666;
+    min-width: 150px;
+  }
+}
+
+.estadoSolicitud{
+  width: 60%;
+  margin: 2em auto;
+  border-radius: 12px !important;
+  overflow: hidden;
+  .titulo{
+    margin: 0;
+    padding: 2px 10px;
+    background: $colorPrincipal;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .listaEstados{
+    list-style: none;
+    margin: 0;
+    padding: 18px 22px;
+    li{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      &:not(:last-child){
+        border-bottom: 1px solid #ececec;
+      }
+      transition: .2s;
+      &:hover{
+        padding-left: 8px;
+        color: #1976d2;
+      }
+    }
+  }
+  .icono{
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .estado{
+    font-size: .95rem;
+    color: #555;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 900px) {
+  .encuestaSatisfaccion{
+    .procesoFinalizado {
+      margin-top: 2rem;
+      padding: 2rem;
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+    .iconoExito {
+      width: 75px;
+      height: 75px;
+      font-size: 2.4rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tiempoRespuesta{
+    width: 94%;
+  }
+  .estadoSolicitud{
+    width: 94%;
+  }
+  .boxSolicitudes{
+    margin-right: 0em;
+    padding-top: 1em;
+    padding-right: 0em;
+    padding-bottom: 0em;
+  }
+}
+
+@media (max-width: 600px) {
+  .tiempoRespuesta{
+    width: 96%;
+  }
+  .estadoSolicitud{
+    width: 96%;
+  }
+  .boxSolicitudes{
+    margin-right: 0em;
+    padding-top: 1em;
+    padding-right: 0em;
+    padding-bottom: 0em;
+  }
+}
+
+@media (max-width: 576px) {  
+  .tiempoRespuesta{
+    width: 98%;
+  }
+  .estadoSolicitud{
+    width: 98%;
+  }
+  .boxSolicitudes{
+    margin-right: 0em;
+    padding-top: 1em;
+    padding-right: 0em;
+    padding-bottom: 0em;
+  }
+}
+
+@keyframes lineaAnimada {
+  0% {
+    width: 0;
+    background-color: $colorPrincipal;
+    opacity: 1;
+  }
+  50% {
+    width: 60%;
+    background-color: $grisOscuro; 
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    width: 0;
+    opacity: 0;
+  }
+}

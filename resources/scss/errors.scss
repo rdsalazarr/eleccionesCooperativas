@@ -1,0 +1,77 @@
+
+$colorSecundario: var(--colorSecundario);
+$colorPrincipal:  var(--colorPrincipal);
+$colorBlanco:     var(--colorBlanco);
+$grisOscuro :     var(--grisOscuro);
+$grisClaro  :     var(--grisClaro);
+
+.container{
+  width: 90%;
+  margin: auto;
+}
+
+.paginaError{
+    margin-top: 2em;
+    h1{
+        color: $colorPrincipal;
+        font-size: 5em;
+        text-shadow: 1px 1px #575a51, 1.2px 1.2px #575a51;
+    }
+    h6{
+        color: $grisOscuro;
+        font-size: 2em;
+        text-align: center;
+    }
+    img{
+        width: 70%;
+        cursor: pointer;
+    }
+    .icono{
+        color: $colorSecundario;
+        font-size: 5em;
+    }
+    p{
+        text-align: justify;
+    }
+}
+
+.imagenError{
+    width: 100%;
+    max-width: 400px;
+    color: red;
+}
+
+/*lg*/
+@media (max-width: 992px) {
+    .paginaError{
+        margin-top: 1em;
+        h1{
+            font-size: 4em;
+        }
+        h6{
+            font-size: 1.5em;
+        }
+        img{
+            width: 98%;
+        }
+        .icono{
+            font-size: 5em;
+        }
+        .centrarContenido{
+            text-align: center;
+        }
+    }
+}
+
+/*xs*/
+@media (max-width: 576px) {
+    .paginaError{ 
+        margin-top: 0.5em;      
+        h1{
+            font-size: 3em;
+        }
+        h6{
+            font-size: 1em;
+        }
+    }
+}

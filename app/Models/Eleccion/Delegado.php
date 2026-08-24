@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Models\Eleccion;
+
+use Illuminate\Database\Eloquent\Model;
+
+#[Fillable(['deledocumento','delenombre','deleapellido','delenumero','delecorreo',
+			'deletelefono','delenotificacion','deleactivo'])]
+class Delegado extends Model
+{
+   protected $table       = 'delegado';
+	protected $primaryKey = 'deleid';
+}

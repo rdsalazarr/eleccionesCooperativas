@@ -1,0 +1,47 @@
+
+php artisan make:migration create_tipos
+php artisan make:migration create_menu
+php artisan make:migration create_usuario
+php artisan make:migration create_empresa
+php artisan make:migration create_asociado
+php artisan make:migration create_delegado
+php artisan make:migration create_notificacion
+php artisan make:migration create_eleccion_delegado
+
+php artisan make:seeder AgenciaSeeder
+php artisan make:seeder UsuarioSeeder
+php artisan make:seeder EmpresaSeeder
+php artisan make:seeder DelegadoSeeder
+php artisan make:seeder TipoOrganoSeeder
+php artisan make:seeder TipoIdentificacion
+php artisan make:seeder EleccionSeeder
+
+php artisan make:model Configurar/Acta
+
+php artisan make:model Gestionar/TipoOrgano
+php artisan make:model Gestionar/AsociadoTemporal
+php artisan make:model Gestionar/Asociado
+
+php artisan make:model Eleccion/Token
+php artisan make:model Eleccion/EleccionDelegado
+php artisan make:model Eleccion/EleccionDelegadoAgencia
+php artisan make:model Eleccion/EleccionDelegadoAgenciaJurado
+php artisan make:model Eleccion/EleccionDelegadoAspirante
+php artisan make:model Eleccion/EleccionDelegadoProceso
+php artisan make:model Eleccion/EleccionDelegadoVoto
+php artisan make:model Eleccion/Delegado
+
+php artisan make:model Eleccion/OrganoEleccion
+php artisan make:model Eleccion/OrganoEleccionTipoOrgano
+php artisan make:model Eleccion/OrganoEleccionParticipante
+php artisan make:model Eleccion/OrganoEleccionParticipanteProceso
+php artisan make:model Eleccion/OrganoEleccionParticipanteVoto
+
+App\Http\Controllers\Home
+
+php artisan make:controller Home\FrondController
+php artisan make:controller Admin\DashboardController
+
+
+php artisan migrate:fresh
+php artisan db:seed

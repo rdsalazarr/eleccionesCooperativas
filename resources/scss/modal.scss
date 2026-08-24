@@ -1,0 +1,292 @@
+$fuentePrincipal: var(--fuentePrincipal);
+$colorSecundario: var(--colorSecundario);
+$colorPrincipal:  var(--colorPrincipal);
+$colorBlanco: var(--colorBlanco);
+$grisOscuro : var(--grisOscuro);
+$rojoOscuro : var(--rojoOscuro);
+$grisClaro  : var(--grisClaro);
+$rojoClaro  : var(--rojoClaro);
+
+.modalCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  .smallFlot {
+    position: relative;
+    width: 30% !important;
+    border-radius: 10px;
+    overflow: hidden !important;
+    background-color: $colorBlanco;
+  }
+  .mediumFlot {
+    position: relative;
+    width: 70% !important;
+    border-radius: 10px;
+    max-height: 80vh;
+    overflow: auto;
+    background-color: $colorBlanco;
+  }
+  .mediumFlotPdf {
+    position: relative;
+    width: 60% !important;
+    border-radius: 10px;
+    max-height: 80vh;
+    overflow: auto;
+    background-color: $colorBlanco;
+  }
+  .bigFlot {
+    position: relative;
+    width: 90% !important;
+    border-radius: 10px;
+    max-height: 80vh;
+    overflow: auto;
+    background-color: $colorBlanco;
+  }
+  .modalContent {
+    padding: 1em;
+    position: relative;
+    margin-top: -40px;
+  }
+  .modalHeader {
+    width: 100%;
+    border-radius: 5px;
+    position: relative;
+    border: $colorSecundario;
+    h3 {
+      color: $colorPrincipal;
+      text-align: left;
+      padding: 1.3em 1em;
+      width: 80%;
+      margin: 0;
+      text-shadow: -0.03em 0.03em #fff6e6, -0.08em 0.08em #e7dcd7;
+      font-weight: bold;
+      font-family: $fuentePrincipal;
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
+    }
+    .iconLateral {
+      position: absolute;
+      width: 100%;
+      height: 5em;
+      overflow: hidden;
+      right: 0;
+      border-top: 5px solid $colorPrincipal;
+      border-radius: 10px;
+      top: 0; 
+      div {
+        width: 20em;
+        height: 14em;
+      }
+      &:before {
+        content: "";
+        font-size: 4px;
+        position: absolute;
+        filter: saturate(0) brightness(20);
+        opacity: 0.3;
+        right: 1em;
+        top: 2em;
+        width: 34em;
+        height: 7em;
+        background-size: cover;
+        z-index: 1;
+      }
+    }
+  }
+  .modalBtn{
+    margin-top: 1em;
+    background-color: $colorPrincipal; 
+    text-shadow: 0px -2px 2px rgba(150, 150, 150, 1);
+    transition: all .5s ease-in-out;
+    &:hover{
+      background: $colorSecundario;
+      transition: all .5s ease-in-out;
+      color: #ccc;
+    }
+  }   
+  .modalBtnRojo{
+    position: relative;
+    padding-left: 40px !important;
+    background-color: $rojoOscuro!important;
+    text-shadow: 0px -2px 2px rgba(150, 150, 150, 1);
+    transition: all .5s ease-in-out;
+    &:hover{
+        background: $colorPrincipal !important;
+        transition: all .5s ease-in-out;
+        color: #ccc;
+      }
+    &::before{
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 34px;
+      height: 100%;
+      background: #e2e2e2;
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+    .MuiButton-startIcon{
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0 !important;
+      svg{
+        font-size: 1.4em !important;
+        color: $colorPrincipal;
+      }
+    }
+  }
+  .floatBtnRojo{
+    float: right;
+  }
+}  
+
+.botonesModal {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 10px;
+}
+
+.mensajePdf{
+  width: 55%;
+  margin: auto;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: $rojoClaro;
+  background-color: $grisClaro;
+  border-radius: 10px;
+}
+
+.modalBtnIcono {
+  margin-top: 1em;
+  background-color: $colorPrincipal;
+  text-shadow: 0px -2px 2px rgba(150, 150, 150, 1);
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    background: $colorSecundario;
+    transition: all 0.5s ease-in-out;
+    color: #ccc;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 34px;
+    height: 100%;
+    background-color: #e2e2e2; 
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  .icono{
+    z-index: 99; 
+    font-size: 2em !important;
+    color: $colorPrincipal;
+    padding-right: 4px;
+  }
+}
+
+.modalBtnIconoRight{
+  position: relative;
+  padding-right: 40px !important;
+  background-color: $colorPrincipal !important;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    background: $colorSecundario !important;
+    transition: all 0.5s ease-in-out;
+    color: #ccc;
+  }
+  &::before{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 34px;
+    height: 100%;
+    background: #e2e2e2;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  .MuiButton-endIcon{
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 !important;
+    svg{
+      font-size: 1.4em !important;
+      color: $colorPrincipal;
+    }
+  }
+}
+
+.botonDescarga {
+  margin-top: 0.5em;
+  cursor: pointer;
+  font-size: 32px;
+  color: $colorPrincipal;
+  background: linear-gradient(135deg, #e3f2fd, #b7b9b9);
+  padding: 10px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.18);
+  transition:
+      transform 0.5s ease,
+      box-shadow 0.5s ease,
+      background 0.5s ease,
+      color 0.5s ease;
+  transform: translateY(0) scale(1.05);
+  &:hover {
+    color: #ffffff;
+    transition: all 0.5s ease;
+    background: linear-gradient(135deg, $colorSecundario, $colorPrincipal);
+    box-shadow: 0 10px 24px rgba(13, 71, 161, 0.35);
+    transform: translateY(5px) scale(1.05);
+  }
+  &:active {
+    transform: translateY(8px) scale(0.95);
+  }
+}
+
+.tiepoRestante{
+  text-align: right; 
+  padding-right: 2em;
+  display: flex;
+  justify-content: right;
+  font-weight: 700;
+  color: $grisOscuro;
+}
+
+.mensajeModal{
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: $grisOscuro;
+}
+
+@media (max-width: 992px) { 
+  .modalCenter {
+    .smallFlot {
+      width: 90% !important; 
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .modalCenter { 
+      .smallFlot { 
+        width: 80% !important; 
+      }
+    }
+    .modalBtn{ 
+    .floatBtnRojo{
+      float: none;
+    }
+  }
+}
