@@ -9,15 +9,18 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 const schema = yup.object({
+        documento:   yup.string().required('El número de documento es obligatorio').min(6, 'El número de documento debe tener al menos 6 caracteres').max(15, 'El número de documento no puede exceder los 15 caracteres'),
+        nombre:      yup.string().required('El nombre es obligatorio').min(4, 'El nombre de usuario debe tener al menos 4 caracteres').max(50, 'El nombre de usuario no puede exceder los 50 caracteres'),
+        apellido:    yup.string().required('El apellido es obligatorio').min(4, 'El apellido de usuario debe tener al menos 4 caracteres').max(50, 'El apellido de usuario no puede exceder los 50 caracteres'),        
         nickUsuario: yup.string().required('El nick de usuario es obligatorio').min(6, 'El nick de usuario debe tener al menos 6 caracteres').max(15, 'El nick de usuario no puede exceder los 15 caracteres'),
         correo:      yup.string().required("El campo correo es requerido").email("Debe ser un correo válido")       
     });
 
 export default function Perfil(){
 
-       const { register, handleSubmit, getValues, setError, clearErrors, reset, control, watch, setValue, formState: { errors } } = useForm({
+       const { register, handleSubmit, setValue, formState: { errors } } = useForm({
                 resolver: yupResolver(schema),
-                defaultValues: {codigo:'000', correo: '',  nickUsuario:'' }
+                defaultValues: {documento:'', nombre:'', apellido: '', correo: '',  nickUsuario:'' }
             }); 
 
     const [habilitado, setHabilitado] = useState(true);
@@ -39,10 +42,12 @@ export default function Perfil(){
         instance.get('/admin/usuario/consultar/perfil').then(res=>{
             if(res.success) {
                 const data = res.data;
-                setValue('personaId', data.persid);
-                setValue('correo', data.usuaemail);
+                setValue('documento', data.usuadocumento);
+                setValue('apellido', data.usuaapellidos);
                 setValue('nickUsuario', data.usuanick);
-                setData(data)
+                setValue('nombre', data.usuanombre);
+                setValue('correo', data.usuaemail);
+                setData(data);
             } else {
                 ShowSnackbar(res.message, 'error');
             } 
@@ -59,32 +64,37 @@ export default function Perfil(){
     return (
         <form onSubmit={handleSubmit(onSubmit)} >
             <Grid container spacing={2}>
-                  <Grid size={{ xs: 12, sm: 3  }}>
-                    <Box className='frmTexto'>
-                        <label>Tipo de identificación</label>
-                        <span>{data.tipidenombre}</span>
-                    </Box>
+                <Grid size={{ xs: 12, sm: 3 }}>
+                    <TextField
+                        label="Documento"
+                        fullWidth
+                        variant="standard"
+                        {...register("documento")}
+                        error={!!errors.documento}
+                        helperText={errors.documento?.message}
+                    />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 3  }}>
-                    <Box className='frmTexto'>
-                        <label>Documento</label>
-                        <span>{data.persdocumento}</span>
-                    </Box>
+                <Grid size={{ xs: 12, sm: 3 }}>
+                    <TextField
+                        label="Nombre (s)"
+                        fullWidth
+                        variant="standard"
+                        {...register("nombre")}
+                        error={!!errors.nombre}
+                        helperText={errors.nombre?.message}
+                    />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 3  }}>
-                    <Box className='frmTexto'>
-                        <label>Nombre (s)</label>
-                        <span>{data.usuanombre}</span>
-                    </Box>
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 3  }}>
-                    <Box className='frmTexto'>
-                        <label>Apellido (s)</label>
-                        <span>{data.usuaapellidos}</span>
-                    </Box>
+                <Grid size={{ xs: 12, sm: 3 }}>
+                    <TextField
+                        label="Apellido (s)"
+                        fullWidth
+                        variant="standard"
+                        {...register("apellido")}
+                        error={!!errors.apellido}
+                        helperText={errors.apellido?.message}
+                    />
                 </Grid>
 
                 <Grid size={{ xs: 12, sm: 3 }}>
@@ -109,6 +119,7 @@ export default function Perfil(){
                     />
                 </Grid>
 
+                <Grid size={{ xs: 12, sm: 3 }} />
                 <Grid size={{ xs: 12, sm: 3 }} />
 
                 <Grid size={{ xs: 12, sm: 3 }} style={{textAlign: 'right'}}>

@@ -16,7 +16,7 @@ class PerfilUsuarioController extends Controller
 	{
 		try {
 			$dataUsuario = ['nombreCompleto' => Auth::user()->name.' '.Auth::user()->apellidos,
-							'usuanick'       => Auth::user()->email
+							'usuanick'       => Auth::user()->usuanick
 							];
 			return response()->json(['success' => true,  "dataUsuario" => $dataUsuario]);
 		}catch(Throwable $e){
@@ -67,7 +67,7 @@ class PerfilUsuarioController extends Controller
 			return response()->json(['success' => true,'message' => 'Registro almacenado con éxito']);
 		} catch (Throwable $e) {
 			Log::error($e->getMessage());
-			return response()->json(['success' => false, 'message'=> 'Ocurrió un error en el registro al tratar de actualizar el perfil']);
+			return response()->json(['success' => false, 'message'=> 'Ocurrió un error al tratar de actualizar el perfil']);
 		}
 	}
 

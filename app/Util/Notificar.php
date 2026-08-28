@@ -8,8 +8,8 @@ use DB, URL;
 
 class Notificar
 {
-    public static function correo($correos = [], $asunto = '', $msg = '', $adjuntos = [], $correoDependencia = '', $enviarCopia = '', $enviarPiePagina = '', $nombreEmpresa = 'IMPLESOFT S.A.S.'){
-	
+    public static function correo($correos = [], $asunto = '', $msg = '', $adjuntos = [], $correoDependencia = '', $enviarCopia = '', $enviarPiePagina = '', $nombreEmpresa = 'IMPLESOFT S.A.S.')
+	{	
 		$mail                = new PHPMailer(true);	
         $configuracioncorreo = DB::table('informacionconfiguracioncorreo')->select('incocohost','incocousuario','incococlaveapi','incocopuerto')->where('incocoid', 1)->first();
 		$host                = $configuracioncorreo->incocohost;
@@ -63,8 +63,8 @@ class Notificar
 		}
 	}
 
-	public static function htmlCorreo($body, $piePagina = '', $nombreEmpresa = '') {
-	
+	public static function htmlCorreo($body, $piePagina = '', $nombreEmpresa = '')
+	{	
 		$esDevelopment    = env('APP_ENV') === 'local' || env('APP_ENV') === 'development';
 		$avisoDevelopment = $esDevelopment ? self::obtenerAvisoDevelopment() : '';
 		
@@ -178,7 +178,8 @@ class Notificar
 		return $html;
 	}
 
-	private static function obtenerAvisoDevelopment() {
+	private static function obtenerAvisoDevelopment()
+	{
 		return '<div class="aviso-development">
 					<strong> Entorno de Desarrollo</strong>
 					Estamos actualmente en la fase de desarrollo de un sistema de Eleecciones. 
@@ -187,7 +188,8 @@ class Notificar
 				</div>';
 	}
 
-	public static function consultarPiePagina(){
+	public static function consultarPiePagina()
+	{
 		$informacionCorreo = DB::table('informacionnotificacioncorreo')
 								->select('innococontenido')
 								->where('innocoid', 1)->first();

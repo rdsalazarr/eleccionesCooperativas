@@ -143,7 +143,7 @@ export default function Frm({data, tipo}){
                     <TextField
                         label="Documento"
                         fullWidth
-                        variant="standard"                       
+                        variant="standard"
                         {...register("documento")}
                         error={!!errors.documento}
                         helperText={errors.documento?.message}
