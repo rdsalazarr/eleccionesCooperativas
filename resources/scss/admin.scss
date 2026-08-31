@@ -385,33 +385,42 @@ h1 {
 }
 
 .titleMenu{
-    text-align: center;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  span {
+    background: $colorPrincipal;
+    color: $colorBlanco !important ;
     position: relative;
-    width: 100%;
-    span {
-      background: $colorPrincipal;
-      color: $colorBlanco !important ;
-      position: relative;
-      display: block;
-      font-size: 1.1em;
-      padding: 2.5px 5px;
-      text-shadow: 0 0.01em 0.05em #505050;
-      transition: all 0.3s, left 0.3s;
-      height: 1.2em;
-    }
-    span.hidden{
-      opacity: 0;
-      height: 0em;
-      transition: all 0.3s, left 0.3s;
-    }
-    h3{
-      margin: 0;
-      position: relative;
-      display: block;
-      color: $colorPrincipal;
-      text-shadow : 0 0.01em 0.05em #505050;
-      font-size: 1.2em
-    }
+    display: block;
+    font-size: 1.1em;
+    padding: 2.5px 5px;
+    text-shadow: 0 0.01em 0.05em #505050;
+    transition: all 0.3s, left 0.3s;
+    height: 1.2em;
+  }
+  span.hidden{
+    opacity: 0;
+    height: 0em;
+    transition: all 0.3s, left 0.3s;
+  }
+  h3{
+    margin: 0;
+    position: relative;
+    display: block;
+    color: $colorPrincipal;
+    text-shadow : 0 0.01em 0.05em #505050;
+    font-size: 1.2em
+  }
+}
+
+.imgLogoGeneral{
+  object-fit: contain;
+  width: 100%;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 10px;
 }
 
 .imgLogoInstitucion{

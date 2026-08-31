@@ -133,7 +133,6 @@ class UsuarioController extends Controller
             DB::commit();
 			return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito'.$mensajeCorreo ]);
 		} catch (Throwable $e){
-			dd($e);
             DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro de usuario']);

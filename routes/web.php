@@ -15,7 +15,11 @@ use App\Http\Controllers\Admin\Configurar\ConfiguracionCorreoController;
 use App\Http\Controllers\Admin\Configurar\NotificacionCorreoController;
 
 use App\Http\Controllers\Admin\Gestionar\UsuarioController;
+use App\Http\Controllers\Admin\Gestionar\AsociadoController;
+use App\Http\Controllers\Admin\Gestionar\TipoOrganoController;
 use App\Http\Controllers\Admin\Gestionar\PerfilUsuarioController;
+use App\Http\Controllers\Admin\Gestionar\OrganoEleccionController;
+use App\Http\Controllers\Admin\Gestionar\CargarAsociadoController;
 
 
 Route::get('/', [FrondController::class, 'index']);
@@ -74,6 +78,27 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
         Route::get('/usuario/consultar/perfil', [PerfilUsuarioController::class, 'perfil']);
         Route::post('/usuario/actualizar/perfil', [PerfilUsuarioController::class, 'updatePerfil']);
         Route::post('/usuario/actualizar/password', [PerfilUsuarioController::class, 'updatePassword']);
+
+        Route::get('/tipo/organo/list', [TipoOrganoController::class, 'index']);//->middleware(['security:admin/configurar/tipos','verifySource']);
+        Route::post('/tipo/organo/salve', [TipoOrganoController::class, 'salve']);
+        Route::post('/tipo/organo/destroy', [TipoOrganoController::class, 'destroy']);
+
+        Route::get('/organo/eleccion/list', [OrganoEleccionController::class, 'index']);//->middleware(['security:admin/configurar/organos','verifySource']);
+        Route::post('/organo/eleccion/list/datos', [OrganoEleccionController::class, 'datos']);
+        Route::post('/organo/eleccion/salve', [OrganoEleccionController::class, 'salve']);
+        Route::post('/organo/eleccion/destroy', [OrganoEleccionController::class, 'destroy']);
+
+        Route::post('/cargar/asociados/salve', [CargarAsociadoController::class, 'salve']);//->middleware(['security:admin/gestionar/cargarAsociado']);
+        Route::post('/cargar/asociados/verificar', [CargarAsociadoController::class, 'verificar']);
+        Route::post('/cargar/asociados/procesar', [CargarAsociadoController::class, 'procesar']);
+
+        Route::get('/asociados/list', [AsociadoController::class, 'index']);//->middleware(['security:admin/gestionar/asociado','verifySource']);
+        Route::post('/asociados/list/datos', [AsociadoController::class, 'datos']);
+        Route::post('/asociados/salve', [AsociadoController::class, 'salve']);
+        Route::post('/asociados/destroy', [AsociadoController::class, 'destroy']);
+        
+
+
 
     });
 

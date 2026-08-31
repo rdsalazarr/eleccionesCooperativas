@@ -24,11 +24,22 @@ import Empresa from "../admin/configurar/empresa/list";
 import Usuario from "../admin/gestionar/usuario/list";
 import MiPerfil from "../admin/gestionar/usuario/miPerfil";
 
+import Tipos from "../admin/gestionar/tipos/list";
+import Asociados from "../admin/gestionar/asociados/list";
+import CargarAsociados from "../admin/gestionar/asociados/cargar/list";
+import OrganosEleccion from "../admin/gestionar/organosEleccion/list";
 
+import RegistrarAspirante from "../admin/enConstruccion";
+import JuradosDelegados from "../admin/enConstruccion";
+import AbrirVotacionDelegados from "../admin/enConstruccion";
+import ImprimirVotacion from "../admin/enConstruccion";
+import InformeVotacion from "../admin/enConstruccion";
 
-
-/*
-import Tipos from "../admin/gestionar/tipos/list";*/
+import Delegados from "../admin/enConstruccion";
+import GenerarToken from "../admin/enConstruccion";
+import Informacion from "../admin/enConstruccion";
+import JuradosOrganosEleccion from "../admin/enConstruccion";
+import AbrirVotacionOrganosEleccion from "../admin/enConstruccion";
 
 const HeaderMenu = ({ open, setOpen }) => {
     return (
@@ -118,36 +129,32 @@ const menuComponente = [
     {id:2,componente : <Roles />},
     {id:3,componente : <Correo />},
     {id:4,componente : <Empresa />},
-    {id:5,componente : <Tipos />},
-    {id:6,componente : <Informacion />},
-    {id:7,componente : <Persona />},
-    {id:8,componente : <Usuario />},
-    {id:9,componente : <Dependencia />},
-    {id:10,componente : <Festivos />},
-    {id:11,componente : <DiasNotificacion />},
-    {id:12,componente : <Encuesta />},
+    {id:5,componente : <Acta />},
 
-    {id:13,componente : <Registrar />},
-    {id:14,componente : <Gestionar />},
-    {id:15,componente : <Verificar />},
-    {id:16,componente : <Responder />},
-    {id:17,componente : <Anotacion />},
-    {id:18,componente : <Seguimiento />},
-    {id:19,componente : <Consultar />},
+    {id:6,componente : <Usuario />},
+    {id:7,componente : <Tipos />},
+    {id:8,componente : <OrganosEleccion />},
+    {id:9,componente : <CargarAsociados />},
+    {id:10,componente : <Asociados />},
 
-    {id:21,componente : <InformeEncuesta />},
-    {id:20,componente : <InformeSolicitud />},
-    {id:22,componente : <InformeTrazabilidad />},
+    {id:11,componente : <RegistrarAspirante />},
+    {id:12,componente : <JuradosDelegados />},
+    {id:13,componente : <AbrirVotacionDelegados />},
+    {id:14,componente : <ImprimirVotacion />},
+    {id:15,componente : <InformeVotacion />},
 
+    {id:16,componente : <Delegados />},
+    {id:17,componente : <GenerarToken />},
+    {id:18,componente : <Informacion />},
+    {id:19,componente : <JuradosOrganosEleccion />},
+    {id:21,componente : <AbrirVotacionOrganosEleccion />},
+
+    {id:20,componente : <EnConstruccion />},
+    {id:22,componente : <EnConstruccion />},
     {id:23,componente : <EnConstruccion />},
     {id:24,componente : <EnConstruccion />},
     {id:25,componente : <EnConstruccion />},
-    {id:26,componente : <EnConstruccion />},
-    {id:27,componente : <EnConstruccion />},
-    {id:28,componente : <EnConstruccion />},
-    {id:29,componente : <EnConstruccion />},
-    {id:30,componente : <EnConstruccion />},
-    {id:31,componente : <EnConstruccion />},*/
+*/
 ];
 
 const componenteMenu = [
@@ -164,36 +171,31 @@ const componenteMenu = [
     {   nombre: 'Gestionar',
         icono : 'content_paste_search',
         itemMenu: [
-            {ruta : 'admin/gestionar/usuario',     menu: 'Usuario',          icono : 'account_circle', componente : <Usuario /> },
-            {ruta : 'admin/gestionar/tipos',       menu: 'Tipos de Órganos', icono : 'schema',         componente : <EnConstruccion /> },
-            {ruta : 'admin/gestionar/informacion', menu: 'Órganos',          icono : 'account_box',    componente : <EnConstruccion /> },
-            
-            /*{ruta : 'admin/gestionar/dependencia',      menu: 'Dependencia',      icono : 'apartment',          componente : <EnConstruccion /> },
-            {ruta : 'admin/gestionar/festivos',         menu: 'Festivos',         icono : 'calendar_month ',    componente : <EnConstruccion /> },
-            {ruta : 'admin/gestionar/diasNotificacion', menu: 'Dia Notificacion', icono : 'edit_notifications', componente : <EnConstruccion /> },
-            {ruta : 'admin/gestionar/encuesta',         menu: 'Encuesta',         icono : 'poll',               componente : <EnConstruccion /> },*/
+            {ruta : 'admin/gestionar/usuario',         menu: 'Usuario',             icono : 'account_circle',  componente : <Usuario /> },
+            {ruta : 'admin/gestionar/tipos',           menu: 'Tipos de Órganos',    icono : 'schema',          componente : <Tipos /> },
+            {ruta : 'admin/gestionar/organosEleccion', menu: 'Órganos de Elección', icono : 'account_box',     componente : <OrganosEleccion /> },
+            {ruta : 'admin/gestionar/cargarAsociado',  menu: 'Cargar asociados',    icono : 'import_contacts', componente : <CargarAsociados /> },
+            {ruta : 'admin/gestionar/asociados',       menu: 'Asociados ',          icono : 'assignment',      componente : <Asociados /> },
         ]
     },
     {   nombre: 'Elección Delegados',
         icono : 'analytics', 
-        itemMenu: [
-            {ruta : 'admin/eleccionDelegado/cargarAsociado',     menu: 'Cargar asociados',     icono : 'import_contacts', componente : <EnConstruccion /> },
-            {ruta : 'admin/eleccionDelegado/asociados',          menu: 'Asociados ',           icono : 'assignment',      componente : <EnConstruccion /> },
-            {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',      componente : <EnConstruccion /> },
-            {ruta : 'admin/eleccionDelegado/Jurados',            menu: 'Jurados',              icono : 'poll',            componente : <EnConstruccion /> },
-            {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir votacion ',      icono : 'storage',         componente : <EnConstruccion /> },
-            {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Votación ',   icono : 'announcement',    componente : <EnConstruccion /> },
-            {ruta : 'admin/eleccionDelegado/informeVotacion',    menu: 'Informe de Votación ', icono : 'cloud_sync',      componente : <EnConstruccion /> },
+        itemMenu: [        
+            {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',      componente : <RegistrarAspirante /> },
+            {ruta : 'admin/eleccionDelegado/Jurados',            menu: 'Jurados',              icono : 'poll',            componente : <JuradosDelegados /> },
+            {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir votacion ',      icono : 'storage',         componente : <AbrirVotacionDelegados /> },
+            {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Votación ',   icono : 'announcement',    componente : <ImprimirVotacion /> },
+            {ruta : 'admin/eleccionDelegado/informeVotacion',    menu: 'Informe de Votación ', icono : 'cloud_sync',      componente : <InformeVotacion /> },
         ]
     } ,
     {   nombre: 'Órgano Elección',
         icono : 'library_books',
         itemMenu: [
-            {ruta : 'admin/gestionar/persona',   menu: 'Delegados',     icono : 'person',          componente : <EnConstruccion /> },
-            {ruta : 'admin/gestionar/persona',   menu: 'Generar Token', icono : 'person',          componente : <EnConstruccion /> },
-            {ruta : 'admin/solicitud/registrar', menu: 'Información ',  icono : 'menu_book',       componente : <EnConstruccion /> },
-            {ruta : 'admin/solicitud/registrar', menu: 'Jurados ',      icono : 'menu_book',       componente : <EnConstruccion /> },
-            {ruta : 'admin/solicitud/responder', menu: 'Generar ',      icono : 'library_books',   componente : <EnConstruccion /> },
+            {ruta : 'admin/gestionar/persona',   menu: 'Delegados',     icono : 'person',          componente : <Delegados /> },
+            {ruta : 'admin/gestionar/persona',   menu: 'Generar Token', icono : 'person',          componente : <GenerarToken /> },
+            {ruta : 'admin/solicitud/registrar', menu: 'Información ',  icono : 'menu_book',       componente : <Informacion /> },
+            {ruta : 'admin/solicitud/registrar', menu: 'Jurados ',      icono : 'menu_book',       componente : <JuradosOrganosEleccion /> },
+            {ruta : 'admin/solicitud/responder', menu: 'Generar ',      icono : 'library_books',   componente : <AbrirVotacionOrganosEleccion /> },
             
         ]
     } 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Eleccion;
+namespace App\Models\Gestionar;
 
 use Illuminate\Database\Eloquent\Model;
 

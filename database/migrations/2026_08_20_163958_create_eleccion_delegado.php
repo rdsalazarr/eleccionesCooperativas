@@ -25,8 +25,8 @@ return new class extends Migration
             $table->increments('oreltoid')->comment('Identificador de la tabla organo elección tipo órgano');
             $table->unsignedTinyInteger('tiporgid')->comment('Identificador del tipo de órgano de elección');
             $table->unsignedSmallInteger('orgeleid')->comment('Identificador del órgano de elección');
-            $table->datetime('oreltofechahorainicio')->comment('Fecha y hora en la cual se da incio a la elección del tipo de órgano');
-            $table->datetime('oreltofechahoracierre')->comment('Fecha y hora en la cual se cierra a la elección del tipo de órgano');
+            $table->datetime('oreltofechahorainicio')->nullable()->comment('Fecha y hora en la cual se da incio a la elección del tipo de órgano');
+            $table->datetime('oreltofechahoracierre')->nullable()->comment('Fecha y hora en la cual se cierra a la elección del tipo de órgano');
             $table->timestamps();
 
             $table->foreign('tiporgid', 'fk_oreltotiporg')->references('tiporgid')->on('tipoorgano')->onUpdate('cascade');

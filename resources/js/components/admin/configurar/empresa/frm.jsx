@@ -1,4 +1,4 @@
-import {useState, useEffect, Fragment} from 'react';
+import {useState, Fragment} from 'react';
 import {Dropzone, ContentFile} from '../../../layout/dropzone';
 import { Button, Grid, Box, TextField } from '@mui/material';
 import {ShowSnackbar} from '../../../layout/snackBar';
@@ -66,7 +66,8 @@ export default function Frm({data, tipo}){
             ShowSnackbar(res.message, icono);
             (tipo === 'I' && res.success) ? reset({codigo: "000", nit: "", nombre: "", sigla: "",  lema: "", direccion: "", ciudad: "",
                                                 telefono: "", celular: "", correo: "", url: "",  tipo: tipo }) : null;
-            (tipo !== 'I' && res.success) ? setHabilitado(false) : null;  
+            (tipo !== 'I' && res.success) ? setHabilitado(false) : null;
+            (res.success) ? setFormDataFile({ logos: []}) : null;
             setLoader(false);
         });
     };

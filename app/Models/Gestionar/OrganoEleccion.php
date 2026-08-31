@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Eleccion;
+namespace App\Models\Gestionar;
 
-use App\Models\Eleccion\OrganoEleccionTipoOrgano;
+use App\Models\Gestionar\OrganoEleccionTipoOrgano;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['orgeleanio','orgeletitulo','orgelelugar','orgeleperiodo', 'orgeleactivo'])]
@@ -13,5 +13,12 @@ class OrganoEleccion extends Model
 
     public function tipoOrganos(){
         return $this->hasMany(OrganoEleccionTipoOrgano::class, 'orgeleid', 'orgeleid');
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($tipoOrgano) {
+            $tipoOrgano->tipoOrganos()->delete();
+        });
     }
 }

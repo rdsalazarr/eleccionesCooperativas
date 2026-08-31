@@ -42,6 +42,10 @@ App\Http\Controllers\Home
 php artisan make:controller Home\FrondController
 php artisan make:controller Admin\DashboardController
 php artisan make:controller Admin\Configurar\ActaController
+php artisan make:controller Admin\Gestionar\TipoOrganoController
+php artisan make:controller Admin\Gestionar\OrganoEleccionController
+php artisan make:controller Admin\Gestionar\CargarAsociadoController
+php artisan make:controller Admin\Gestionar\AsociadoController
 
 php artisan migrate:fresh
 php artisan db:seed
