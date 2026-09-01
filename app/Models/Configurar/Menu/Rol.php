@@ -2,6 +2,7 @@
 
 namespace App\Models\Configurar\Menu;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Models\Configurar\Menu\RolFuncionalidad;
 use Illuminate\Database\Eloquent\Model;
 

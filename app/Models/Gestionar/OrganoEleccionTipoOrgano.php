@@ -2,6 +2,7 @@
 
 namespace App\Models\Gestionar;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['tiporgid','orgeleid','oreltofechahorainicio', 'oreltofechahoracierre'])]

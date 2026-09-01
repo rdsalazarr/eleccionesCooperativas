@@ -88,7 +88,7 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
         Route::post('/organo/eleccion/salve', [OrganoEleccionController::class, 'salve']);
         Route::post('/organo/eleccion/destroy', [OrganoEleccionController::class, 'destroy']);
 
-        Route::post('/cargar/asociados/salve', [CargarAsociadoController::class, 'salve']);//->middleware(['security:admin/gestionar/cargarAsociado']);
+        Route::post('/cargar/asociados/salve', [CargarAsociadoController::class, 'procesarArchivo']);//->middleware(['security:admin/gestionar/cargarAsociado']);
         Route::post('/cargar/asociados/verificar', [CargarAsociadoController::class, 'verificar']);
         Route::post('/cargar/asociados/procesar', [CargarAsociadoController::class, 'procesar']);
 

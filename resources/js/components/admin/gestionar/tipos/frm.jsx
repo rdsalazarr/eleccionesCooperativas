@@ -1,4 +1,4 @@
-import {useState, Fragment} from 'react';
+import {useState} from 'react';
 import { Button, Grid, MenuItem, Box, TextField } from '@mui/material';
 import {Dropzone, ContentFile} from '../../../layout/dropzone';
 import {ShowSnackbar} from '../../../layout/snackBar';
@@ -29,7 +29,7 @@ export default function Frm({data, tipo}){
             });
 
     const [formDataFile, setFormDataFile] = useState({ logos: []});
-     const rutaLogo  = ( tipo !== 'I') ? data.rutaLogo : null;
+    const rutaLogo  = ( tipo !== 'I') ? data.rutaLogo : null;
     const [habilitado, setHabilitado] = useState(true);
     const [loader, setLoader] = useState(false);
 
@@ -50,7 +50,7 @@ export default function Frm({data, tipo}){
     const onSubmit = (formValues) => {
         const payload = {
             ...formValues,
-            logo:    formDataFile.logos.length > 0 ? formDataFile.logos[0].file : null,
+            logo: formDataFile.logos.length > 0 ? formDataFile.logos[0].file : null,
         };
 
         setLoader(true); 

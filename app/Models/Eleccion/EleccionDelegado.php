@@ -2,6 +2,7 @@
 
 namespace App\Models\Eleccion;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Models\Eleccion\EleccionDelegadoAgencia;
 use Illuminate\Database\Eloquent\Model;
 

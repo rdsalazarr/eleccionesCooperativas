@@ -2,6 +2,7 @@
 
 namespace App\Models\Configurar;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['emprmunid','emprnit','emprnombre','emprsigla','emprlema','emprdireccion',

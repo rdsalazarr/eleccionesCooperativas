@@ -2,6 +2,7 @@
 
 namespace App\Models\Gestionar;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Models\Gestionar\OrganoEleccionTipoOrgano;
 use Illuminate\Database\Eloquent\Model;
 

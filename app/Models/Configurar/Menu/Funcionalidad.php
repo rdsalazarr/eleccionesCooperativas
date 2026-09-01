@@ -2,6 +2,7 @@
 
 namespace App\Models\Configurar\Menu;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use App\Util\General;
 use DB, Auth;

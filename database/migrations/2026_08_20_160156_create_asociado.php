@@ -18,11 +18,10 @@ return new class extends Migration
             $table->string('asotemnumero', 20)->nullable()->comment('Número de documento del asociado');
             $table->string('asotemnombrecompleto', 100)->nullable()->comment('Nombre completo del asociado');
             $table->string('asotemfechaingreso', 20)->nullable()->comment('Fecha de ingreso del asociado a la cooperativa');
-            $table->string('asotemgenero', 20)->nullable()->nullable()->comment('Genero al que pertenece el asociado');
-            $table->string('asotemfechanacimiento', 20)->nullable()->nullable()->comment('Fecha de nacimiento del asociado');
+            $table->string('asotemgenero', 20)->nullable()->comment('Genero al que pertenece el asociado');
+            $table->string('asotemfechanacimiento', 20)->nullable()->comment('Fecha de nacimiento del asociado');
             $table->string('asotemtelefono',20)->nullable()->comment('Teléfono del asociado'); 
             $table->string('asotememail',80)->nullable()->comment('Email del asociado'); 
-            $table->string('asotemdescripcion',500)->nullable()->comment('Descripción del asociado');
             $table->string('asotemcelular',20)->nullable()->comment('Celular del asociado'); 
             $table->string('asotemfechaexpedicion',20)->nullable()->comment('Fecha expedición del asociado'); 
         });
@@ -33,8 +32,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('agenid')->comment('Identificador de la agencia'); 
             $table->string('asocnumerodocumento', 20)->unique('uk_asociado')->comment('Número de documento del asociado');
             $table->string('asocnombrecompleto', 100)->comment('Nombre completo del asociado');
-            $table->date('asocfechaingreso')->comment('Fecha de ingreso del asociado a la cooperativa');
-            $table->string('asocgenero', 1)->comment('Genero al que pertenece el asociado');
+            $table->date('asocfechaingreso')->nullable()->comment('Fecha de ingreso del asociado a la cooperativa');
+            $table->string('asocgenero', 1)->nullable()->comment('Genero al que pertenece el asociado');
             $table->date('asocfechanacimiento')->comment('Fecha de nacimiento del asociado');
             $table->string('asoctelefono',20)->nullable()->comment('Teléfono del asociado');
             $table->string('asocemail',80)->nullable()->comment('Email del asociado'); 
