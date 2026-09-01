@@ -21,6 +21,18 @@ use App\Http\Controllers\Admin\Gestionar\PerfilUsuarioController;
 use App\Http\Controllers\Admin\Gestionar\OrganoEleccionController;
 use App\Http\Controllers\Admin\Gestionar\CargarAsociadoController;
 
+use App\Http\Controllers\Admin\Eleccion\Delegado\AbrirVotacionController;
+use App\Http\Controllers\Admin\Eleccion\Delegado\InformeVotacionController;
+use App\Http\Controllers\Admin\Eleccion\Delegado\ImprimirVotacionController;
+use App\Http\Controllers\Admin\Eleccion\Delegado\RegistrarAspiranteController;
+use App\Http\Controllers\Admin\Eleccion\Delegado\JuradosController as JuradosDelegadoController;
+
+use App\Http\Controllers\Admin\Eleccion\Organos\DelegadosController;
+use App\Http\Controllers\Admin\Eleccion\Organos\InformacionController;
+use App\Http\Controllers\Admin\Eleccion\Organos\GenerarTokenController;
+use App\Http\Controllers\Admin\Eleccion\Organos\GenerarVotacionController;
+use App\Http\Controllers\Admin\Eleccion\Organos\JuradosController as JuradosOrganosController;
+
 
 Route::get('/', [FrondController::class, 'index']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
@@ -36,8 +48,8 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
         Route::get('/admin/{id}', [DashboardController::class, 'index']);
         Route::get('/admin/configurar/{id}', [DashboardController::class, 'index']);
         Route::get('/admin/gestionar/{id}', [DashboardController::class, 'index']);
-        Route::get('/admin/solicitud/{id}', [DashboardController::class, 'index']);
-        Route::get('/admin/informes/{id}', [DashboardController::class, 'index']);
+        Route::get('/admin/eleccionDelegado/{id}', [DashboardController::class, 'index']);
+        Route::get('/admin/organosEleccion/{id}', [DashboardController::class, 'index']);
     });
 
     Route::prefix('admin')->group(function(){
@@ -96,10 +108,32 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
         Route::post('/asociados/list/datos', [AsociadoController::class, 'datos']);
         Route::post('/asociados/salve', [AsociadoController::class, 'salve']);
         Route::post('/asociados/destroy', [AsociadoController::class, 'destroy']);
-        
 
+        Route::prefix('eleccion/delegado')->group(function(){
+            Route::get('/registrar/aspirante/list', [RegistrarAspiranteController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/registrarAspirante','verifySource']);
 
+            Route::get('/jurados/list', [JuradosDelegadoController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/jurados','verifySource']);
 
+            Route::get('/abrir/votacion/list', [AbrirVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/abrirVotacion','verifySource']);
+            
+            Route::get('/imprimir/actas/list', [ImprimirVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/imprimirActas','verifySource']);
+
+            Route::get('/informes/list', [InformeVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/informeVotacion','verifySource']);
+
+        });
+
+        Route::prefix('organos/eleccion')->group(function(){
+            Route::get('/delegados/list', [DelegadosController::class, 'index']);//->middleware(['security:admin/organosEleccion/generarToken','verifySource']);
+
+            Route::get('/generar/token/list', [GenerarTokenController::class, 'index']);//->middleware(['security:admin/organosEleccion/generarToken','verifySource']);
+
+            Route::get('/informacion/list', [InformacionController::class, 'index']);//->middleware(['security:admin/organosEleccion/informacion','verifySource']);
+
+            Route::get('/jurados/list', [JuradosOrganosController::class, 'index']);//->middleware(['security:admin/organosEleccion/jurados','verifySource']);
+
+            Route::get('/abrir/votacion/list', [GenerarVotacionController::class, 'index']);//->middleware(['security:admin/organosEleccion/abrirVotacion','verifySource']);
+
+        });
     });
 
 }); 

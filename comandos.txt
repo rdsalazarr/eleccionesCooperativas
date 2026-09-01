@@ -47,5 +47,17 @@ php artisan make:controller Admin\Gestionar\OrganoEleccionController
 php artisan make:controller Admin\Gestionar\CargarAsociadoController
 php artisan make:controller Admin\Gestionar\AsociadoController
 
+php artisan make:controller Admin\Eleccion\Delegado\RegistrarAspiranteController
+php artisan make:controller Admin\Eleccion\Delegado\JuradosController
+php artisan make:controller Admin\Eleccion\Delegado\AbrirVotacionController
+php artisan make:controller Admin\Eleccion\Delegado\ImprimirVotacionController
+php artisan make:controller Admin\Eleccion\Delegado\InformeVotacionController
+
+php artisan make:controller Admin\Eleccion\Organos\DelegadosController
+php artisan make:controller Admin\Eleccion\Organos\GenerarTokenController
+php artisan make:controller Admin\Eleccion\Organos\InformacionController
+php artisan make:controller Admin\Eleccion\Organos\JuradosController
+php artisan make:controller Admin\Eleccion\Organos\GenerarVotacionController
+
 php artisan migrate:fresh
 php artisan db:seed

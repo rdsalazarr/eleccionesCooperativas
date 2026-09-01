@@ -180,22 +180,22 @@ const componenteMenu = [
     },
     {   nombre: 'Elección Delegados',
         icono : 'analytics', 
-        itemMenu: [        
-            {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',      componente : <RegistrarAspirante /> },
-            {ruta : 'admin/eleccionDelegado/Jurados',            menu: 'Jurados',              icono : 'poll',            componente : <JuradosDelegados /> },
-            {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir votacion ',      icono : 'storage',         componente : <AbrirVotacionDelegados /> },
-            {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Votación ',   icono : 'announcement',    componente : <ImprimirVotacion /> },
-            {ruta : 'admin/eleccionDelegado/informeVotacion',    menu: 'Informe de Votación ', icono : 'cloud_sync',      componente : <InformeVotacion /> },
+        itemMenu: [
+            {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
+            {ruta : 'admin/eleccionDelegado/jurados',            menu: 'Jurados',              icono : 'poll',         componente : <JuradosDelegados /> },
+            {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir Votacion ',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
+            {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Actas ',      icono : 'announcement', componente : <ImprimirVotacion /> },
+            {ruta : 'admin/eleccionDelegado/informeVotacion',    menu: 'Informe de Votación ', icono : 'cloud_sync',   componente : <InformeVotacion /> },
         ]
     } ,
     {   nombre: 'Órgano Elección',
         icono : 'library_books',
         itemMenu: [
-            {ruta : 'admin/gestionar/persona',   menu: 'Delegados',     icono : 'person',          componente : <Delegados /> },
-            {ruta : 'admin/gestionar/persona',   menu: 'Generar Token', icono : 'person',          componente : <GenerarToken /> },
-            {ruta : 'admin/solicitud/registrar', menu: 'Información ',  icono : 'menu_book',       componente : <Informacion /> },
-            {ruta : 'admin/solicitud/registrar', menu: 'Jurados ',      icono : 'menu_book',       componente : <JuradosOrganosEleccion /> },
-            {ruta : 'admin/solicitud/responder', menu: 'Generar ',      icono : 'library_books',   componente : <AbrirVotacionOrganosEleccion /> },
+            {ruta : 'admin/organosEleccion/delegados',     menu: 'Delegados',     icono : 'person',        componente : <Delegados /> },
+            {ruta : 'admin/organosEleccion/generarToken',  menu: 'Generar Token', icono : 'person',        componente : <GenerarToken /> },
+            {ruta : 'admin/organosEleccion/informacion',   menu: 'Información ',  icono : 'menu_book',     componente : <Informacion /> },
+            {ruta : 'admin/organosEleccion/jurados',       menu: 'Jurados ',      icono : 'menu_book',     componente : <JuradosOrganosEleccion /> },
+            {ruta : 'admin/organosEleccion/abrirVotacion', menu: 'Generar ',      icono : 'library_books', componente : <AbrirVotacionOrganosEleccion /> },
             
         ]
     } 

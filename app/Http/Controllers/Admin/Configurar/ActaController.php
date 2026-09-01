@@ -9,7 +9,7 @@ use Throwable, DB, Log;
 
 class ActaController extends Controller
 {
-   public function index()
+    public function index()
 	{
         try{
 		    $data = DB::table('acta')->select('actaid','actatitulo','actacontenido')->get();
