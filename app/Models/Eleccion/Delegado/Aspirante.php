@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Eleccion;
+namespace App\Models\Eleccion\Delegado;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +8,7 @@ use DB ;
 
 #[Fillable(['eledelid','tipideid','agenid','eldeasdocumento', 'eldeasnumero','eldeasfechahora','eldeasprimernombre','eldeassegundonombre',
             'eldeasprimerapellido','eldeassegundoapellido', 'eldeascorreo','eldeastelefono','eldeasimagen','eldeasactivo','eldeasesvotoblanco'])]
-class EleccionDelegadoAspirante extends Model
+class Aspirante extends Model
 {
     protected $table      = 'elecciondelegadoaspirante';
 	protected $primaryKey = 'eldeasid';

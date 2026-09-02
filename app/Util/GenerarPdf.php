@@ -54,11 +54,8 @@ class GenerarPdf extends TCPDF
 
 	public function Footer()
     {
-        $parametros       = $this->parametrosFooter;
-        $mostrarQR        = $parametros['mostrarQR']        ?? 'NO';
-        $solicitudId      = $parametros['solicitudId']      ?? '';
-		$urlEmpresa       = $parametros['urlEmpresa']       ?? '';
-        $codigoPostal     = $parametros['codigoPostal']     ?? '';
+        $parametros       = $this->parametrosFooter;         
+		$urlEmpresa       = $parametros['urlEmpresa']       ?? '';       
         $correoEmpresa    = $parametros['correoEmpresa']    ?? '';
         $telefonosEmpresa = $parametros['telefonosEmpresa'] ?? '';
         $direccionEmpresa = $parametros['direccionEmpresa'] ?? '';
@@ -72,26 +69,9 @@ class GenerarPdf extends TCPDF
         $this->Ln(4); 
         $this->Cell(192,4,$correoEmpresa,0,0,'C');
         $this->Ln(4); 
-        $this->Cell(192,4,$telefonosEmpresa." | ".$codigoPostal,0,0,'C');
+        $this->Cell(192,4,$telefonosEmpresa,0,0,'C');
         $this->Ln(4); 
         $this->Cell(192,4,$urlEmpresa,0,0,'C');
-
-        if($mostrarQR === 'SI'){
-            $url   = URL::to('/').'/verificarQR/'.urlencode(Encrypt::encrypted($solicitudId));
-            $style = [
-                    'hpadding' => 'auto',
-                    'vpadding' => 'auto',
-                    'fgcolor'  => array(0,0,0),
-                    'bgcolor'  => false,
-                    'text'     => true,
-                    'font'     => 'helvetica',
-                    'fontsize' => 8,
-                    'stretchtext' => 4,
-                    'label'       => 'Verifica este documento en '.URL::to('/').'verificarQR'
-                ];
-
-            $this->write2DBarcode($url, 'QRCODE,H', 180, 273, 30, 30, $style, 'N' );
-        }
     }
 
     public static function registro($solicitud, $anexos=[], $empresa, $metodo = 'I')
@@ -263,4 +243,67 @@ class GenerarPdf extends TCPDF
             $tcpdf->output($tituloPdf, 'I');
         }
 	}
+
+    public static function inscripcionDelegado($data, $empresa, $metodo = 'I')
+    {
+        $numeroInscripcion = $data['numeroInscripcion'] ?? '';
+        $tituloEleccion    = $data['tituloEleccion'] ?? '';
+        $contenido         = $data['contenido'] ?? '';
+
+        $nombreEmpresa = $empresa->emprnombre;
+        $siglaEmpresa  = $empresa->emprsigla;
+        $nitEmpresa    = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->escudo,
+            'lemaEmpresa'      => $empresa->emprlema,           
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LEGAL', true, 'UTF-8', false);
+        $tcpdf->SetAuthor($nombreEmpresa); 
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('INSCRIPCIÓN DELEGADOS DE '.$siglaEmpresa);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT, '.$numeroInscripcion);
+        $tcpdf->SetTitle('Certificado aspirante a delegado número '.$numeroInscripcion);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+		$tcpdf->setParametrosFooter($parametrosFijos); 
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->AddPage('P', 'Letter');
+        #Establecemos los márgenes izquierda, arriba y derecha
+        $tcpdf->SetMargins(20, 40 , 20);
+        $tcpdf->SetAutoPageBreak(true,35);
+        $tcpdf->SSetFont('helvetica','B',12);
+        $tcpdf->SLn(28); 
+        $tcpdf->SCell(170,5,$nombreEmpresa,0,0,'C');
+        $tcpdf->SLn(5);
+        $tcpdf->SCell(170,5,$siglaEmpresa,0,0,'C');
+        $tcpdf->SLn(5);
+        $tcpdf->SCell(170,5,$nitEmpresa,0,0,'C');
+        $tcpdf->SLn(10);
+        
+        $tcpdf->SMultiCell(170,4,$tituloEleccion,0,'C',0);
+        $tcpdf->SSetFont('helvetica','',12);
+        $tcpdf->SLn(8);        
+        $tcpdf->SwriteHTML($contenido, true, 0, true, true);
+        $tcpdf->SLn(12);
+
+        //Descargo o muestro el pdf
+		$tituloPdf = $numeroInscripcion.'.pdf';
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Eleccion;
+namespace App\Models\Eleccion\Delegado;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;

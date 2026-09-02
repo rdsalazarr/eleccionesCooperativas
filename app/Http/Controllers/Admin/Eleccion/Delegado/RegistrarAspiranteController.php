@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Eleccion\Delegado;
 
-use App\Models\Eleccion\EleccionDelegadoAspirante;
+use App\Models\Eleccion\Delegado\Aspirante;
 use App\Http\Controllers\Controller;
 use App\Util\ProcesadorImagen;
 use Throwable, DB, Log, auth;
 use Illuminate\Http\Request;
+use App\Util\GenerarPdf;
 use App\Util\General;
+use App\Util\Empresa;
 
 class RegistrarAspiranteController extends Controller
 {
@@ -72,7 +74,7 @@ class RegistrarAspiranteController extends Controller
 		try {
 
 			$id = $request->codigo;	
-			$eleccionDelegadoAspirante = ($id != '000') ? EleccionDelegadoAspirante::findOrFail($id) : new EleccionDelegadoAspirante();
+			$eleccionDelegadoAspirante = ($id != '000') ? Aspirante::findOrFail($id) : new Aspirante();
 
             if($request->hasFile('foto')){
                 $rutaCarpeta    = public_path().'/archivos/images/aspirante/';
@@ -89,15 +91,17 @@ class RegistrarAspiranteController extends Controller
             }
 
             if($request->tipo === 'I'){
-                $eleccionDelegado   = DB::table('elecciondelegado')->select('eledelid')->where('eledelanio', date('Y'))->first(); 
-                $eleccionDelegadoId = $elecciondelegado->eledelid;
-                $consecutivo      = EleccionDelegadoAspirante::obtenerConsecutivo($elecciondelegado->eledelid, auth()->user()->agenid);
+                $eleccionDelegado   = DB::table('elecciondelegado')->select('eledelid', 'eledeltitulo', 'eledelperiodo')->where('eledelanio', date('Y'))->first(); 
+                $eleccionDelegadoId = $eleccionDelegado->eledelid;
+                $tituloEleccion     = $eleccionDelegado->eledeltitulo.' '.$eleccionDelegado->eledelperiodo;
+                $consecutivo        = Aspirante::obtenerConsecutivo($elecciondelegado->eledelid, auth()->user()->agenid);
                 $eleccionDelegadoAspirante->eldeasnumero    = str_pad($consecutivo, 2, '0', STR_PAD_LEFT);
                 $eleccionDelegadoAspirante->eledelid        = $eleccionDelegadoId;
                 $eleccionDelegadoAspirante->agenid          = auth()->user()->agenid;
                 $eleccionDelegadoAspirante->eldeasfechahora = Carbon::now();
             }
 
+            $correoAspirante = $request->correo;
             $primerNombre    = mb_strtoupper($request->primerNombre,'UTF-8');
             $segundoNombre   = mb_strtoupper($request->primernombre,'UTF-8');
             $primerApellido  = mb_strtoupper($request->primernombre,'UTF-8');
@@ -105,7 +109,7 @@ class RegistrarAspiranteController extends Controller
             $nombreAsociado  = $primerNombre.' '.$segundoNombre.' '.$primerApellido.' '.$segundoApellido;
 
 			$eleccionDelegadoAspirante->tipideid              = $request->tipoIdentificacion;
-            $eleccionDelegadoAspirante->eldeasdocumento       = $request->documento;            
+            $eleccionDelegadoAspirante->eldeasdocumento       = $request->documento;
             $eleccionDelegadoAspirante->eldeasprimernombre    = $primerNombre;
             $eleccionDelegadoAspirante->eldeassegundonombre   = $segundoNombre;
             $eleccionDelegadoAspirante->eldeasprimerapellido  = $primerApellido;
@@ -118,29 +122,43 @@ class RegistrarAspiranteController extends Controller
 
             $mensajeCorreo = '';
 			if ($request->tipo === 'I'){
-				$nombreUsuario     = $nombres.' '. $apellidos;
-				$email             = $request->correo;
-				$contrasenaSistema = $request->documento;
-				$urlSistema        = URL::to('/');
-				$empresa           = DB::table('empresa')->select('emprcorreo','emprsigla')->where('emprid', 1)->first();
-				$emailEmpresa 	   = $empresa->emprcorreo;
+                $empresa           = Empresa::informacion();
+                $emailEmpresa 	   = $empresa->emprcorreo;
 				$nombreEmpresa     = $empresa->emprsigla;
-				$informacionCorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificarRegistroUsuario')->first();
-				$buscar            = Array('nombreEmpresa','nombreUsuario','nickUsuario', 'contrasenaUsuario','urlSistema');
-        		$remplazo          = Array($nombreEmpresa, $nombreUsuario, $nickUsuario, $contrasenaSistema, $urlSistema);
 
-                $buscar            = Array("nombre_asociado","numero_asignado", "titulo_eleccion", "nombre_agencia", "lugar_votacion");
-                $remplazo          = Array(mb_strtoupper($nombre_asociado,'UTF-8'), $numeroInscripcion, $tituloEleccion, $nombreAgencia, $lugarVotacion);
+                $eleccionDelegadoAgencia = DB::table('elecciondelegadoagencia as eda')
+                                                ->select('eda.eldeaglugar', 'a.agennombre')
+                                                ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
+                                                ->join('agencia as a', 'a.agenid', '=', 'eda.agenid')
+                                                ->where('eledelid', $eleccionDelegadoId)
+                                                ->where('agenid', auth()->user()->agenid)
+                                                ->first();
+
+                $nombreAgencia     = $eleccionDelegadoAgencia->agennombre;
+                $lugarVotacion     = $eleccionDelegadoAgencia->eldeaglugar;
+
+				$informacionCorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificarRegistroAspiranteDelegado')->first();
+                $buscar            = Array("nombreAsociado","numeroAsignado", "tituloEleccion", "nombreAgencia", "lugarVotacion");
+                $remplazo          = Array($nombreAsociado, $consecutivo, $tituloEleccion, $nombreAgencia, $lugarVotacion);
 				$asunto            = str_replace($buscar, $remplazo, $informacionCorreo->innocoasunto);
 				$msg               = str_replace($buscar, $remplazo, $informacionCorreo->innococontenido);
 				$enviarcopia       = $informacionCorreo->innocoenviarcopia;
 				$enviarpiepagina   = $informacionCorreo->innocoenviarpiepagina;
-				$mensajeCorreo     = ', se ha enviado notificación al correo '.Notificar::correo([$email], $asunto, $msg, [], $emailEmpresa, $enviarcopia, $enviarpiepagina, $nombreEmpresa);
+
+                $data = [
+                        'numeroInscripcion' => $consecutivo,
+                        'tituloEleccion'    => $asunto,
+                        'contenido'         => $msg,
+                    ];
+
+                $rutaPdf[]     = GenerarPdf::inscripcionDelegado($data, $empresa, 'S');
+				$mensajeCorreo = ', se ha enviado notificación al correo '.Notificar::correo([$correoAspirante], $asunto, $msg, $rutaPdf, $emailEmpresa, $enviarcopia, $enviarpiepagina, $nombreEmpresa);
 			}
 
             DB::commit();
 			return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito '.$mensajeCorreo ]);
 		} catch (Throwable $e){
+            dd($e);
             DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro ']);
@@ -156,7 +174,7 @@ class RegistrarAspiranteController extends Controller
             return response()->json(['success' => false, 'message'=> 'Este registro no se puede eliminar, porque está relacionado con un voto de la elección de delegado ']);
         }else{
             try {
-                $eleccionDelegadoAspirante = EleccionDelegadoAspirante::findOrFail($request->codigo);
+                $eleccionDelegadoAspirante = Aspirante::findOrFail($request->codigo);
                 $eleccionDelegadoAspirante->delete();
                 return response()->json(['success' => true, 'message' => 'Registro eliminado con éxito']);
             } catch (Throwable $e){

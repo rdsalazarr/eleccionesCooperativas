@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('eldeagnumerodelesuplente',3)->comment('Número de delegado suplente en la agencia');
 
             $table->timestamps(); 
+            $table->unique(['eledelid', 'agenid'],'uk_elecciondelegadoagencia');
             $table->foreign('eledelid', 'fk_eldeageledel')->references('eledelid')->on('elecciondelegado')->onUpdate('cascade'); 
             $table->foreign('agenid', 'fk_eldeagagen')->references('agenid')->on('agencia')->onUpdate('cascade');
         });
@@ -40,11 +41,12 @@ return new class extends Migration
         Schema::create('elecciondelegadoagenciajurado', function (Blueprint $table) {
             $table->increments('eldeajid')->comment('Identificador de la tabla eleccion delegado agencia jurado');  
             $table->unsignedInteger('eldeagid')->comment('Identificador de la tabla eleccion agencia');
-            $table->string('eldeajdocumento',15)->comment('Documento del jurado');
+            $table->string('eldeajdocumento',50)->comment('Documento del jurado');
             $table->string('eldeajnombre',100)->comment('Nombre del jurado');
-            $table->string('eldeajcargo',50)->comment('Cargo del jurado');
+            $table->string('eldeajcargo',50)->nullable()->comment('Cargo del jurado');
 
             $table->timestamps();
+            $table->unique(['eldeagid', 'eldeajdocumento'], 'uk_elecciondelegadoagenciajurado');
             $table->foreign('eldeagid', 'fk_eldeajeldeag')->references('eldeagid')->on('elecciondelegadoagencia')->onUpdate('cascade');
         });
 

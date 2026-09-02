@@ -32,7 +32,7 @@ const schema = yup.object({
 
 export default function Frm({data, tipo}){
 
-    const { register, handleSubmit, getValues, setError, clearErrors, reset, control, watch, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, getValues, setError, clearErrors, reset, control, setValue, formState: { errors } } = useForm({
                 resolver: yupResolver(schema),
                 defaultValues: tipo !== 'I'
                     ? {codigo:data.usuaid,     documento:data.usuadocumento, nombre:data.usuanombre,  apellido:data.usuaapellidos, 
@@ -45,10 +45,10 @@ export default function Frm({data, tipo}){
     const [rolesUsuario, setRolesUsuario] = useState([]);
     const [habilitado, setHabilitado] = useState(true);
     const [agencias, setAgencias] = useState([]);
-    const [loader, setLoader] = useState(true);    
-    const [roles, setRoles] = useState([]);    
+    const [loader, setLoader] = useState(true);
+    const [roles, setRoles] = useState([]);
 
-    const adicionarFilaRol = () => {
+    const adicionarFila = () => {
         const rolSeleccionado = getValues('rol');
 
         if (!rolSeleccionado) {
@@ -69,7 +69,7 @@ export default function Frm({data, tipo}){
         setValue('rol', '');
     };
 
-    const eliminarFilaRol = (id) =>{
+    const eliminarFila = (id) =>{
         let newRolesUsuario = []; 
         rolesUsuario.map((res,i) =>{
             if(res.estado === 'U' && i === id){
@@ -106,6 +106,7 @@ export default function Frm({data, tipo}){
             (tipo !== 'I' && res.success) ? setHabilitado(false) : null;
             (tipo === 'I' && res.success) ? reset({codigo:'000',    documento:'', nombre:'', apellido: '', correo: '', agencia: '',
                                                     nickUsuario:'', cambiarPassword:'0', bloqueado:'0',  estado:'1', rol:'', tipo: tipo}) : null;
+            (tipo === 'I' && res.success) ? setRolesUsuario([]) : null;
             setLoader(false);
         })
     }
@@ -114,7 +115,7 @@ export default function Frm({data, tipo}){
         setLoader(true);
         instance.post('/admin/usuario/list/datos', {codigo: data?.usuaid || '000', tipo:tipo}).then(res=>{
             setAgencias(res.agencias);
-            setRoles(res.roles);            
+            setRoles(res.roles);
             if(tipo === 'U' && res.success){
                 let newRolesUsuario = [];
                 res.usuariosRoles.forEach(function(usua){
@@ -327,7 +328,7 @@ export default function Frm({data, tipo}){
 
                 <Grid size={{ xs: 12, sm: 12, md: 2 }}>
                     <Button type={"button"} className={'modalBtnIcono'} 
-                        startIcon={<Add className='icono' />} onClick={() => {adicionarFilaRol()}}> {"Agregar"}
+                        startIcon={<Add className='icono' />} onClick={() => {adicionarFila()}}> {"Agregar"}
                     </Button>
                 </Grid>
 
@@ -357,7 +358,7 @@ export default function Frm({data, tipo}){
 
                                             <TableCell className='cellCenter'>
                                                 <Icon key={'iconDelete'+a} className={'icon top red'}
-                                                        onClick={() => {eliminarFilaRol(a);}}
+                                                        onClick={() => {eliminarFila(a);}}
                                                     >clear</Icon>
                                             </TableCell>
                                         </TableRow>

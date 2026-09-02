@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Gestionar\PerfilUsuarioController;
 use App\Http\Controllers\Admin\Gestionar\OrganoEleccionController;
 use App\Http\Controllers\Admin\Gestionar\CargarAsociadoController;
 
+use App\Http\Controllers\Admin\Eleccion\Delegado\GestionController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\AbrirVotacionController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\InformeVotacionController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\ImprimirVotacionController;
@@ -110,6 +111,13 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
         Route::post('/asociados/destroy', [AsociadoController::class, 'destroy']);
 
         Route::prefix('eleccion/delegado')->group(function(){
+            Route::get('/gestion/list', [GestionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/gestion','verifySource']);
+            Route::post('/gestion/asignar/jurados/list', [GestionController::class, 'juradosAsignados']);
+            Route::post('/gestion/asignar/jurados/salve', [GestionController::class, 'asignarJurados']);
+            Route::post('/gestion/list/datos', [GestionController::class, 'datos']);
+            Route::post('/gestion/salve', [GestionController::class, 'salve']);
+            Route::post('/gestion/destroy', [GestionController::class, 'destroy']);
+
             Route::get('/registrar/aspirante/list', [RegistrarAspiranteController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/registrarAspirante','verifySource']);
 
             Route::get('/jurados/list', [JuradosDelegadoController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/jurados','verifySource']);

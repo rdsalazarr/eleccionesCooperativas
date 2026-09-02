@@ -42,12 +42,12 @@ export default function Frm({data, tipo}) {
     const [loader, setLoader] = useState(false);
 
     const onSubmit = (formValues) => {
-        //setLoader(true);
+        setLoader(true);
         instance.post('/admin/asociados/salve', formValues).then(res => {
             let icono = res.success ? 'success' : 'error';
             ShowSnackbar(res.message, icono);
             (tipo !== 'I' && res.success) ? setHabilitado(false) : null; 
-            (tipo === 'I' && res.success) ? reset({codigo: '000', tipoIdentificacion: '', documento: '', nombre:'', correo:'', fechaNacimiento:'', 
+            (tipo === 'I' && res.success) ? reset({codigo: '000', tipoIdentificacion: '', documento: '', nombre:'', correo:'', fechaNacimiento:'',
                                             fechaExpedicion: '', fechaIngreso: '', telefono:'', celular:'', agencia:'', genero:'', estado:'', tipo: tipo }) : null;
             setLoader(false);
         });
@@ -305,7 +305,7 @@ export default function Frm({data, tipo}) {
                         )}
                     />
                 </Grid>
-  
+
             </Grid>
 
             <Box className={'botonesModal'}>

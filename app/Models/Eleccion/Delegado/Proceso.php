@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Eleccion;
+namespace App\Models\Eleccion\Delegado;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['eledelid','asocid','eldeprfecha','eldeprhora'])]
-class EleccionDelegadoProceso extends Model
+class Proceso extends Model
 {
     protected $table      = 'elecciondelegadoproceso';
 	protected $primaryKey = 'eldeprid';

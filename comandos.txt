@@ -47,6 +47,7 @@ php artisan make:controller Admin\Gestionar\OrganoEleccionController
 php artisan make:controller Admin\Gestionar\CargarAsociadoController
 php artisan make:controller Admin\Gestionar\AsociadoController
 
+php artisan make:controller Admin\Eleccion\Delegado\GestionarController
 php artisan make:controller Admin\Eleccion\Delegado\RegistrarAspiranteController
 php artisan make:controller Admin\Eleccion\Delegado\JuradosController
 php artisan make:controller Admin\Eleccion\Delegado\AbrirVotacionController

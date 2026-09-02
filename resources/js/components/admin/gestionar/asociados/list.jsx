@@ -53,7 +53,7 @@ export default function List(){
                 <Box sx={{maxHeight: '35em', overflow:'auto'}} sm={{maxHeight: '35em', overflow:'auto'}}>
                     <TablaGeneral
                         datos={data}
-                        titulo={['Tipo de identificación','Número de documento','Nombre Completo','Fecha de nacimiento','Fecha de expedición','Teléfono','Correo','Agencia','Activo','Actualizar','Eliminar']}
+                        titulo={['Tipo de identificación','Número de documento','Nombre completo','Fecha de nacimiento','Fecha de expedición','Teléfono','Correo','Agencia','Activo','Actualizar','Eliminar']}
                         ver={["tipoIdentificacion","asocnumerodocumento","asocnombrecompleto","asocfechanacimiento","asocfechaexpedicion","telefonos","asocemail","agencia","estado"]}
                         accion={[
                             {tipo: 'T', icono : 'add',    color: 'green',  funcion : (data)=>{edit(data,0)} },
