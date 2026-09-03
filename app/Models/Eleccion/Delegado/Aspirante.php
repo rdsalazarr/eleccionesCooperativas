@@ -13,7 +13,7 @@ class Aspirante extends Model
     protected $table      = 'elecciondelegadoaspirante';
 	protected $primaryKey = 'eldeasid';
 
-    public function obtenerConsecutivo(int $eleccionId, int $agenciaId): int
+    public static function obtenerConsecutivo(int $eleccionId, int $agenciaId): int
     {
         $ultimoNumero = DB::table('elecciondelegadoaspirante')
                         ->where('eledelid', $eleccionId)

@@ -5,11 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\FrondController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Security\MantenimientoController;
 
 use App\Http\Controllers\Admin\Configurar\RolController;
 use App\Http\Controllers\Admin\Configurar\ActaController;
 use App\Http\Controllers\Admin\Configurar\ModuloController;
 use App\Http\Controllers\Admin\Configurar\EmpresaController;
+
 use App\Http\Controllers\Admin\Configurar\FuncionalidadController;
 use App\Http\Controllers\Admin\Configurar\ConfiguracionCorreoController;
 use App\Http\Controllers\Admin\Configurar\NotificacionCorreoController;
@@ -116,14 +118,19 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
             Route::post('/gestion/asignar/jurados/salve', [GestionController::class, 'asignarJurados']);
             Route::post('/gestion/list/datos', [GestionController::class, 'datos']);
             Route::post('/gestion/salve', [GestionController::class, 'salve']);
+            Route::post('/gestion/visualizar', [GestionController::class, 'show']);
             Route::post('/gestion/destroy', [GestionController::class, 'destroy']);
 
             Route::get('/registrar/aspirante/list', [RegistrarAspiranteController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/registrarAspirante','verifySource']);
+            Route::post('/registrar/aspirante/list/datos', [RegistrarAspiranteController::class, 'datos']);
+            Route::post('/registrar/aspirante/salve', [RegistrarAspiranteController::class, 'salve']);
+            Route::post('/registrar/aspirante/ver/PDF', [RegistrarAspiranteController::class, 'showPdf']);
+
 
             Route::get('/jurados/list', [JuradosDelegadoController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/jurados','verifySource']);
 
             Route::get('/abrir/votacion/list', [AbrirVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/abrirVotacion','verifySource']);
-            
+
             Route::get('/imprimir/actas/list', [ImprimirVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/imprimirActas','verifySource']);
 
             Route::get('/informes/list', [InformeVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/informeVotacion','verifySource']);

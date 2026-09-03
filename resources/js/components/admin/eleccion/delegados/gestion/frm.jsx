@@ -31,7 +31,7 @@ const schema = yup.object().shape({
 
 export default function Frm({data, tipo}) {
 
-     const { register, handleSubmit, getValues, setError, clearErrors, reset, control, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, getValues, setError, clearErrors, reset, control, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: tipo !== 'I'
             ? { codigo: data.eledelid, titulo: data.eledeltitulo, periodo: data.eledelperiodo, horaInicio:data.eledelhorainicio,

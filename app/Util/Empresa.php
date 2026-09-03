@@ -13,7 +13,7 @@ class Empresa
                     DB::raw("CONCAT('NIT:', emprnit) as nitEmpresa"),
                     DB::raw("CONCAT('Dirección:', emprdireccion) as direccionEmpresa"),
                     DB::raw("CONCAT('Correo electrónico:', emprcorreo) as correoElectronico"),
-                    DB::raw("CONCAT('archivos/images/logoIntitucion/',emprlogo) as logo"),
+                    DB::raw("CONCAT('archivos/images/logoIntitucion/',emprlogo) as logoEmpresa"),
                     DB::raw(" CASE 
                                 WHEN emprtelefonofijo IS NOT NULL AND emprtelefonocelular IS NOT NULL 
                                     THEN CONCAT('Teléfonos: ', emprtelefonofijo, ' / ', emprtelefonocelular)

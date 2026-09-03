@@ -11,7 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (!defined('K_PATH_FONTS')) {
+            define('K_PATH_FONTS', base_path('resources/tcpdf/fonts/'));
+        }
     }
 
     /**

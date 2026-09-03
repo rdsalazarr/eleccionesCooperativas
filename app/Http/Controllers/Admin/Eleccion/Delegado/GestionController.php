@@ -7,7 +7,8 @@ use App\Models\Eleccion\Delegado\AgenciaJurado;
 use App\Models\Eleccion\Delegado\Agencia;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Throwable, DB, Log, auth;
+use Throwable, DB, Log;
+use App\Util\General;
 
 class GestionController extends Controller
 {
@@ -63,7 +64,6 @@ class GestionController extends Controller
 
 			return response()->json(['success' => true, 'agencias' => $agencias, 'delegadosAgencias' => $delegadosAgencias ]);
 		}catch(Throwable $e){
-            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message' => 'Error al obtener la información para la gestión de la elección de delegados']);
 		}
@@ -84,8 +84,6 @@ class GestionController extends Controller
         try {
 
             $anio             = date('Y');
-
-            $anio = 2025;
             $id               = $request->codigo;
 			$eleccionDelegado = ($id != '000') ? EleccionDelegado::findOrFail($id) : new EleccionDelegado();
 
@@ -126,7 +124,6 @@ class GestionController extends Controller
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito']);
 		} catch (Throwable $e){
-            dd($e);
 			DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro de la gestion de la elección de delegado']);
@@ -136,7 +133,7 @@ class GestionController extends Controller
     public function juradosAsignados(Request $request)
 	{
 		$request->validate(['codigo' => 'required']);
-		try{ 	
+		try{
 
 			$juradosAgencias = DB::table('elecciondelegadoagenciajurado as edaj')
                                 ->select('edaj.eldeajid','edaj.eldeajdocumento','edaj.eldeajnombre', 'edaj.eldeajcargo','a.agennombre')
@@ -147,7 +144,6 @@ class GestionController extends Controller
 
 			return response()->json(['success' => true, 'juradosAgencias' => $juradosAgencias ]);
 		}catch(Throwable $e){
-            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message' => 'Error al obtener la información de los jurado de la agencia para la elección de delegados']);
 		}
@@ -186,12 +182,48 @@ class GestionController extends Controller
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito']);
 		} catch (Throwable $e){
-            dd($e);
 			DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro delos jurados para la elección de delegado']);
 		}
 	}
+
+    public function show(Request $request)
+	{
+        $request->validate(['codigo' => 'required']);
+		try{
+
+        	$delegadosAgencias = DB::table('elecciondelegadoagencia as eda')
+                                        ->select('eda.agenid', 'eda.eldeaglugar','eda.eldeagnumerodeleprincipal','eda.eldeagnumerodelesuplente','a.agennombre')
+										->join('agencia as a', 'a.agenid', '=', 'eda.agenid')
+										->where('eda.eledelid', $request->codigo)->get();
+
+            $arrayDelegadosAgencias = collect($delegadosAgencias)->map(function($x){ 
+                                                return (array) $x;
+                                            })->toArray();
+
+			$juradosAgencias = DB::table('elecciondelegadoagenciajurado as edaj')
+                                    ->select('edaj.eldeajdocumento','edaj.eldeajnombre', 'edaj.eldeajcargo', 'eda.agenid')
+                                    ->join('elecciondelegadoagencia as eda', 'eda.eldeagid', '=', 'edaj.eldeagid')
+                                    ->where('eda.eledelid', $request->codigo)
+                                    ->get();
+
+            $arrayJuradosAgencias = collect($juradosAgencias)->map(function($x){ 
+                                        return (array) $x;
+                                    })->toArray();
+
+            $label   = ['agenid'];
+            $nombres = ['jurados'];
+
+            $agencias =  General::ordenarArray($arrayDelegadosAgencias, $label, $nombres, $arrayJuradosAgencias);
+
+			return response()->json(['success' => true, 'agencias' => $agencias ]);
+		}catch(Throwable $e){
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message' => 'Error al obtener la información de los jurado de la agencia para la elección de delegados']);
+		}
+
+    }
 
     public function destroy(Request $request)
 	{

@@ -152,6 +152,7 @@ export default function Frm({data, tipo}){
                         label="Arrastra y suelta o elige el logo en formato png"
                         handleFiles={handleFiles}
                         maxFileSize={1000000}
+                        currentFiles={formDataFile.logos}
                     />
                 </Grid>
 

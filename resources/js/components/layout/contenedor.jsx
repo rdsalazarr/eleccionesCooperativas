@@ -29,7 +29,6 @@ import Asociados from "../admin/gestionar/asociados/list";
 import OrganosEleccion from "../admin/gestionar/organosEleccion/list";
 import CargarAsociados from "../admin/gestionar/asociados/cargar/list";
 
-import JuradosDelegados from "../admin/eleccion/delegados/jurados/list";
 import RegistrarAspirante from "../admin/eleccion/delegados/aspirantes/list";
 import ImprimirActas from "../admin/eleccion/delegados/votacion/imprimirActas";
 import GestionEleccionesDelegado from "../admin/eleccion/delegados/gestion/list";
@@ -185,7 +184,6 @@ const componenteMenu = [
         itemMenu: [
             {ruta : 'admin/eleccionDelegado/gestion',            menu: 'Gestión ',             icono : 'menu_book',    componente : <GestionEleccionesDelegado /> },
             {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
-            {ruta : 'admin/eleccionDelegado/jurados',            menu: 'Jurados',              icono : 'poll',         componente : <JuradosDelegados /> },
             {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir Votacion ',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
             {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Actas ',      icono : 'announcement', componente : <ImprimirActas /> },
             {ruta : 'admin/eleccionDelegado/informeVotacion',    menu: 'Informe de Votación ', icono : 'cloud_sync',   componente : <InformeVotacion /> },
@@ -197,7 +195,7 @@ const componenteMenu = [
             {ruta : 'admin/organosEleccion/delegados',     menu: 'Delegados',     icono : 'person',        componente : <Delegados /> },
             {ruta : 'admin/organosEleccion/generarToken',  menu: 'Generar Token', icono : 'person',        componente : <GenerarToken /> },
             {ruta : 'admin/organosEleccion/informacion',   menu: 'Información ',  icono : 'menu_book',     componente : <Informacion /> },
-            {ruta : 'admin/organosEleccion/jurados',       menu: 'Jurados ',      icono : 'menu_book',     componente : <JuradosOrganosEleccion /> },
+            {ruta : 'admin/organosEleccion/jurados',       menu: 'Jurados ',      icono : 'poll',          componente : <JuradosOrganosEleccion /> },
             {ruta : 'admin/organosEleccion/abrirVotacion', menu: 'Generar ',      icono : 'library_books', componente : <AbrirVotacionOrganosEleccion /> },
             
         ]
