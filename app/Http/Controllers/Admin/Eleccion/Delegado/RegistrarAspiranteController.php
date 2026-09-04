@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Eleccion\Delegado;
 
 use App\Models\Eleccion\Delegado\Aspirante;
-use Throwable, DB, Log, auth, URL, File;
+use Throwable, DB, Log, Auth, URL, File;
 use App\Http\Controllers\Controller;
 use App\Util\ProcesadorImagen;
 use Illuminate\Http\Request;
@@ -222,6 +222,49 @@ class RegistrarAspiranteController extends Controller
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF ']);
 		}
 	}
+
+    public function imprimirLista(Request $request)
+	{
+        try {
+
+            $empresa = Empresa::informacion();
+
+            $eleccionDelegado = DB::table('elecciondelegado')->select('eledelid', 'eledeltitulo', 'eledelperiodo')->where('eledelanio', date('Y'))->first();
+            if (!$eleccionDelegado) {
+                return null;
+            }
+            $titulo  = $eleccionDelegado->eledeltitulo;
+            $periodo = $eleccionDelegado->eledelperiodo;
+
+            $agencias = DB::table('agencia')->select('agenid', 'agennombre')->orderBy('agennombre')->get();
+
+            foreach ($agencias as $agencia) {
+                $agencia->aspirantes = DB::table('elecciondelegadoaspirante as eda')
+                                    ->select(
+                                        DB::raw("LPAD(eda.eldeasnumero, 2, '0') as eldeasnumero"),
+                                        DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre, eda.eldeasprimerapellido, eda.eldeassegundoapellido ) as nombreCompleto") )
+                                    ->where('eda.agenid', $agencia->agenid)
+                                    ->where('eda.eledelid', $eleccionDelegado->eledelid)
+                                    ->where('eda.eldeasactivo', true)
+                                    ->where('eda.eldeasesvotoblanco', false)
+                                    ->orderBy('eda.eldeasnumero')
+                                    ->get();
+            }
+
+            $data = [
+                    'tituloEleccion' => 'Aspirantes a '.mb_strtolower($titulo,'UTF-8').' '.mb_strtolower($periodo,'UTF-8'),
+                    'agencias'       => $agencias
+                ];
+
+            $dataPdf = GenerarPdf::listaDelegado($data, $empresa, 'S');    
+
+			return response()->json(['success' => true, "data" => $dataPdf]);
+		} catch (Throwable $e){
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF ']);
+		}
+
+    }
 
 	public function destroy(Request $request)
 	{

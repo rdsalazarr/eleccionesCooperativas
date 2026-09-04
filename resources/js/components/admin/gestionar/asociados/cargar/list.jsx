@@ -33,12 +33,12 @@ export default function List(){
             <Typography component={'h2'} className={'titleGeneral'}>Cargar asociados masivamente</Typography>
             <Grid container justifyContent="center">
                 <Grid size={{ xs: 12 }}>
-                    <Card elevation={3}>
+                    <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
                         <CardContent>
 
                             <Grid container spacing={2}>
                                 <Grid size={{ xs: 12, sm: 4 }}>
-                                    <Button fullWidth variant="contained" color="primary"
+                                    <Button fullWidth className='btnAsociados btnCargar'
                                         startIcon={<GroupIcon />}
                                         onClick={() => abrirModal(0)}
                                         sx={{ py: 1.5 }}>
@@ -47,7 +47,7 @@ export default function List(){
                                 </Grid>
 
                                 <Grid size={{ xs: 12, sm: 4 }}>
-                                    <Button fullWidth variant="contained" color="success"
+                                    <Button fullWidth  className='btnAsociados btnVerificar'
                                         startIcon={<BadgeIcon />}
                                         onClick={() => abrirModal(1)}
                                         sx={{ py: 1.5 }} >
@@ -56,7 +56,7 @@ export default function List(){
                                 </Grid>
 
                                 <Grid size={{ xs: 12, sm: 4 }}>
-                                    <Button fullWidth variant="contained" color="error"
+                                    <Button fullWidth  className='btnAsociados btnProcesar'
                                         startIcon={<Groups2Icon />}
                                         onClick={() => abrirModal(2)}
                                         sx={{ py: 1.5 }} >

@@ -125,11 +125,11 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
             Route::post('/registrar/aspirante/list/datos', [RegistrarAspiranteController::class, 'datos']);
             Route::post('/registrar/aspirante/salve', [RegistrarAspiranteController::class, 'salve']);
             Route::post('/registrar/aspirante/ver/PDF', [RegistrarAspiranteController::class, 'showPdf']);
-
-
-            Route::get('/jurados/list', [JuradosDelegadoController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/jurados','verifySource']);
+            Route::post('/registrar/aspirante/imprimir/lista',[RegistrarAspiranteController::class, 'imprimirLista']);    
 
             Route::get('/abrir/votacion/list', [AbrirVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/abrirVotacion','verifySource']);
+            Route::post('/generar/acta/inicio/PDF', [AbrirVotacionController::class, 'actaInicio']);
+            Route::post('/generar/acta/cierre/PDF', [AbrirVotacionController::class, 'actaCierre']);
 
             Route::get('/imprimir/actas/list', [ImprimirVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/imprimirActas','verifySource']);
 

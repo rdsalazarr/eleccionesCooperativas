@@ -11,12 +11,12 @@ import Frm from './frm';
 
 export default function List(){
 
-    const [modal, setModal] = useState({open : false, vista:4, data:{}, titulo:'', tamano:'bigFlot'});
+    const [modal, setModal] = useState({open : false, vista:5, data:{}, titulo:'', tamano:'bigFlot'});
     const [loader, setLoader] = useState(true);
     const [data, setData] = useState([]);
 
     const cerrarModal = () =>{
-        setModal({open : false, vista:4, data:{}, titulo:'', tamano:'bigFlot'});
+        setModal({open : false, vista:5, data:{}, titulo:'', tamano:'bigFlot'});
     }
 
     const modales = [
@@ -24,12 +24,19 @@ export default function List(){
                         <Frm data={modal.data} tipo={'U'} />,
                         <Eliminar id={modal?.data?.eldeasid || null} ruta={'/admin/eleccion/delegado/registrar/aspirante/destroy'} cerrarModal={cerrarModal} />,
                         <VisualizarPdf id={modal?.data?.eldeasid || null} ruta={'/admin/eleccion/delegado/registrar/aspirante/ver/PDF'} />,
+                        <VisualizarPdf id={modal?.data?.eldeasid || null} ruta={'/admin/eleccion/delegado/registrar/aspirante/imprimir/lista'} />,
                     ];
 
     const tituloModal = ['Nuevo aspirante','Editar aspirante','', 'Ver información en PDF'];
 
     const edit = (data, tipo) =>{
-        setModal({open: true, vista: tipo, data:data, titulo: tituloModal[tipo], tamano: (tipo === 2 ) ? 'smallFlot' :  'mediumFlot'});
+        const tamanos = {
+                        '2': 'smallFlot',
+                        '3': 'mediumFlotPdf',
+                        '4': 'mediumFlotPdf'
+                    };
+        const tamano = tamanos[tipo] || 'mediumFlot';
+        setModal({open: true, vista: tipo, data:data, titulo: tituloModal[tipo], tamano: tamano});
     }
 
     const inicio = () =>{
@@ -62,6 +69,7 @@ export default function List(){
                             {tipo: 'B', icono : 'edit',           color: 'orange', funcion : (data)=>{edit(data,1)} },
                             {tipo: 'B', icono : 'delete',         color: 'red',    funcion : (data)=>{edit(data,2)} },
                             {tipo: 'B', icono : 'picture_as_pdf', color: 'orange', funcion : (data)=>{edit(data,3)} },
+                            {tipo: 'D', icono : 'picture_as_pdf', color: 'orange', funcion : (data)=>{edit(data,4)} },
                         ]}
                         funciones={{orderBy: true,search: true, pagination: true}}
                     />
@@ -70,7 +78,7 @@ export default function List(){
                 <ModalDefault
                     title   = {modal.titulo}
                     content = {modales[modal.vista]}
-                    close   = {() =>{cerrarModal(), inicio();}}
+                    close   = {() =>{cerrarModal(), [0, 1, 2].includes(modal.vista) ? inicio() : null;}}
                     tam     = {modal.tamano}
                     abrir   = {modal.open}
                 />

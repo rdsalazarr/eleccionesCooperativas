@@ -81,7 +81,7 @@ return new class extends Migration
             $table->date('eldeprfecha')->comment('Fecha en la cual se registra el voto por el asociado');
             $table->time('eldeprhora')->comment('Hora en la cual se registra el voto por el asociado');
             $table->timestamps();
-            $table->unique(['eledelid', 'asocid','eldeprfecha'],'uk_elecciondelegadoproceso');      
+            $table->unique(['eledelid', 'asocid','eldeprfecha'],'uk_elecciondelegadoproceso');
             $table->foreign('eledelid', 'fk_eldepreledel')->references('eledelid')->on('elecciondelegado')->onUpdate('cascade');
             $table->foreign('asocid', 'fk_eldeprasoc')->references('asocid')->on('asociado')->onUpdate('cascade'); 
         });
@@ -98,11 +98,12 @@ return new class extends Migration
         Schema::create('delegado', function (Blueprint $table) {
             $table->smallIncrements('deleid')->comment('Identificador de la tabla delegado');
             $table->string('deledocumento', 15)->unique('uk_delegado')->comment('Documento del delegado');
-            $table->date('delefechaexpedicion')->comment('Fecha de expedición del documento del delegado');
-            $table->string('delenombre', 50)->comment('Nombres del delegado');
-            $table->string('deleapellido', 50)->comment('Apellidos del delegado');
+            $table->string('deleprimernombre', 50)->comment('Primer nombre del delegado');
+            $table->string('delesegundonombre', 50)->nullable()->comment('Segundo nombre del delegado');
+            $table->string('deleprimerapellido', 50)->comment('Primer apellido del delegado');
+            $table->string('delesegundoapellido', 50)->nullable()->comment('Segundo apellido del delegado');
             $table->tinyInteger('delenumero')->comment('Número en el orden el cual fue asignado como delegado');
-            $table->string('delecorreo', 80)->unique('uk_delegado1')->nullable()->comment('Correo del delegado');
+            $table->string('delecorreo', 80)->nullable()->comment('Correo del delegado');
             $table->string('deletelefono', 20)->nullable()->comment('Teléfono del delegado');
             $table->boolean('deleactivo')->default(true)->comment('Determina si el delegado esta activo');
             $table->timestamps(); 

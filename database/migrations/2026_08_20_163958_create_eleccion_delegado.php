@@ -62,8 +62,9 @@ return new class extends Migration
             $table->increments('orelpvid')->comment('Identificador de la tabla eleccion participante voto');
             $table->unsignedInteger('orelpaid')->comment('Identificador de la tabla eleccion participante');
             $table->datetime('orelpvfecha')->comment('Fecha y hora en la cual se registra el voto');
+            $table->string('toketoken', 20)->comment('Token utilizado para la elección');
             $table->timestamps();
-            $table->foreign('orelpaid', 'fk_orelpvorelpa')->references('orelpaid')->on('organoeleccionparticipante')->onUpdate('cascade');    
+            $table->foreign('orelpaid', 'fk_orelpvorelpa')->references('orelpaid')->on('organoeleccionparticipante')->onUpdate('cascade');
         });
     }
 
