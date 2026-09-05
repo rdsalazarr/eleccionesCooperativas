@@ -14,17 +14,19 @@ class DelegadoSeeder extends Seeder
     public function run(): void
     {
         DB::table('delegado')->insert([
-            'deleid'        => '1',
-            'deledocumento' => '123456789',
-            'delenombre'    => 'VOTO',
-            'deleapellido'  => 'BLANCO',
+            'deleid'              => '1',
+            'deledocumento'       => '123456789',
+            'deleprimernombre'    => 'VOTO',
+            'delesegundonombre'   => null,
+            'deleprimerapellido'  => 'BLANCO',
+            'delesegundoapellido' => null,
             'delefechaexpedicion' => '2026-10-01',
-            'delenumero'       => 99,
-            'delecorreo'       => null,
-            'deletelefono'     => null,
-            'deleactivo'       => false,
-            'created_at'       => now(),
-			'updated_at'       => now(),
+            'delenumero'          => 99,
+            'delecorreo'          => null,
+            'deletelefono'        => null,
+            'deleactivo'          => false,
+            'created_at'          => now(),
+			'updated_at'          => now(),
         ]);
     }
 }
