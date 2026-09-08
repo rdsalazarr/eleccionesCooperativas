@@ -4,7 +4,7 @@ namespace App\Models\Eleccion\Delegado;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use DB ;
+use DB;
 
 #[Fillable(['eledelid','tipideid','agenid','eldeasdocumento', 'eldeasnumero','eldeasfechahora','eldeasprimernombre','eldeassegundonombre',
             'eldeasprimerapellido','eldeassegundoapellido', 'eldeascorreo','eldeastelefono','eldeasimagen','eldeasactivo','eldeasesvotoblanco'])]

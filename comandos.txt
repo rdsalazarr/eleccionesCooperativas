@@ -7,6 +7,7 @@ php artisan make:migration create_asociado
 php artisan make:migration create_delegado
 php artisan make:migration create_notificacion
 php artisan make:migration create_eleccion_delegado
+php artisan make:migration create_eleccion_delegado_informe
 
 php artisan make:seeder AgenciaSeeder
 php artisan make:seeder UsuarioSeeder
@@ -30,6 +31,9 @@ php artisan make:model Eleccion/EleccionDelegadoAspirante
 php artisan make:model Eleccion/EleccionDelegadoProceso
 php artisan make:model Eleccion/EleccionDelegadoVoto
 php artisan make:model Eleccion/Delegado
+php artisan make:model Eleccion/Delegado/Informe
+
+
 
 php artisan make:model Eleccion/OrganoEleccion
 php artisan make:model Eleccion/OrganoEleccionTipoOrgano
@@ -51,7 +55,7 @@ php artisan make:controller Admin\Eleccion\Delegado\GestionarController
 php artisan make:controller Admin\Eleccion\Delegado\RegistrarAspiranteController
 php artisan make:controller Admin\Eleccion\Delegado\JuradosController
 php artisan make:controller Admin\Eleccion\Delegado\AbrirVotacionController
-php artisan make:controller Admin\Eleccion\Delegado\ImprimirVotacionController
+php artisan make:controller Admin\Eleccion\Delegado\ImprimirActasVotacionController
 php artisan make:controller Admin\Eleccion\Delegado\InformeVotacionController
 
 php artisan make:controller Admin\Eleccion\Organos\DelegadosController
@@ -59,6 +63,8 @@ php artisan make:controller Admin\Eleccion\Organos\GenerarTokenController
 php artisan make:controller Admin\Eleccion\Organos\InformacionController
 php artisan make:controller Admin\Eleccion\Organos\JuradosController
 php artisan make:controller Admin\Eleccion\Organos\GenerarVotacionController
+
+php artisan make:class Services/ActasVotacionDelegadoService
 
 php artisan migrate:fresh
 php artisan db:seed

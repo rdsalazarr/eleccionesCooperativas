@@ -14,7 +14,7 @@ export default function Procesar({cerrarModal}){
     const [loader, setLoader] = useState(false);
 
     const continuar = () =>{
-        //setLoader(true);
+        setLoader(true);
         instance.post('/admin/cargar/asociados/procesar').then(res=>{
             let icono = (res.success) ? 'success' : 'error';
             ShowSnackbar(res.message, icono);

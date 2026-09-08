@@ -27,7 +27,7 @@ const schemaFirma = yup.object({
 export default function Eliminar({id, ruta, cerrarModal}){
 
     const [habilitado, setHabilitado] = useState(true);
-    const [loader, setLoader] = useState(false);   
+    const [loader, setLoader] = useState(false);
 
     const continuar = () =>{
         setLoader(true);

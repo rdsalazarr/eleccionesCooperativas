@@ -300,7 +300,7 @@ class GenerarPdf extends TCPDF
 
     public static function actaCierre($data, $empresa, $metodo = 'I')
     {
-        $tituloEleccion = $data['tituloEleccion'];  
+        $tituloEleccion = $data['tituloEleccion'];
         $agencias       = $data['agencias'];
 
         $nombreEmpresa   = $empresa->emprnombre;
@@ -330,21 +330,21 @@ class GenerarPdf extends TCPDF
         $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
         $tcpdf->SetSubject('ACTA DE CIERRE DE ELECCIONES DE DELEGADOS DE '.$siglaEmpresa);
         $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
-        $tcpdf->SetTitle('Acta de cierre de elecciones de delegados de '.$siglaEmpresa);    
+        $tcpdf->SetTitle('Acta de cierre de elecciones de delegados de '.$siglaEmpresa);
 
-        foreach($agencias as $agencia){            
+        foreach($agencias as $agencia){
             $tcpdf->AddPage('P', 'Letter');
-            $tcpdf->SetFont('helvetica','B',12);           
+            $tcpdf->SetFont('helvetica','B',12);
             $tcpdf->Cell(170,5,$nombreEmpresa,0,0,'C');
             $tcpdf->Ln(5);
             $tcpdf->Cell(170,5,$siglaEmpresa.mb_strtoupper(' agencia '.$agencia->agennombre,'UTF-8'),0,0,'C');
             $tcpdf->Ln(5);
-            $tcpdf->Cell(170,5,$nitEmpresa,0,0,'C');    
-            $tcpdf->Ln(10);   
+            $tcpdf->Cell(170,5,$nitEmpresa,0,0,'C');
+            $tcpdf->Ln(10);
             $tcpdf->MultiCell(170,4,$agencia->titulo,0,'C',0);
-            $tcpdf->Ln(8);  
+            $tcpdf->Ln(8);
             $tcpdf->SetFont('helvetica','',12);
-            $tcpdf->MultiCell(0,4,$agencia->contenido."\n",0,'J',0);      
+            $tcpdf->MultiCell(0,4,$agencia->contenido."\n",0,'J',0);
             $tcpdf->Ln(12);
             $tcpdf->Cell(10,6,' N° ',1,0,'C');
             $tcpdf->Cell(40,6,' IDENTIFICACIÓN ',1,0,'L');
@@ -433,4 +433,96 @@ class GenerarPdf extends TCPDF
             $tcpdf->output($tituloPdf, 'I');
         }
     }
+
+    public static function resultadosEleccionDelegados($data, $empresa, $metodo = 'I')
+    {        
+        $eleccionDelegadoId = $data['eleccionDelegadoId'];
+        $tituloEleccion     = $data['tituloEleccion'];
+        $consecutivo        = $data['consecutivo'];
+        $agencias           = $data['agencias'];
+
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos);
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('Resultados de elección de delegados de '.$siglaEmpresa);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('Resultados de elección de delegados en '.$siglaEmpresa);
+
+        foreach($agencias as $agencia){
+            $tcpdf->AddPage('P', 'Letter');
+            $tcpdf->SetFont('helvetica','B',12);
+            $tcpdf->Cell(170,5,$nombreEmpresa,0,0,'C');
+            $tcpdf->Ln(5);
+            $tcpdf->Cell(170,5,$siglaEmpresa.mb_strtoupper(' agencia '.$agencia->agennombre,'UTF-8'),0,0,'C');
+            $tcpdf->Ln(5);
+            $tcpdf->Cell(170,5,$nitEmpresa,0,0,'C');
+            $tcpdf->Ln(10);
+            $tcpdf->MultiCell(170,4,$agencia->titulo,0,'C',0);
+            $tcpdf->Ln(8);
+            $tcpdf->SetFont('helvetica','',12);
+            $tcpdf->Cell(30,6,'', 0,0,'C');
+            $tcpdf->Cell(10,6,'N° ',1,0,'C');
+            $tcpdf->Cell(90,6,'NOMBRES Y APELLIDOS',1,0,'L'); 
+            $tcpdf->Cell(20,6,'VOTOS',1,0,'L');
+            $tcpdf->Ln(6);
+
+            $tcpdf->SetFont('helvetica','',9); 
+            $votosTotal = 0;
+            $i          = 0;
+           foreach($agencia->aspirantes as $aspirante){
+                $i ++;
+                $votosTotal += $aspirante->totalVotos;
+                $tcpdf->Cell(30,6,'', 1, 0,'C'); 
+                $tcpdf->Cell(10,6, $i, 1, 0,'L');
+                $tcpdf->Cell(90,6,$aspirante->nombreCompleto, 1 ,0,'L'); 
+                $tcpdf->Cell(20,6,$aspirante->totalVotos, 1 ,0,'C');
+                $tcpdf->Ln(6);
+            }
+
+            $votosBlanco = 0;
+            if($agencia->totalVotosBlanco){
+                $votosBlanco = $agencia->totalVotosBlanco->votosBlanco;
+            }
+
+            $tcpdf->Ln(6);
+            $tcpdf->Cell(30,6,'VOTO EN BLANCO',0,0,'L');
+            $tcpdf->Cell(20,6,$votosBlanco,0,0,'C');
+            $tcpdf->Ln(6);
+            $tcpdf->Cell(30,6,'TOTAL VOTOS',0,0,'L');
+            $tcpdf->Cell(20,6,$votosTotal,0,0,'C');
+        }
+
+        //Descargo el pdf
+        $tituloPdf = 'Informe_resultado_'.$eleccionDelegadoId.$consecutivo.'.pdf';
+        $rutaPDF   = '/archivos/pdf/informes/'.$tituloPdf;
+        $tcpdf->Output(public_path().$rutaPDF, 'F');
+
+        return [
+            'rutaPDF'    => $rutaPDF,
+            'totalVotos' => $votosTotal + $votosBlanco
+        ];
+    }
+
 }

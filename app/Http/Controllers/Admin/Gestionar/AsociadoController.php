@@ -17,7 +17,7 @@ class AsociadoController extends Controller
 						->select('a.asocid', 'a.tipideid','a.agenid','a.asocnumerodocumento','a.asocnombrecompleto',
                             'a.asocfechaingreso','a.asocgenero','a.asocfechanacimiento','a.asoctelefono','a.asocemail',
                             'a.asocdescripcion','a.asoccelular','a.asocfechaexpedicion','a.asocactivo', 'ag.agennombre as agencia',
-                              DB::raw("CONCAT(IFNULL(a.asoccelular,''),' ',IFNULL(a.asoctelefono,'')) as telefonos"),
+                            DB::raw("CONCAT(IFNULL(a.asoccelular,''),' ',IFNULL(a.asoctelefono,'')) as telefonos"),
                             DB::raw("CONCAT(ti.tipidesigla,' - ', ti.tipidenombre ) as tipoIdentificacion"), 
                             DB::raw("if(a.asocactivo = 1,'Sí', 'No') as estado"))
                          ->join('tipoidentificacion as ti', 'ti.tipideid', '=', 'a.tipideid')

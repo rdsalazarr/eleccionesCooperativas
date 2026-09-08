@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Card, CardContent, Typography, Grid, Button,  Box,} from "@mui/material";
+import {Card, CardContent, Typography, Grid, Button, Box} from "@mui/material";
 import { ModalDefault } from '../../../../layout/modal';
 import Groups2Icon from "@mui/icons-material/Groups2";
 import GroupIcon from "@mui/icons-material/Group";

@@ -17,6 +17,7 @@ import OpenElecciones from './openElecciones';
 export default function AbrirVotacion(){
 
     const [modal, setModal] = useState({open : false, vista:5, titulo:'', tamano:'bigFlot'});
+    const [eleccionId, setEleccionId] = useState(null);
     const [loader, setLoader] = useState(true);
     const [data, setData] = useState([]);
 
@@ -25,11 +26,11 @@ export default function AbrirVotacion(){
     }
 
     const modales = [
-                        <OpenElecciones cerrarModal={cerrarModal} />,
-                        <GenerarActasPdf url='/admin/eleccion/delegado/generar/acta/inicio/PDF' cerrarModal={cerrarModal} /> ,
-                        <CerrarElecciones cerrarModal={cerrarModal} />,
-                        <GenerarActasPdf url='/admin/eleccion/delegado/generar/acta/cierre/PDF' cerrarModal={cerrarModal} /> ,
-                        <PublicarResultados cerrarModal={cerrarModal} />
+                        <OpenElecciones id={eleccionId} cerrarModal={cerrarModal} />,
+                        <GenerarActasPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/inicio/PDF' /> ,
+                        <CerrarElecciones id={eleccionId} cerrarModal={cerrarModal} />,
+                        <GenerarActasPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/cierre/PDF' /> ,
+                        <PublicarResultados id={eleccionId} cerrarModal={cerrarModal} />
                     ];
 
     const tituloModal = ['','Generar acta de inicio en formato PDF','', 'Generar acta de cierre en formato PDF'];
@@ -41,7 +42,7 @@ export default function AbrirVotacion(){
     const inicio = () =>{
         setLoader(true);
         instance.get('/admin/eleccion/delegado/abrir/votacion/list').then(res=>{
-            (res.success) ? setData(res.data) : ShowSnackbar(res.message, 'error');
+            (res.success) ? (setData(res.data), setEleccionId(res.data.id)) : ShowSnackbar(res.message, 'error');
             setLoader(false);
         })
     }
@@ -56,7 +57,7 @@ export default function AbrirVotacion(){
         <Box >
             <Typography component={'h2'} className={'titleGeneral'}>{data.titulo}
 	        </Typography>
-            <Grid container justifyContent="center">
+            <Grid container>
                 <Grid size={{ xs: 12 }}>
                     <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
                         <CardContent>
@@ -121,7 +122,7 @@ export default function AbrirVotacion(){
             <ModalDefault
                 title   = {modal.titulo}
                 content = {modales[modal.vista]}
-                close   = {() =>{cerrarModal()}}
+                close   = {() =>{cerrarModal(), [0, 2, 4].includes(modal.vista) ? inicio() : null;}}
                 tam     = {modal.tamano}
                 abrir   = {modal.open}
             />

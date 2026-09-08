@@ -59,7 +59,7 @@ export default function Frm({data, tipo}){
             foto: formDataFile.fotos.length > 0 ? formDataFile.fotos[0].file : null,
         };
 
-        //setLoader(true);
+        setLoader(true);
         instance.post('/admin/eleccion/delegado/registrar/aspirante/salve', payload).then(res=>{
             let icono = (res.success) ? 'success' : 'error';
             ShowSnackbar(res.message, icono);

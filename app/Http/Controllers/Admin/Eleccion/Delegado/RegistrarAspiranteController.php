@@ -26,7 +26,7 @@ class RegistrarAspiranteController extends Controller
                             DB::raw("CONCAT(ti.tipidesigla,' - ', eda.eldeasdocumento ) as tipoIdentificacion"),
                             DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre ) as nombres"),
                             DB::raw("CONCAT_WS(' ', eda.eldeasprimerapellido, eda.eldeassegundoapellido) as apellidos"),
-                             DB::raw("CONCAT('".URL::to('/')."/archivos/images/aspirante/', eldeasimagen ) as rutaFoto"))
+                            DB::raw("CONCAT('".URL::to('/')."/archivos/images/aspirante/', eldeasimagen ) as rutaFoto"))
                         ->join('tipoidentificacion as ti', 'ti.tipideid', '=', 'eda.tipideid')
                         ->where('eda.agenid', auth()->user()->agenid)
                         ->whereIn('eda.eledelid', function($query) {
