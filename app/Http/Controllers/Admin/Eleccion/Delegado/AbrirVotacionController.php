@@ -91,6 +91,7 @@ class AbrirVotacionController extends Controller
 
                     $delegados = DB::table('elecciondelegadoaspirante as eda')
                                         ->select(
+                                            'eda.agenid',
                                             'eda.eldeasid',
                                             'eda.eldeasdocumento',
                                             'eda.eldeascorreo',
@@ -123,6 +124,7 @@ class AbrirVotacionController extends Controller
 
                     foreach ($delegados as $indice => $aspirante) {
                         DB::table('delegado')->insert([
+                            'agenid'              => $aspirante->agenid,
                             'deledocumento'       => $aspirante->eldeasdocumento,
                             'deleprimernombre'    => $aspirante->eldeasprimernombre,
                             'delesegundonombre'   => $aspirante->eldeassegundonombre,
@@ -137,6 +139,7 @@ class AbrirVotacionController extends Controller
                     }
                 }
             }
+
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Proceso realizado con éxito']);
         }catch(Throwable $e){

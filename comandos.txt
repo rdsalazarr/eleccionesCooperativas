@@ -8,6 +8,7 @@ php artisan make:migration create_delegado
 php artisan make:migration create_notificacion
 php artisan make:migration create_eleccion_delegado
 php artisan make:migration create_eleccion_delegado_informe
+php artisan make:migration create_eleccion_delegado_jurado
 
 php artisan make:seeder AgenciaSeeder
 php artisan make:seeder UsuarioSeeder
@@ -32,7 +33,7 @@ php artisan make:model Eleccion/EleccionDelegadoProceso
 php artisan make:model Eleccion/EleccionDelegadoVoto
 php artisan make:model Eleccion/Delegado
 php artisan make:model Eleccion/Delegado/Informe
-
+php artisan make:model Eleccion/Organos/Jurado
 
 
 php artisan make:model Eleccion/OrganoEleccion

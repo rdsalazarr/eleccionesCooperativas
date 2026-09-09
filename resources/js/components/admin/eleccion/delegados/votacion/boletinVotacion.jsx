@@ -6,7 +6,7 @@ import {ShowSnackbar} from '../../../../layout/snackBar';
 import { ModalDefault } from '../../../../layout/modal';
 import {LoaderModal} from "../../../../layout/loader";
 import instance from '../../../../layout/instance';
-import GenerarActasPdf from './generarActasPdf';
+import VisualizarPdf from '../../visualizarPdf';
 import GenerarBoletin from './generarBoletin';
 
 export default function BoletinVotacion(){
@@ -22,9 +22,10 @@ export default function BoletinVotacion(){
         setModal({open : false, vista:2, data:{}, titulo:'', tamano:'bigFlot'});
     }
 
-    const modales     = [   <GenerarActasPdf id={modal?.data?.eldeboid || null} ruta='/admin/eleccion/delegado/boletin/imprimir/PDF' />,
+    const modales     = [   <VisualizarPdf id={modal?.data?.eldeboid || null} ruta='/admin/eleccion/delegado/boletin/imprimir/PDF' />,
                             <GenerarBoletin id={modal?.data?.eldeboid || null} cerrarModal={cerrarModal} />
                         ];
+
     const tituloModal = ['Informe generado en formato PDF'];
 
     const edit = (data, tipo) =>{

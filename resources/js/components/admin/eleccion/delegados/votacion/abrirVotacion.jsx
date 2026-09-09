@@ -10,7 +10,7 @@ import {LoaderModal} from "../../../../layout/loader";
 import PublicarResultados from './publicarResultados';
 import instance from '../../../../layout/instance';
 import CerrarElecciones from './cerrarElecciones';
-import GenerarActasPdf from './generarActasPdf';
+import VisualizarPdf from '../../visualizarPdf';
 import LockIcon from '@mui/icons-material/Lock';
 import OpenElecciones from './openElecciones';
 
@@ -27,9 +27,9 @@ export default function AbrirVotacion(){
 
     const modales = [
                         <OpenElecciones id={eleccionId} cerrarModal={cerrarModal} />,
-                        <GenerarActasPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/inicio/PDF' /> ,
+                        <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/inicio/PDF' /> ,
                         <CerrarElecciones id={eleccionId} cerrarModal={cerrarModal} />,
-                        <GenerarActasPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/cierre/PDF' /> ,
+                        <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/cierre/PDF' /> ,
                         <PublicarResultados id={eleccionId} cerrarModal={cerrarModal} />
                     ];
 

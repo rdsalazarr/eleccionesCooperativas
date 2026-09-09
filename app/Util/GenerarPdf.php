@@ -97,7 +97,7 @@ class GenerarPdf extends TCPDF
         $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
         $tcpdf->SetProtection(array('copy'), '', null, 0, null);
         $tcpdf->setParametrosHeader($parametrosFijos);
-        $tcpdf->setParametrosFooter($parametrosFijos); 
+        $tcpdf->setParametrosFooter($parametrosFijos);
         $tcpdf->SetPrintHeader(true);
         $tcpdf->SetPrintFooter(true);
         $tcpdf->SetMargins(20, 40, 20);
@@ -137,7 +137,7 @@ class GenerarPdf extends TCPDF
         }
     }
 
-    public static function listaDelegado($data, $empresa, $metodo = 'I')
+    public static function listaAspiranteDelegado($data, $empresa, $metodo = 'I')
     {
         $tituloEleccion = $data['tituloEleccion'];  
         $agencias       = $data['agencias'];
@@ -190,7 +190,7 @@ class GenerarPdf extends TCPDF
             $tcpdf->SetFont('helvetica','',9); 
            foreach ($agencia->aspirantes as $aspirante) { 
                 $tcpdf->Cell(140,6,' '.$aspirante->nombreCompleto,1,0,'L'); 
-                $tcpdf->Cell(40,6,$aspirante->eldeasnumero,1,0,'C');
+                $tcpdf->Cell(40,6,$aspirante->numeroAsignado,1,0,'C');
                 $tcpdf->Ln(6);
             }
         }
@@ -533,5 +533,114 @@ class GenerarPdf extends TCPDF
             'rutaPDF'    => $tituloPdf,
             'totalVotos' => $votosTotal + $votosBlanco
         ];
+    }
+
+    public static function listaDelegadoActivos($agencias, $empresa, $metodo = 'I')
+    {
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos); 
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('Lista delegados activos en '.$siglaEmpresa);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('Lista delegados activos en '.$siglaEmpresa);
+
+        foreach($agencias as $agencia){
+            $tcpdf->AddPage('P', 'LETTER');
+            $tcpdf->SetFont('helvetica','B',12);
+            $tcpdf->Cell(170,5,$nombreEmpresa,0,0,'C');
+            $tcpdf->Ln(5);
+            $tcpdf->Cell(170,5,$siglaEmpresa.mb_strtoupper(' agencia '.$agencia->agennombre,'UTF-8'),0,0,'C');
+            $tcpdf->Ln(5);
+            $tcpdf->Cell(170,5,$nitEmpresa,0,0,'C');
+            $tcpdf->SetFont('helvetica','',12);
+            $tcpdf->Ln(10);
+            $tcpdf->MultiCell(170,4,'Lista de delegados hábiles',0,'L',0);
+            $tcpdf->SetFont('helvetica','B',12);
+            $tcpdf->Ln(8);
+            $tcpdf->Cell(30,6,' DOCUMENTO',1,0,'L');
+            $tcpdf->Cell(120,6,' NOMBRES Y APELLIDOS',1,0,'L'); 
+            $tcpdf->Cell(30,6,'NÚMERO',1,0,'C');
+            $tcpdf->Ln(6);
+            $tcpdf->SetFont('helvetica','',9); 
+           foreach ($agencia->delegados as $delegado) { 
+                $tcpdf->Cell(30,6,' '.$delegado->documento,1,0,'L'); 
+                $tcpdf->Cell(120,6,' '.$delegado->nombreCompleto,1,0,'L'); 
+                $tcpdf->Cell(30,6,$delegado->numeroInscripcion,1,0,'C');
+                $tcpdf->Ln(6);
+            }
+        }
+
+        //Descargo o muestro el pdf
+		$tituloPdf = 'Lista_delegados_habiles.pdf';
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
+
+    public static function generarToken($tokens, $metodo = 'I')
+    {
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->SetPrintHeader(false);
+        $tcpdf->SetPrintFooter(false);
+        $tcpdf->SetMargins(15, 15, 15);
+        $tcpdf->SetAutoPageBreak(true, 10);
+        $tcpdf->AddPage('P', 'LETTER');
+        $tcpdf->SetAuthor('Implesoft Elecciones');
+        $tcpdf->SetCreator('Sistema elecciones');
+        $tcpdf->SetSubject('Impresión del token');
+        $tcpdf->SetKeywords('Sistema, Delegados, IMPLESOFT');
+        $tcpdf->SetTitle('Impresión del token');
+        $tcpdf->SetFont('helvetica','B',46);
+        $i = 0;
+        foreach ($tokens as $token) {
+          $i ++;
+          $tcpdf->Cell(42,30, $token->toketoken,1,0,'C');
+          $tcpdf->Cell(5,30,'',0,0,'');
+          if($i == 4){
+            $tcpdf->Ln(36);
+            $i = 0;
+          }
+        }
+
+        if(count($tokens) < 1){
+            $tcpdf->SetFont('helvetica','B',30);
+            $tcpdf->Cell(180,4,'No existen token creados',0,0,'C');
+        } 
+
+        $tituloPdf = "Token.pdf";
+        if($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
     }
 }

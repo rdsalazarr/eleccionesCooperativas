@@ -138,7 +138,7 @@ export default function TablaGeneral({datos, titulo, ver, accion= [],
                     <Grid size={{ xs: 2, sm: 2, md: 8, lg: 8, xl: 8 }} className={'tablaIcono'} style={{textAlign:'left', padding: 0}}>
                        {accion.map(ev=>{
                             if(ev.tipo === 'D'){
-                                return (<Icon key={'icon'+ ev.icono} className={'icon top ' + ev.color } style={{marginRight: '1em'}} title='Descargar'
+                                return (<Icon key={'icon'+ ev.icono} className={'icon top ' + ev.color } style={{marginRight: '1em'}} 
                                             onClick={() => {const a = ev.funcion;
                                                 a();}}>{ev.icono}</Icon>);
                             }

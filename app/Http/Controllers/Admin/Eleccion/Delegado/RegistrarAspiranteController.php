@@ -21,8 +21,8 @@ class RegistrarAspiranteController extends Controller
 		    $data = DB::table('elecciondelegadoaspirante as eda')
                         ->select('eda.eldeasid','eda.eldeascorreo','eda.eldeastelefono','eda.eldeasfechahora','eda.eldeasactivo', 'eda.tipideid',
                             'eda.eldeasprimernombre', 'eda.eldeassegundonombre', 'eda.eldeasprimerapellido', 'eda.eldeassegundoapellido', 'eda.eldeasdocumento',
-                            DB::raw("CONCAT(LPAD(eda.eldeasnumero,  2, 0)) as eldeasnumero"),
                             DB::raw("if(eda.eldeasactivo = 1,'Sí', 'No') as estado"),
+                            DB::raw("CONCAT(LPAD(eda.eldeasnumero,  2, 0)) as eldeasnumero"),
                             DB::raw("CONCAT(ti.tipidesigla,' - ', eda.eldeasdocumento ) as tipoIdentificacion"),
                             DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre ) as nombres"),
                             DB::raw("CONCAT_WS(' ', eda.eldeasprimerapellido, eda.eldeassegundoapellido) as apellidos"),
@@ -182,7 +182,7 @@ class RegistrarAspiranteController extends Controller
 
             $eleccionDelegado = DB::table('elecciondelegadoaspirante as eda')
                                 ->select('eda.eldeasid', 'ed.eledeltitulo', 'ed.eledelperiodo','edg.eldeaglugar', 'a.agennombre',
-                                    DB::raw("CONCAT(LPAD(eda.eldeasnumero,  2, 0)) as eldeasnumero"),
+                                    DB::raw("CONCAT(LPAD(eda.eldeasnumero,  2, 0)) as numeroAsignado"),
                                     DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre, eda.eldeasprimerapellido, eda.eldeassegundoapellido ) as nombreCompleto"))
                                 ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
                                 ->join('elecciondelegadoagencia as edg', 'edg.eledelid', '=', 'eda.eledelid')
@@ -198,23 +198,23 @@ class RegistrarAspiranteController extends Controller
             $nombreAgencia     = $eleccionDelegado->agennombre;
             $lugarVotacion     = $eleccionDelegado->eldeaglugar;
             $nombreAsociado    = $eleccionDelegado->nombreCompleto;
-            $consecutivo       = $eleccionDelegado->eldeasnumero;
+            $numeroAsignado    = $eleccionDelegado->numeroAsignado;
 
             $informacionCorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificarRegistroAspiranteDelegado')->first();
             $buscar            = Array("nombreAsociado","numeroAsignado", "tituloEleccion", "nombreAgencia", "lugarVotacion", "nombreEmpresa");
-            $remplazo          = Array($nombreAsociado, $consecutivo, $tituloEleccion, $nombreAgencia, $lugarVotacion, $siglaEmpresa);
+            $remplazo          = Array($nombreAsociado, $numeroAsignado, $tituloEleccion, $nombreAgencia, $lugarVotacion, $siglaEmpresa);
             $asunto            = str_replace($buscar, $remplazo, $informacionCorreo->innocoasunto);
             $msg               = str_replace($buscar, $remplazo, $informacionCorreo->innococontenido);
             $enviarcopia       = $informacionCorreo->innocoenviarcopia;
             $enviarpiepagina   = $informacionCorreo->innocoenviarpiepagina;
 
             $data = [
-                    'numeroInscripcion' => $consecutivo,
+                    'numeroInscripcion' => $numeroAsignado,
                     'tituloEleccion'    => $asunto,
                     'contenido'         => $msg,
                 ];
 
-            $dataPdf = GenerarPdf::inscripcionDelegado($data, $empresa, 'S');    
+            $dataPdf = GenerarPdf::inscripcionDelegado($data, $empresa, 'S');  
 
 			return response()->json(['success' => true, "data" => $dataPdf]);
 		} catch (Throwable $e){
@@ -241,7 +241,7 @@ class RegistrarAspiranteController extends Controller
             foreach ($agencias as $agencia) {
                 $agencia->aspirantes = DB::table('elecciondelegadoaspirante as eda')
                                     ->select(
-                                        DB::raw("LPAD(eda.eldeasnumero, 2, '0') as eldeasnumero"),
+                                        DB::raw("LPAD(eda.eldeasnumero, 2, '0') as numeroAsignado"),
                                         DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre, eda.eldeasprimerapellido, eda.eldeassegundoapellido ) as nombreCompleto") )
                                     ->where('eda.agenid', $agencia->agenid)
                                     ->where('eda.eledelid', $eleccionDelegado->eledelid)
@@ -256,14 +256,13 @@ class RegistrarAspiranteController extends Controller
                     'agencias'       => $agencias
                 ];
 
-            $dataPdf = GenerarPdf::listaDelegado($data, $empresa, 'S');    
+            $dataPdf = GenerarPdf::listaAspiranteDelegado($data, $empresa, 'S');    
 
 			return response()->json(['success' => true, "data" => $dataPdf]);
 		} catch (Throwable $e){
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF ']);
 		}
-
     }
 
 	public function destroy(Request $request)

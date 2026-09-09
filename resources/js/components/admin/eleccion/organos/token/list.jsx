@@ -1,44 +1,39 @@
 import {useState, useEffect} from 'react';
 import {Card, CardContent, Typography, Grid, Button, Box} from "@mui/material";
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import DescriptionIcon from '@mui/icons-material/Description';
-import {ShowSnackbar} from '../../../../layout/snackBar';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { ModalDefault } from '../../../../layout/modal';
 import {LoaderModal} from "../../../../layout/loader";
-import instance from '../../../../layout/instance';
+import TokenIcon from '@mui/icons-material/Token';
 import VisualizarPdf from '../../visualizarPdf';
+import GenerarToken from './generarToken';
 
-export default function ImprimirActas(){
+export default function List(){
 
     const [modal, setModal] = useState({open : false, vista:2, titulo:'', tamano:'bigFlot'});
-    const [eleccionId, setEleccionId] = useState(null);
     const [loader, setLoader] = useState(true);
-    const [data, setData] = useState([]);
 
     const cerrarModal = () =>{
         setModal({open : false, vista:2,  titulo:'', tamano:'bigFlot'});
     }
 
     const modales = [
-                        <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/imprimir/actas/inicio/PDF' /> ,
-                        <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/imprimir/actas/cierre/PDF' /> 
+                        <GenerarToken cerrarModal={cerrarModal} />,
+                        <VisualizarPdf id={''} ruta='/admin/organos/eleccion/imprimir/token/PDF' />
                     ];
 
-    const tituloModal = ['Generar acta individual de inicio en formato PDF', 'Generar acta individual de cierre en formato PDF'];
+    const tituloModal = ['', 'Generar token de delegados activos en formato PDF'];
 
-    const abrirModal = ( tipo) =>{
-        setModal({open: true, vista: tipo, titulo: tituloModal[tipo], tamano: 'mediumFlotPdf'});
+    const abrirModal = (tipo) =>{
+        setModal({open: true, vista: tipo, titulo: tituloModal[tipo], tamano: tipo === 0 ? 'smallFlot' : 'mediumFlotPdf'});
     }
 
-    const inicio = () =>{
-        setLoader(true);
-        instance.get('/admin/eleccion/delegado/imprimir/actas/list').then(res=>{
-            (res.success) ? (setData(res.data), setEleccionId(res.data.id)) : ShowSnackbar(res.message, 'error');
+    useEffect(() => {
+        const timer = setTimeout(() => {
             setLoader(false);
-        })
-    }
+        }, 300);
 
-    useEffect(()=>{inicio();}, []);
+        return () => clearTimeout(timer);
+    }, []);
 
     if(loader){
         return <LoaderModal />
@@ -46,32 +41,28 @@ export default function ImprimirActas(){
 
     return (
         <Box className={'containerSmoll'} >
-            <Typography component={'h2'} className={'titleGeneral'}>{data.titulo}
+            <Typography component={'h2'} className={'titleGeneral'}>Generar token
             </Typography>
 
             <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
                 <CardContent>
-
+                    <p>Recuerde que solo se genera token para aquellos delegados que se encuentran activos.</p>
                     <Grid container spacing={3}>
-
                         <Grid size={{ xs: 12, sm: 6 }}>
                             <Button fullWidth className="btnElecciones btnActa"
-                                startIcon={<DescriptionIcon />}
+                                startIcon={<TokenIcon />}
                                 onClick={() => abrirModal(0)}
-                                sx={{ py: 1.5 }} 
-                                disabled={!data.habilitarActaInicio}>
-                                Acta de inicio
+                                sx={{ py: 1.5 }}>
+                                Generar token
                             </Button>
                         </Grid>
 
-
                         <Grid size={{ xs: 12, sm: 6}}>
                             <Button fullWidth className="btnElecciones btnCerrar"
-                                startIcon={<AssignmentTurnedInIcon />}
+                                startIcon={<PictureAsPdfIcon />}
                                 onClick={() => abrirModal(1)}
-                                sx={{ py: 1.5 }} 
-                                disabled={!data.habilitarActaCierre}>
-                                Acta de cierre
+                                sx={{ py: 1.5 }}>
+                               Imprimir token
                             </Button>
                         </Grid>
 

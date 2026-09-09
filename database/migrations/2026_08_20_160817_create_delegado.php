@@ -52,9 +52,9 @@ return new class extends Migration
 
         Schema::create('elecciondelegadoaspirante', function (Blueprint $table) {
             $table->smallIncrements('eldeasid')->comment('Identificador de la tabla inscripcion delegado');
-            $table->smallInteger('eledelid')->unsigned()->comment('Identificador de la elección de delegado');
-            $table->tinyInteger('tipideid')->unsigned()->comment('Identificador del tipo de identificación de aspirante');
-            $table->tinyInteger('agenid')->unsigned()->comment('Identificador de la agencia'); 
+            $table->unsignedSmallInteger('eledelid')->comment('Identificador de la elección de delegado');
+            $table->unsignedTinyInteger('tipideid')->comment('Identificador del tipo de identificación de aspirante');
+            $table->unsignedTinyInteger('agenid')->comment('Identificador de la agencia'); 
             $table->string('eldeasdocumento', 15)->comment('Documento de inscripción delegado');
             $table->tinyInteger('eldeasnumero')->comment('Número en el orden el cual fue inscrito como delegado'); 
             $table->datetime('eldeasfechahora')->comment('Fecha y hora en la cual se registra el delegado');
@@ -76,8 +76,8 @@ return new class extends Migration
 
         Schema::create('elecciondelegadoproceso', function (Blueprint $table) {
             $table->increments('eldeprid')->comment('Identificador de la tabla inscripcion delegado proceso');
-            $table->smallInteger('eledelid')->unsigned()->comment('Identificador de la elección de delegado');
-            $table->integer('asocid')->unsigned()->comment('Identificador de la tabla asociado');
+            $table->unsignedSmallInteger('eledelid')->comment('Identificador de la elección de delegado');
+            $table->unsignedInteger('asocid')->comment('Identificador de la tabla asociado');
             $table->date('eldeprfecha')->comment('Fecha en la cual se registra el voto por el asociado');
             $table->time('eldeprhora')->comment('Hora en la cual se registra el voto por el asociado');
             $table->timestamps();
@@ -88,15 +88,29 @@ return new class extends Migration
 
         Schema::create('elecciondelegadovoto', function (Blueprint $table) {
             $table->increments('eldevoid')->comment('Identificador de la tabla inscripción delegado voto');
-            $table->smallInteger('eledelid')->unsigned()->comment('Identificador de la elección de delegado');
-            $table->smallInteger('eldeasid')->unsigned()->comment('Identificador del aspirante a delegado');
+            $table->unsignedSmallInteger('eledelid')->comment('Identificador de la elección de delegado');
+            $table->unsignedSmallInteger('eldeasid')->comment('Identificador del aspirante a delegado');
             $table->timestamps();
             $table->foreign('eledelid', 'fk_eldevoeledel')->references('eledelid')->on('elecciondelegado')->onUpdate('cascade');
             $table->foreign('eldeasid', 'fk_eldevoeldeas')->references('eldeasid')->on('elecciondelegadoaspirante')->onUpdate('cascade');
         });
 
+        Schema::create('elecciondelegadoboletin', function (Blueprint $table) {
+            $table->increments('eldeboid')->comment('Identificador de la tabla eleccion delegado boletín');
+            $table->unsignedSmallInteger('eledelid')->comment('Identificador de la elección de delegado');
+            $table->unsignedSmallInteger('usuaid')->comment('Identificador del usuario que genera el boletín');
+            $table->datetime('eldebofechahora')->comment('Fecha y hora en la cual se registra el boletín');
+            $table->tinyInteger('eldebonumeroboletin')->comment('Número de boletín realizado');
+            $table->unsignedInteger('eldebototalvotos')->comment('Número total de votos realizados hasta la fecha y hora del votación');
+            $table->string('eldeborutaarchivo', 80)->comment('Ruta del archivo en el cual se encuentra el boletín generado');
+            $table->timestamps();
+            $table->foreign('eledelid', 'fk_eldeboeledel')->references('eledelid')->on('elecciondelegado')->onUpdate('cascade'); 
+            $table->foreign('usuaid', 'fk_usuaeldebon')->references('usuaid')->on('usuario')->onUpdate('cascade');
+        });
+
         Schema::create('delegado', function (Blueprint $table) {
             $table->smallIncrements('deleid')->comment('Identificador de la tabla delegado');
+            $table->unsignedTinyInteger('agenid')->nullable()->comment('Identificador de la agencia'); 
             $table->string('deledocumento', 15)->unique('uk_delegado')->comment('Documento del delegado');
             $table->string('deleprimernombre', 50)->comment('Primer nombre del delegado');
             $table->string('delesegundonombre', 50)->nullable()->comment('Segundo nombre del delegado');
@@ -107,6 +121,8 @@ return new class extends Migration
             $table->string('deletelefono', 20)->nullable()->comment('Teléfono del delegado');
             $table->boolean('deleactivo')->default(true)->comment('Determina si el delegado esta activo');
             $table->timestamps(); 
+            $table->unique(['agenid', 'delenumero'],'uk_delegadonumero');
+            $table->foreign('agenid', 'fk_deleagen')->references('agenid')->on('agencia')->onUpdate('cascade');
         });
     }
 
@@ -115,6 +131,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('elecciondelegadoboletin');
         Schema::dropIfExists('elecciondelegadovoto');
         Schema::dropIfExists('elecciondelegadoproceso');
         Schema::dropIfExists('elecciondelegadoaspirante');

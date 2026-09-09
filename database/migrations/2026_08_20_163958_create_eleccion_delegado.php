@@ -45,7 +45,7 @@ return new class extends Migration
         });
 
         Schema::create('organoeleccionparticipante', function (Blueprint $table) {
-            $table->increments('orelpaid')->comment('Identificador de la tabla eleccion participante');
+            $table->increments('orelpaid')->comment('Identificador de la tabla organo eleccion participante');
             $table->unsignedTinyInteger('tiporgid')->comment('Identificador del tipo de elección');
             $table->unsignedSmallInteger('orgeleid')->comment('Identificador de la elección');
             $table->unsignedSmallInteger('deleid')->comment('Identificador del delegado');
@@ -59,10 +59,9 @@ return new class extends Migration
         });
 
         Schema::create('organoeleccionparticipantevoto', function (Blueprint $table) {
-            $table->increments('orelpvid')->comment('Identificador de la tabla eleccion participante voto');
+            $table->increments('orelpvid')->comment('Identificador de la tabla organo eleccion participante voto');
             $table->unsignedInteger('orelpaid')->comment('Identificador de la tabla eleccion participante');
             $table->datetime('orelpvfecha')->comment('Fecha y hora en la cual se registra el voto');
-            $table->string('toketoken', 20)->comment('Token utilizado para la elección');
             $table->timestamps();
             $table->foreign('orelpaid', 'fk_orelpvorelpa')->references('orelpaid')->on('organoeleccionparticipante')->onUpdate('cascade');
         });

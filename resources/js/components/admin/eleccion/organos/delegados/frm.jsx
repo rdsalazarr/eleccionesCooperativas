@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react';
 import { Button, Grid, Box, TextField, MenuItem } from '@mui/material';
-import {Dropzone, ContentFile} from '../../../../layout/dropzone';
 import {ShowSnackbar} from '../../../../layout/snackBar';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
@@ -11,15 +10,16 @@ import Save from '@mui/icons-material/Save';
 import * as yup from "yup";
 
 const schema = yup.object({
-        tipoIdentificacion:  yup.string().required('Debe seleccionar un tipo de identificación'),
+        agencia:         yup.string().required('Debe seleccionar una agencia'),
         documento:       yup.string().required("El documento es obligatorio").min(6, "El documento debe tener mínimo 6 caracteres").max(15, "Máximo 15 caracteres"),
         primerNombre:    yup.string().required("El primer nombre es obligatorio").min(3, "El primer nombre debe tener mínimo 3 caracteres").max(40, "Máximo 40 caracteres"),
         segundoNombre:   yup.string().nullable().max(40, "Máximo 40 caracteres"),
         primerApellido:  yup.string().required("El primer apellido es obligatorio").min(3, "El primer apellido debe tener mínimo 3 caracteres").max(40, "Máximo 40 caracteres"),
         segundoApellido: yup.string().nullable().max(40, "Máximo 40 caracteres"),
         correo:          yup.string().required("El campo correo es requerido").email("Debe ser un correo válido").max(80, "Máximo 80 caracteres"),
-        celular:         yup.string().nullable().max(20, "Máximo 20 caracteres"),
-        estado:         yup.string().required('Debe seleccionar un estado'),
+        telefono:        yup.string().nullable().max(20, "Máximo 20 caracteres"),
+        numeroDelegado:  yup.number().required('Los número de delegado es obligatorio').typeError("Debe ser un número").max(99, "Máximo 99"),
+        estado:          yup.string().required('Debe seleccionar un estado'),
     });
 
 export default function Frm({data, tipo}){
@@ -27,55 +27,33 @@ export default function Frm({data, tipo}){
     const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
            resolver: yupResolver(schema),
            defaultValues: tipo !== 'I'
-               ? { codigo: data.eldeasid, tipoIdentificacion: data.tipideid, documento: data.eldeasdocumento, primerNombre:data.eldeasprimernombre,
-                   segundoNombre:data.eldeassegundonombre, primerApellido:data.eldeasprimerapellido, segundoApellido:data.eldeassegundoapellido, 
-                   correo:data.eldeascorreo,  celular:data.eldeastelefono, estado:data.eldeasactivo, tipo: tipo }
-               : { codigo: '000', tipoIdentificacion: '', documento: '', primerNombre: '', segundoNombre: '', primerApellido: '', 
-                    segundoApellido: '', correo: '', celular: '', estado:'1', tipo: tipo }
+               ? { codigo: data.deleid, agencia: data.agenid, documento: data.deledocumento, primerNombre:data.deleprimernombre,
+                   segundoNombre:data.delesegundonombre, primerApellido:data.deleprimerapellido, segundoApellido:data.delesegundoapellido, 
+                   correo:data.delecorreo, numeroDelegado:data.delenumero,   telefono:data.deletelefono, estado:data.deleactivo, tipo: tipo }
+               : { codigo: '000', agencia: '', documento: '', primerNombre: '', segundoNombre: '', primerApellido: '', 
+                    segundoApellido: '', numeroDelegado: '',  correo: '', telefono: '', estado:'1', tipo: tipo }
        });
-    
-    const [tipoIdentificaciones, setTipoIdentificaciones] = useState([]);
-    const [formDataFile, setFormDataFile] = useState({ fotos: []});
-    const rutaFoto  = ( tipo !== 'I') ? data.rutaFoto : null;
+        
     const [habilitado, setHabilitado] = useState(true);
+    const [agencias, setAgencias] = useState([]);
     const [loader, setLoader] = useState(false);
 
-    const handleFiles = (nombre, files) => {
-        setFormDataFile((prev) => ({
-            ...prev,
-            [nombre]: [...prev[nombre], ...files],
-        }));
-    }
-
-    const removeFile = (nombre, fileName) => {
-        setFormDataFile((prev) => ({
-            ...prev,
-            [nombre]: prev[nombre].filter(file => file.name !== fileName),
-        }));
-    }
-
     const onSubmit = (formValues) => {
-        const payload = {
-            ...formValues,
-            foto: formDataFile.fotos.length > 0 ? formDataFile.fotos[0].file : null,
-        };
-
         setLoader(true);
-        instance.post('/admin/eleccion/delegado/registrar/aspirante/salve', payload).then(res=>{
+        instance.post('/admin/organos/eleccion/delegados/salve', formValues).then(res=>{
             let icono = (res.success) ? 'success' : 'error';
             ShowSnackbar(res.message, icono);
             (tipo !== 'I' && res.success) ? setHabilitado(false) : null;
-            (tipo === 'I' && res.success) ? reset({codigo: '000', tipoIdentificacion: '', documento: '', primerNombre: '', segundoNombre: '', primerApellido: '', 
-                                                    segundoApellido: '', correo: '', celular: '', estado:'1', tipo: tipo  }) : null;
-            (res.success) ? setFormDataFile({ fotos: []}) : null;
+            (tipo === 'I' && res.success) ? reset({codigo: '000', agencia: '', documento: '', primerNombre: '', segundoNombre: '', primerApellido: '', 
+                                                   segundoApellido: '', numeroDelegado: '',  correo: '', telefono: '', estado:'1', tipo: tipo  }) : null;
             setLoader(false);
         })
     }
 
     useEffect(()=>{
         setLoader(true);
-        instance.post('/admin/eleccion/delegado/registrar/aspirante/list/datos', {codigo: data?.eldeasid || '000', tipo:tipo}).then(res=>{
-            (res.success) ? setTipoIdentificaciones(res.tipoIdentificaciones) : ShowSnackbar(res.message, 'error');
+        instance.post('/admin/organos/eleccion/delegados/list/datos', {codigo: data?.deleid || '000'}).then(res=>{
+            (res.success) ? setAgencias(res.agencias) : ShowSnackbar(res.message, 'error');
             setLoader(false);
         })
     }, []);
@@ -90,21 +68,21 @@ export default function Frm({data, tipo}){
 
                 <Grid size={{ xs: 11, sm: 3 }}>
                     <Controller
-                        name="tipoIdentificacion"
+                        name="agencia"
                         control={control}
                         render={({ field }) => (
                             <TextField
                                 select
-                                label="Tipo de identificación"
+                                label="Agencia"
                                 fullWidth
                                 variant="standard"
                                 {...field}
-                                error={!!errors.tipoIdentificacion}
-                                helperText={errors.tipoIdentificacion?.message}
+                                error={!!errors.agencia}
+                                helperText={errors.agencia?.message}
                             >
                                 <MenuItem value="">Seleccione</MenuItem>
-                                {tipoIdentificaciones.map(res=>{
-                                    return <MenuItem value={res.tipideid} key={res.tipideid}> {res.tipidenombre}</MenuItem>
+                                {agencias.map(res=>{
+                                    return <MenuItem value={res.agenid} key={res.agenid}> {res.agennombre}</MenuItem>
                                 })}
                             </TextField>
                         )}
@@ -191,7 +169,7 @@ export default function Frm({data, tipo}){
                     />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 2 }}>
+                <Grid size={{ xs: 12, sm: 3 }}>
                    <TextField
                         label="Segundo apellido"
                         fullWidth
@@ -229,14 +207,14 @@ export default function Frm({data, tipo}){
                     />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 2 }}>
+                <Grid size={{ xs: 12, sm: 3 }}>
                    <TextField
                         label="Teléfono celular"
                         fullWidth
                         variant="standard"
-                        {...register("celular")}
-                        error={!!errors.celular}
-                        helperText={errors.celular?.message}
+                        {...register("telefono")}
+                        error={!!errors.telefono}
+                        helperText={errors.telefono?.message}
                         slotProps={{
                                 htmlInput: {
                                     autoComplete: "off",
@@ -246,7 +224,19 @@ export default function Frm({data, tipo}){
                     />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 2 }}>
+                <Grid size={{ xs: 12, sm: 3 }}>
+                    <TextField
+                        label="Número de delegado"
+                        fullWidth
+                        type="number"
+                        variant="standard"
+                        {...register("numeroDelegado")}
+                        error={!!errors.numeroDelegado}
+                        helperText={errors.numeroDelegado?.message}
+                    />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 3 }}>
                     <Controller
                         name="estado"
                         control={control}
@@ -268,42 +258,7 @@ export default function Frm({data, tipo}){
                     />
                 </Grid>
 
-            </Grid>
-   
-            <Grid container spacing={4} style={{marginTop:'1em', paddingRight: '1em' }}>
-                <Grid size={{ xs: 12, sm: 5}}>
-                    <Dropzone
-                        nombre="fotos"
-                        accept={['.png','.jpg']}
-                        maxFiles={1}
-                        label="Arrastra y suelta o elige el foto en formato png ó jpg"
-                        handleFiles={handleFiles}
-                        maxFileSize={1000000}
-                        currentFiles={formDataFile.fotos}
-                    />
-                </Grid>
-
-                {rutaFoto !== null ? (
-                    <Grid size={{ xs: 6, sm: 2 }} style={{ textAlign: 'center' }}>
-                        <Box className='frmTexto'>
-                            <label>Foto actual</label>
-                            <img
-                                src={rutaFoto}
-                                alt="Foto"
-                                className='imgLogoGeneral'
-                            />
-                        </Box>
-                    </Grid>
-                ) : null}
-
-                <Grid size={{ xs: 6, sm: 5 }}>
-                    <Box className='filesContainer'>
-                        {formDataFile.fotos.map((file, a) =>{
-                            return <ContentFile file={file} label={"fotos"} name={file.name} remove={removeFile} key={'ContentFile-' +a}/>
-                        })}
-                    </Box>
-                </Grid>
-            </Grid>
+            </Grid> 
 
             <Box className={'botonesModal'}>
                  <Button type="submit" className={'modalBtn'} disabled={!habilitado} startIcon={(tipo === 'I') ? <Save /> : <SaveAs />} >

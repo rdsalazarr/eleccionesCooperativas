@@ -13,7 +13,6 @@ export default function Show({data}){
     useEffect(()=>{
         setLoader(true);
         instance.post('/admin/eleccion/delegado/gestion/visualizar', {codigo: data?.eledelid || '000'}).then(res=>{
-            console.log(res.agencias);
             (res.success) ? setAgencias(res.agencias) : ShowSnackbar(res.message, 'error');
             setLoader(false);
         })

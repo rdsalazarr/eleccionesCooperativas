@@ -5,8 +5,8 @@ namespace App\Models\Eleccion\Delegado;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['deledocumento','delenombre','deleapellido','delenumero','delecorreo',
-			'deletelefono','delenotificacion','deleactivo'])]
+#[Fillable(['agenid','deledocumento','deleprimernombre','delesegundonombre','deleprimerapellido','delesegundoapellido',
+			'delenumero','delecorreo','deletelefono','deleactivo'])]
 class Delegado extends Model
 {
    protected $table       = 'delegado';

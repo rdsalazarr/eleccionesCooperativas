@@ -35,11 +35,11 @@ import GestionEleccionesDelegado from "../admin/eleccion/delegados/gestion/list"
 import BoletinVotacion from "../admin/eleccion/delegados/votacion/boletinVotacion";
 import AbrirVotacionDelegados from "../admin/eleccion/delegados/votacion/abrirVotacion";
 
-import Delegados from "../admin/enConstruccion";
-import GenerarToken from "../admin/enConstruccion";
-import Informacion from "../admin/enConstruccion";
-import JuradosOrganosEleccion from "../admin/enConstruccion";
-import AbrirVotacionOrganosEleccion from "../admin/enConstruccion";
+import Informacion from "../admin/eleccion/organos/token/list";
+import GenerarToken from "../admin/eleccion/organos/token/list";
+import Delegados from "../admin/eleccion/organos/delegados/list";
+import JuradosOrganosEleccion from "../admin/eleccion/organos/jurados/list";
+import AbrirVotacionOrganosEleccion from "../admin/eleccion/organos/token/list";
 
 const HeaderMenu = ({ open, setOpen }) => {
     return (
@@ -182,21 +182,21 @@ const componenteMenu = [
     {   nombre: 'Elección Delegados',
         icono : 'analytics', 
         itemMenu: [
-            {ruta : 'admin/eleccionDelegado/gestion',            menu: 'Gestión ',             icono : 'menu_book',    componente : <GestionEleccionesDelegado /> },
-            {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
-            {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir Votacion ',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
-            {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Actas ',      icono : 'announcement', componente : <ImprimirActas /> },
-            {ruta : 'admin/eleccionDelegado/boletinVotacion',    menu: 'Boletín de Votación ', icono : 'cloud_sync',   componente : <BoletinVotacion /> },
+            {ruta : 'admin/eleccion/delegado/gestion',            menu: 'Gestión ',             icono : 'menu_book',    componente : <GestionEleccionesDelegado /> },
+            {ruta : 'admin/eleccion/delegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
+            {ruta : 'admin/eleccion/delegado/abrirVotacion',      menu: 'Abrir Votacion ',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
+            {ruta : 'admin/eleccion/delegado/imprimirActas',      menu: 'Imprimir Actas ',      icono : 'announcement', componente : <ImprimirActas /> },
+            {ruta : 'admin/eleccion/delegado/boletinVotacion',    menu: 'Boletín de Votación ', icono : 'cloud_sync',   componente : <BoletinVotacion /> },
         ]
     } ,
     {   nombre: 'Órgano Elección',
         icono : 'library_books',
         itemMenu: [
-            {ruta : 'admin/organosEleccion/delegados',     menu: 'Delegados',     icono : 'person',        componente : <Delegados /> },
-            {ruta : 'admin/organosEleccion/generarToken',  menu: 'Generar Token', icono : 'person',        componente : <GenerarToken /> },
-            {ruta : 'admin/organosEleccion/informacion',   menu: 'Información ',  icono : 'menu_book',     componente : <Informacion /> },
-            {ruta : 'admin/organosEleccion/jurados',       menu: 'Jurados ',      icono : 'poll',          componente : <JuradosOrganosEleccion /> },
-            {ruta : 'admin/organosEleccion/abrirVotacion', menu: 'Generar ',      icono : 'library_books', componente : <AbrirVotacionOrganosEleccion /> },
+            {ruta : 'admin/organos/eleccion/delegados',     menu: 'Delegados',     icono : 'person',         componente : <Delegados /> },
+            {ruta : 'admin/organos/eleccion/generarToken',  menu: 'Generar Token', icono : 'token',          componente : <GenerarToken /> },
+            {ruta : 'admin/organos/eleccion/jurados',       menu: 'Jurados',       icono : 'assignment_add', componente : <JuradosOrganosEleccion /> },
+            {ruta : 'admin/organos/eleccion/informacion',   menu: 'Información ',  icono : 'menu_book',      componente : <Informacion /> },
+            {ruta : 'admin/organos/eleccion/abrirVotacion', menu: 'Generar',       icono : 'how_to_vote',    componente : <AbrirVotacionOrganosEleccion /> },
             
         ]
     } 

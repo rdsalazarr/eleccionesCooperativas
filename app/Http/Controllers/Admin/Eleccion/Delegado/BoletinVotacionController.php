@@ -46,7 +46,6 @@ class BoletinVotacionController extends Controller
 
             return response()->json(['success' => true, 'data' => $informes, 'titulo' => $titulo, 'habilitarBoton' => $habilitarBoton, 'ocultarBoton' => $ocultarBoton]);
         } catch (Throwable $e) {
-            dd($e);
             Log::error($e->getMessage());
             return response()->json(['success' => false, 'message' => 'Error al obtener la lista de informes de la votación de delegados']);
         }
@@ -78,7 +77,6 @@ class BoletinVotacionController extends Controller
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito']);
 		} catch (Throwable $e){
-            dd($e);
 			DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro de Boletin en la elección de delegado']);
@@ -96,7 +94,7 @@ class BoletinVotacionController extends Controller
             }
 
             $rutaFisica = public_path('archivos/pdf/boletin/'.$boletin->eldeborutaarchivo);
-           
+
             if (!file_exists($rutaFisica)) {
                 return response()->json(['success' => false, 'message' => 'El archivo físico no se encuentra en el servidor.']);
             }

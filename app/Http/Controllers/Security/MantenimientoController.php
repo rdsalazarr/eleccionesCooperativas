@@ -150,7 +150,7 @@ class MantenimientoController extends Controller
                 'agencias'       => $agencias
             ];
 
-        GenerarPdf::listaDelegado($data, $empresa, 'I'); */
+        GenerarPdf::listaAspiranteDelegado($data, $empresa, 'I'); */
 
 /*
         $eleccionDelegado = DB::table('elecciondelegado')->select('eledelid', 'eledeltitulo', 'eledelperiodo')->where('eledelanio', date('Y'))->first();
