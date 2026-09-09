@@ -437,8 +437,8 @@ class GenerarPdf extends TCPDF
     public static function resultadosEleccionDelegados($data, $empresa, $metodo = 'I')
     {        
         $eleccionDelegadoId = $data['eleccionDelegadoId'];
+        $consecutivo        = $data['consecutivo'] ?? '';
         $tituloEleccion     = $data['tituloEleccion'];
-        $consecutivo        = $data['consecutivo'];
         $agencias           = $data['agencias'];
 
         $nombreEmpresa   = $empresa->emprnombre;
@@ -482,10 +482,10 @@ class GenerarPdf extends TCPDF
             $tcpdf->MultiCell(170,4,$agencia->titulo,0,'C',0);
             $tcpdf->Ln(8);
             $tcpdf->SetFont('helvetica','',12);
-            $tcpdf->Cell(30,6,'', 0,0,'C');
+            $tcpdf->Cell(20,6,'', 0,0,'C');
             $tcpdf->Cell(10,6,'N° ',1,0,'C');
-            $tcpdf->Cell(90,6,'NOMBRES Y APELLIDOS',1,0,'L'); 
-            $tcpdf->Cell(20,6,'VOTOS',1,0,'L');
+            $tcpdf->Cell(120,6,' NOMBRES Y APELLIDOS',1,0,'L'); 
+            $tcpdf->Cell(20,6,'VOTOS',1,0,'C');
             $tcpdf->Ln(6);
 
             $tcpdf->SetFont('helvetica','',9); 
@@ -494,9 +494,9 @@ class GenerarPdf extends TCPDF
            foreach($agencia->aspirantes as $aspirante){
                 $i ++;
                 $votosTotal += $aspirante->totalVotos;
-                $tcpdf->Cell(30,6,'', 1, 0,'C'); 
+                $tcpdf->Cell(20,6,'', 1, 0,'C'); 
                 $tcpdf->Cell(10,6, $i, 1, 0,'L');
-                $tcpdf->Cell(90,6,$aspirante->nombreCompleto, 1 ,0,'L'); 
+                $tcpdf->Cell(120,6,' '.$aspirante->nombreCompleto, 1 ,0,'L'); 
                 $tcpdf->Cell(20,6,$aspirante->totalVotos, 1 ,0,'C');
                 $tcpdf->Ln(6);
             }
@@ -514,15 +514,24 @@ class GenerarPdf extends TCPDF
             $tcpdf->Cell(20,6,$votosTotal,0,0,'C');
         }
 
-        //Descargo el pdf
-        $tituloPdf = 'Informe_resultado_'.$eleccionDelegadoId.$consecutivo.'.pdf';
-        $rutaPDF   = '/archivos/pdf/informes/'.$tituloPdf;
-        $tcpdf->Output(public_path().$rutaPDF, 'F');
+        $tituloPdf    = 'Boletin_resultado_'.$eleccionDelegadoId.$consecutivo.'.pdf';
+        if($metodo === 'F'){
+            $directory = public_path('archivos/pdf/boletin');
+            if (!File::isDirectory($directory)) {
+                File::makeDirectory($directory, 0755, true, true);
+            }           
+            $rutaCompleta = $directory . DIRECTORY_SEPARATOR . $tituloPdf;
+            $pdfContenido = $tcpdf->Output('', 'S');
+            File::put($rutaCompleta, $pdfContenido);
+        }elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
 
         return [
-            'rutaPDF'    => $rutaPDF,
+            'rutaPDF'    => $tituloPdf,
             'totalVotos' => $votosTotal + $votosBlanco
         ];
     }
-
 }

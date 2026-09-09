@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import CerrarEleccionesJson from '../../../../../../images/json/cerrarElecciones.json';
+import InformeVotacionJson from '../../../../../../images/json/informeVotacion.json';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {ShowSnackbar} from '../../../../layout/snackBar';
 import {LoaderModal} from "../../../../layout/loader";
@@ -8,14 +8,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import {Box, Grid, Button} from "@mui/material";
 import { Lottie } from 'lottie-react';
 
-export default function GenerarInforme({id, cerrarModal}){
+export default function GenerarBoletin({id, cerrarModal}){
 
     const [habilitado, setHabilitado] = useState(true);
     const [loader, setLoader] = useState(false);
 
     const continuar = () =>{
         setLoader(true);
-        instance.post('/admin/eleccion/delegado/informes/salve', {codigo: id}).then(res=>{
+        instance.post('/admin/eleccion/delegado/boletin/salve', {codigo: id}).then(res=>{
             let icono = (res.success) ? 'success' : 'error';
             ShowSnackbar(res.message, icono);
             (res.success) ? setHabilitado(false) : null;
@@ -31,13 +31,13 @@ export default function GenerarInforme({id, cerrarModal}){
         <Grid container spacing={2}>
             <Grid size={{ xs: 4, sm: 4, md: 3 }} >
                 <Box className='animate__animated animate__rotateIn'>
-                    <Lottie src={CerrarEleccionesJson} autoplay loop />
+                    <Lottie src={InformeVotacionJson} autoplay loop />
                 </Box>
             </Grid>
 
             <Grid size={{ xs: 8, sm: 8, md: 9}}>
                 <p className='mensajeModal'>
-                    ¿Esta seguro que desea generar un nuevo informe para estas votaciones?
+                    ¿Esta seguro que desea generar un nuevo boletín para estas votaciones?
                 </p>
             </Grid>
 

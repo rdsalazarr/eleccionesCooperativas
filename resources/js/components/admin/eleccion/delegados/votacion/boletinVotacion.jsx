@@ -1,16 +1,19 @@
 import {useState, useEffect} from 'react';
+import { Box, Card, Typography, Grid, Button} from '@mui/material';
 import TablaGeneral from '../../../../layout/tablaGeneral';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import {ShowSnackbar} from '../../../../layout/snackBar';
 import { ModalDefault } from '../../../../layout/modal';
-import { Box, Card, Typography} from '@mui/material';
 import {LoaderModal} from "../../../../layout/loader";
 import instance from '../../../../layout/instance';
 import GenerarActasPdf from './generarActasPdf';
+import GenerarBoletin from './generarBoletin';
 
-export default function List(){
+export default function BoletinVotacion(){
 
     const [modal, setModal] = useState({open : false, vista:2, data:{}, titulo:'', tamano:'bigFlot'});
     const [habilitarBoton, setHabilitarBoton] = useState(false);
+    const [ocultarBoton, setOcultarBoton] = useState(false);
     const [loader, setLoader] = useState(true);
     const [titulo, setTitulo] = useState('');
     const [data, setData] = useState([]);
@@ -19,7 +22,9 @@ export default function List(){
         setModal({open : false, vista:2, data:{}, titulo:'', tamano:'bigFlot'});
     }
 
-    const modales     = [<GenerarActasPdf id={modal?.data?.eldeinid || null} ruta='/admin/eleccion/delegado/informes/imprimir/PDF' /> ];
+    const modales     = [   <GenerarActasPdf id={modal?.data?.eldeboid || null} ruta='/admin/eleccion/delegado/boletin/imprimir/PDF' />,
+                            <GenerarBoletin id={modal?.data?.eldeboid || null} cerrarModal={cerrarModal} />
+                        ];
     const tituloModal = ['Informe generado en formato PDF'];
 
     const edit = (data, tipo) =>{
@@ -28,8 +33,12 @@ export default function List(){
 
     const inicio = () =>{
         setLoader(true);
-        instance.get('/admin/eleccion/delegado/informes/list').then(res=>{
-            (res.success) ? (setData(res.data), setTitulo(res.titulo), setHabilitarBoton(res.habilitarBoton)) : ShowSnackbar(res.message, 'error');
+        instance.get('/admin/eleccion/delegado/boletin/list').then(res=>{
+            (res.success) ? (setData(res.data),
+                             setTitulo(res.titulo),
+                             setHabilitarBoton(res.habilitarBoton),
+                             setOcultarBoton(res.ocultarBoton)) 
+                          : ShowSnackbar(res.message, 'error');
             setLoader(false);
         })
     }
@@ -41,17 +50,32 @@ export default function List(){
     }
 
     return (
-        <Box>
+        <Box className={'containerMedium'}>
             <Box>
                 <Typography component={'h2'} className={'titleGeneral'}>{titulo}</Typography>
             </Box>
 
             <Card className={'cardContainer'}>
+
+                {(!ocultarBoton) ?
+                    <Grid container spacing={1.5}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }} style={{marginBottom:'1em'}}>
+                            <Button fullWidth className="btnElecciones btnAbrir"
+                                startIcon={<HowToVoteIcon />}
+                                onClick={() => edit({}, 1)}
+                                sx={{ py: 1.5 }}
+                                disabled={!habilitarBoton}>
+                                Generar Boletín
+                            </Button>
+                        </Grid>
+                    </Grid>
+                : null }
+
                 <Box sx={{maxHeight: '35em', overflow:'auto'}} sm={{maxHeight: '35em', overflow:'auto'}}>
                     <TablaGeneral
                         datos={data}
                         titulo={['Fecha y hora','Número','Total votos','Usuario','PDF']}
-                        ver={["eldeinfechahora","eldeinnumeroinforme","eldeintotalvotos","usuario"]}
+                        ver={["eldebofechahora","numeroBoletin","eldebototalvotos","usuario"]}
                         accion={[{tipo: 'B', icono : 'picture_as_pdf', color: 'orange', funcion : (data)=>{edit(data, 0)} },]}
                         funciones={{orderBy: false, search: false, pagination: true}}
                     />

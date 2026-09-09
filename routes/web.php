@@ -25,7 +25,7 @@ use App\Http\Controllers\Admin\Gestionar\CargarAsociadoController;
 
 use App\Http\Controllers\Admin\Eleccion\Delegado\GestionController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\AbrirVotacionController;
-use App\Http\Controllers\Admin\Eleccion\Delegado\InformeVotacionController;
+use App\Http\Controllers\Admin\Eleccion\Delegado\BoletinVotacionController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\RegistrarAspiranteController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\ImprimirActasVotacionController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\JuradosController as JuradosDelegadoController;
@@ -136,9 +136,9 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
             Route::post('/imprimir/actas/inicio/PDF', [ImprimirActasVotacionController::class, 'actaInicio']);
             Route::post('/imprimir/actas/cierre/PDF', [ImprimirActasVotacionController::class, 'actaCierre']);
 
-            Route::get('/informes/list', [InformeVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/informeVotacion','verifySource']);
-            Route::post('/informes/salve', [InformeVotacionController::class, 'salve']);
-            Route::post('/informes/imprimir/PDF', [InformeVotacionController::class, 'imprimir']);
+            Route::get('/boletin/list', [BoletinVotacionController::class, 'index']);//->middleware(['security:admin/eleccionDelegado/boletinVotacion','verifySource']);
+            Route::post('/boletin/salve', [BoletinVotacionController::class, 'salve']);
+            Route::post('/boletin/imprimir/PDF', [BoletinVotacionController::class, 'imprimir']);
 
         });
 

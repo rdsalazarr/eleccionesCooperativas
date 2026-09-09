@@ -102,7 +102,7 @@ class VotacionDelegadoService
             ];
     }
 
-    public function resultadosEleccionDelegados($consecutivo)
+    public function resultadosEleccionDelegados($consecutivo = '')
     {
         $eleccionDelegado = DB::table('elecciondelegado')
                                     ->select('eledelid', 'eledeltitulo', 'eledelperiodo')
@@ -111,10 +111,11 @@ class VotacionDelegadoService
             return null;
         }
 
-        $eledelid        = $eleccionDelegado->eledelid;
+        $eledelid       = $eleccionDelegado->eledelid;
         $titulo         = $eleccionDelegado->eledeltitulo;
         $periodo        = $eleccionDelegado->eledelperiodo;
-        $tituloEleccion = mb_strtolower($titulo,'UTF-8').' '.$periodo;
+        $complemento    = (!empty($consecutivo)) ? 'Boletín número '. $consecutivo.' de ' : '';
+        $tituloEleccion =  $complemento.mb_strtolower($titulo,'UTF-8').' '.$periodo;
 
         $agencias = DB::table('agencia as a')->select('a.agenid', 'a.agennombre', 'eda.eldeagid')
                             ->join('elecciondelegadoagencia as eda', 'eda.agenid', '=', 'a.agenid')
@@ -123,8 +124,7 @@ class VotacionDelegadoService
                             ->get();
 
         foreach ($agencias as $agencia) {
-            $agencia->titulo           = $titulo;
-            $agencia->contenido        = $contenido;
+            $agencia->titulo           = $tituloEleccion;
             $agencia->aspirantes       = $this->datosVotacionDelegados($agencia->agenid, $eledelid);
             $agencia->totalVotosBlanco = $this->datosVotosBlancos($agencia->agenid, $eledelid);
         }
@@ -173,7 +173,7 @@ class VotacionDelegadoService
                                     ) AS totalVotos')
                                 )
                         ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
-                        ->where('eda.agenid', $agencia->agenid)
+                        ->where('eda.agenid', $agenid)
                         ->where('eda.eledelid', $eledelid)
                         ->where('eda.eldeasesvotoblanco', true)
                         ->orderByDesc('totalVotos')

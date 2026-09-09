@@ -57,67 +57,63 @@ export default function AbrirVotacion(){
         <Box >
             <Typography component={'h2'} className={'titleGeneral'}>{data.titulo}
 	        </Typography>
-            <Grid container>
-                <Grid size={{ xs: 12 }}>
-                    <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
-                        <CardContent>
+         
+            <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
+                <CardContent>
+                    <Grid container spacing={1.5}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                            <Button fullWidth className="btnElecciones btnAbrir"
+                                startIcon={<LockOpenIcon />}
+                                onClick={() => abrirModal(0)}
+                                sx={{ py: 1.5 }}
+                                disabled={!data.habilitarAbrirEleccion}>
+                                Abrir elección
+                            </Button>
+                        </Grid>
 
-                            <Grid container spacing={1.5}>
-                                <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                                    <Button fullWidth className="btnElecciones btnAbrir"
-                                        startIcon={<LockOpenIcon />}
-                                        onClick={() => abrirModal(0)}
-                                        sx={{ py: 1.5 }}
-                                        disabled={!data.habilitarAbrirEleccion}>
-                                        Abrir elección
-                                    </Button>
-                                </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                            <Button fullWidth className="btnElecciones btnActa"
+                                startIcon={<DescriptionIcon />}
+                                onClick={() => abrirModal(1)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarActaInicio}>
+                                Acta de inicio
+                            </Button>
+                        </Grid>
 
-                                <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                                    <Button fullWidth className="btnElecciones btnActa"
-                                        startIcon={<DescriptionIcon />}
-                                        onClick={() => abrirModal(1)}
-                                        sx={{ py: 1.5 }} 
-                                        disabled={!data.habilitarActaInicio}>
-                                        Acta de inicio
-                                    </Button>
-                                </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                            <Button fullWidth className="btnElecciones btnCerrar"
+                                startIcon={<LockIcon />}
+                                onClick={() => abrirModal(2)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarCerrarEleccion}>
+                                Cerrar elección
+                            </Button>
+                        </Grid>
 
-                                <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                                    <Button fullWidth className="btnElecciones btnCerrar"
-                                        startIcon={<LockIcon />}
-                                        onClick={() => abrirModal(2)}
-                                        sx={{ py: 1.5 }} 
-                                        disabled={!data.habilitarCerrarEleccion}>
-                                        Cerrar elección
-                                    </Button>
-                                </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                            <Button fullWidth className="btnElecciones btnActa"
+                                startIcon={<AssignmentTurnedInIcon />}
+                                onClick={() => abrirModal(3)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarActaCierre}>
+                                Acta de cierre
+                            </Button>
+                        </Grid>
 
-                                <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                                    <Button fullWidth className="btnElecciones btnActa"
-                                        startIcon={<AssignmentTurnedInIcon />}
-                                        onClick={() => abrirModal(3)}
-                                        sx={{ py: 1.5 }} 
-                                        disabled={!data.habilitarActaCierre}>
-                                        Acta de cierre
-                                    </Button>
-                                </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                            <Button fullWidth className="btnElecciones btnPublicar"
+                                startIcon={<CampaignIcon />}
+                                onClick={() => abrirModal(4)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarPublicarResultados}>
+                                Publicar resultados
+                            </Button>
+                        </Grid>
 
-                                <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                                    <Button fullWidth className="btnElecciones btnPublicar"
-                                        startIcon={<CampaignIcon />}
-                                        onClick={() => abrirModal(4)}
-                                        sx={{ py: 1.5 }} 
-                                        disabled={!data.habilitarPublicarResultados}>
-                                        Publicar resultados
-                                    </Button>
-                                </Grid>
-
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>            
 
             <ModalDefault
                 title   = {modal.titulo}

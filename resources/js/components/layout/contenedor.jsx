@@ -32,7 +32,7 @@ import CargarAsociados from "../admin/gestionar/asociados/cargar/list";
 import RegistrarAspirante from "../admin/eleccion/delegados/aspirantes/list";
 import ImprimirActas from "../admin/eleccion/delegados/votacion/imprimirActas";
 import GestionEleccionesDelegado from "../admin/eleccion/delegados/gestion/list";
-import InformeVotacion from "../admin/eleccion/delegados/votacion/informeVotacion";
+import BoletinVotacion from "../admin/eleccion/delegados/votacion/boletinVotacion";
 import AbrirVotacionDelegados from "../admin/eleccion/delegados/votacion/abrirVotacion";
 
 import Delegados from "../admin/enConstruccion";
@@ -142,7 +142,7 @@ const menuComponente = [
     {id:13,componente : <JuradosDelegados />},
     {id:14,componente : <AbrirVotacionDelegados />},
     {id:15,componente : <ImprimirActas />},
-    {id:16,componente : <InformeVotacion />},
+    {id:16,componente : <BoletinVotacion />},
 
     {id:17,componente : <Delegados />},
     {id:18,componente : <GenerarToken />},
@@ -186,7 +186,7 @@ const componenteMenu = [
             {ruta : 'admin/eleccionDelegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
             {ruta : 'admin/eleccionDelegado/abrirVotacion',      menu: 'Abrir Votacion ',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
             {ruta : 'admin/eleccionDelegado/imprimirActas',      menu: 'Imprimir Actas ',      icono : 'announcement', componente : <ImprimirActas /> },
-            {ruta : 'admin/eleccionDelegado/informeVotacion',    menu: 'Informe de Votación ', icono : 'cloud_sync',   componente : <InformeVotacion /> },
+            {ruta : 'admin/eleccionDelegado/boletinVotacion',    menu: 'Boletín de Votación ', icono : 'cloud_sync',   componente : <BoletinVotacion /> },
         ]
     } ,
     {   nombre: 'Órgano Elección',

@@ -49,39 +49,36 @@ export default function ImprimirActas(){
         <Box className={'containerSmoll'} >
             <Typography component={'h2'} className={'titleGeneral'}>{data.titulo}
             </Typography>
-            <Grid container>
-                <Grid size={{ xs: 12 }}>
-                    <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
-                        <CardContent>
 
-                            <Grid container spacing={3}>
+            <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
+                <CardContent>
 
-                                <Grid size={{ xs: 12, sm: 6 }}>
-                                    <Button fullWidth className="btnElecciones btnActa"
-                                        startIcon={<DescriptionIcon />}
-                                        onClick={() => abrirModal(0)}
-                                        sx={{ py: 1.5 }} 
-                                        disabled={!data.habilitarActaInicio}>
-                                        Acta de inicio
-                                    </Button>
-                                </Grid>
+                    <Grid container spacing={3}>
+
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <Button fullWidth className="btnElecciones btnActa"
+                                startIcon={<DescriptionIcon />}
+                                onClick={() => abrirModal(0)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarActaInicio}>
+                                Acta de inicio
+                            </Button>
+                        </Grid>
 
 
-                                <Grid size={{ xs: 12, sm: 6}}>
-                                    <Button fullWidth className="btnElecciones btnCerrar"
-                                        startIcon={<AssignmentTurnedInIcon />}
-                                        onClick={() => abrirModal(1)}
-                                        sx={{ py: 1.5 }} 
-                                        disabled={!data.habilitarActaCierre}>
-                                        Acta de cierre
-                                    </Button>
-                                </Grid>
+                        <Grid size={{ xs: 12, sm: 6}}>
+                            <Button fullWidth className="btnElecciones btnCerrar"
+                                startIcon={<AssignmentTurnedInIcon />}
+                                onClick={() => abrirModal(1)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarActaCierre}>
+                                Acta de cierre
+                            </Button>
+                        </Grid>
 
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
 
             <ModalDefault
                 title   = {modal.titulo}
