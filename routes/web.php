@@ -30,10 +30,10 @@ use App\Http\Controllers\Admin\Eleccion\Delegado\RegistrarAspiranteController;
 use App\Http\Controllers\Admin\Eleccion\Delegado\ImprimirActasVotacionController;
 
 use App\Http\Controllers\Admin\Eleccion\Organos\DelegadosController;
-use App\Http\Controllers\Admin\Eleccion\Organos\InformacionController;
 use App\Http\Controllers\Admin\Eleccion\Organos\GenerarTokenController;
 use App\Http\Controllers\Admin\Eleccion\Organos\GenerarVotacionController;
 use App\Http\Controllers\Admin\Eleccion\Organos\JuradosController as JuradosOrganosController;
+use App\Http\Controllers\Admin\Eleccion\Organos\RegistrarAspiranteController as AspiranteOrganoControlController;
 
 
 Route::get('/', [FrondController::class, 'index']);
@@ -150,10 +150,21 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
             Route::post('/imprimir/token/PDF', [GenerarTokenController::class, 'showPdf']);
 
             Route::get('/jurados/list', [JuradosOrganosController::class, 'index']);//->middleware(['security:admin/organos/eleccion/jurados','verifySource']);
+            Route::post('/jurados/salve', [JuradosOrganosController::class, 'salve']);
 
-            Route::get('/informacion/list', [InformacionController::class, 'index']);//->middleware(['security:admin/organos/eleccion/informacion','verifySource']);            
+            Route::get('/aspirantes/list', [AspiranteOrganoControlController::class, 'index']);//->middleware(['security:admin/organos/eleccion/aspirantes','verifySource']);
+            Route::post('/aspirantes/list/datos', [AspiranteOrganoControlController::class, 'datos']);
+            Route::post('/aspirantes/salve', [AspiranteOrganoControlController::class, 'salve']);
+            Route::post('/aspirantes/imprimir/PDF', [AspiranteOrganoControlController::class, 'imprimirLista']);
 
-            Route::get('/abrir/votacion/list', [GenerarVotacionController::class, 'index']);//->middleware(['security:admin/organos/eleccion/abrirVotacion','verifySource']);
+            Route::get('/generar/votacion/list', [GenerarVotacionController::class, 'index']);//->middleware(['security:admin/organos/eleccion/generarVotacion','verifySource']);
+            Route::post('/generar/votacion/abrir', [GenerarVotacionController::class, 'abrir']);
+            Route::post('/generar/votacion/cerrar', [GenerarVotacionController::class, 'cerrar']); 
+            Route::post('/generar/votacion/imprimir/lista/PDF', [GenerarVotacionController::class, 'imprimirLista']);
+            Route::post('/generar/votacion/acta/apertura/PDF', [GenerarVotacionController::class, 'actaApertura']);            
+            Route::post('/generar/votacion/lista/resultado/PDF', [GenerarVotacionController::class, 'listaResultado']);
+            Route::post('/generar/votacion/acta/escrutinio/PDF', [GenerarVotacionController::class, 'actaEscrutinio']);
+            Route::post('/generar/votacion/acta/resultado/PDF', [GenerarVotacionController::class, 'actaResultado']);
 
         });
     });

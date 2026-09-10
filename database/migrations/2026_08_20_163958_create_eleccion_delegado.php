@@ -31,17 +31,17 @@ return new class extends Migration
 
             $table->foreign('tiporgid', 'fk_oreltotiporg')->references('tiporgid')->on('tipoorgano')->onUpdate('cascade');
             $table->foreign('orgeleid', 'fk_oreltoorgele')->references('orgeleid')->on('organoeleccion')->onUpdate('cascade');
-        });
+        });   
 
-        Schema::create('organoeleccionparticipanteproceso', function (Blueprint $table) {
-            $table->increments('orelprid')->comment('Identificador de la tabla organo elección participante proceso');
-            $table->unsignedTinyInteger('tiporgid')->comment('Identificador del tipo de órgano de elección');
-            $table->unsignedSmallInteger('orgeleid')->comment('Identificador del órgano de elección');
-            $table->string('orelprtoken', 20)->nullable()->comment('Token registrado por el usuario en la elección'); 
+        Schema::create('organoeleccionjurado', function (Blueprint $table) {
+            $table->increments('oreljuid')->comment('Identificador de la tabla organo eleccion jurado');
+            $table->unsignedSmallInteger('orgeleid')->comment('Identificador de la elección');
+            $table->unsignedSmallInteger('deleid')->comment('Identificador del delegado');
+            $table->boolean('oreljuesjurado')->default(true)->comment('Determina si es un jurado o un testigo');
             $table->timestamps();
-
-            $table->foreign('tiporgid', 'fk_orelprtiporg')->references('tiporgid')->on('tipoorgano')->onUpdate('cascade');
-            $table->foreign('orgeleid', 'fk_orelprorgele')->references('orgeleid')->on('organoeleccion')->onUpdate('cascade');
+        
+            $table->foreign('orgeleid', 'fk_oreljuelec')->references('orgeleid')->on('organoeleccion')->onUpdate('cascade'); 
+            $table->foreign('deleid', 'fk_oreljudele')->references('deleid')->on('delegado')->onUpdate('cascade');
         });
 
         Schema::create('organoeleccionparticipante', function (Blueprint $table) {
@@ -56,6 +56,17 @@ return new class extends Migration
             $table->foreign('tiporgid', 'fk_orelpatiporg')->references('tiporgid')->on('tipoorgano')->onUpdate('cascade');
             $table->foreign('orgeleid', 'fk_orelpaelec')->references('orgeleid')->on('organoeleccion')->onUpdate('cascade'); 
             $table->foreign('deleid', 'fk_orelpadele')->references('deleid')->on('delegado')->onUpdate('cascade');
+        });
+
+        Schema::create('organoeleccionparticipanteproceso', function (Blueprint $table) {
+            $table->increments('orelprid')->comment('Identificador de la tabla organo elección participante proceso');
+            $table->unsignedTinyInteger('tiporgid')->comment('Identificador del tipo de órgano de elección');
+            $table->unsignedSmallInteger('orgeleid')->comment('Identificador del órgano de elección');
+            $table->string('orelprtoken', 20)->nullable()->comment('Token registrado por el usuario en la elección'); 
+            $table->timestamps();
+
+            $table->foreign('tiporgid', 'fk_orelprtiporg')->references('tiporgid')->on('tipoorgano')->onUpdate('cascade');
+            $table->foreign('orgeleid', 'fk_orelprorgele')->references('orgeleid')->on('organoeleccion')->onUpdate('cascade');
         });
 
         Schema::create('organoeleccionparticipantevoto', function (Blueprint $table) {
@@ -73,8 +84,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('organoeleccionparticipantevoto');
-        Schema::dropIfExists('organoeleccionparticipante');
         Schema::dropIfExists('organoeleccionparticipanteproceso');
+        Schema::dropIfExists('organoeleccionparticipante');        
+        Schema::dropIfExists('organoeleccionjurado');
         Schema::dropIfExists('organoelecciontipoorgano');
         Schema::dropIfExists('organoeleccion');
     }

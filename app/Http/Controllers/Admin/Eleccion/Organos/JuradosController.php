@@ -17,14 +17,13 @@ class JuradosController extends Controller
             $titulo  = 'No existen ningún órgano de elección activo';
             $id      = '';
             $jurados = DB::table('organoeleccionjurado as oej')
-                            ->select('oej.oreljuid','oej.orgeleid','d.deledocumento','oej.oreljuesjurado',
-                                DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre ) as nombres"),
-                                DB::raw("CONCAT_WS(' ', d.deleprimerapellido, d.delesegundoapellido) as apellidos"),
+                            ->select('oej.oreljuid','oej.orgeleid','d.deledocumento','oej.oreljuesjurado','oej.deleid',
+                                DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre, d.deleprimerapellido, d.delesegundoapellido) as nombreCompleto"),
                                 DB::raw("if(oej.oreljuesjurado = 1,'Jurado', 'Testigo') as tipoJurado"))
                             ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oej.orgeleid')
                             ->join('delegado as d', 'd.deleid', '=', 'oej.deleid')
                             ->where('oe.orgeleactivo', true)
-                            ->orderBy('nombres')->get();
+                            ->orderBy('oej.oreljuid')->get();
 
             $organoEleccion = DB::table('organoeleccion')->select('orgeleid','orgeletitulo')->where('orgeleactivo', true)->first();
             if($organoEleccion){
@@ -34,18 +33,54 @@ class JuradosController extends Controller
 
 		    $delegados = DB::table('delegado')
                                 ->select('deleid','deledocumento',
-                                    DB::raw("CONCAT_WS(' ', deleprimernombre, delesegundonombre) as nombres"),
-                                    DB::raw("CONCAT_WS(' ', deleprimerapellido, delesegundoapellido) as apellidos"))
+                                    DB::raw("CONCAT_WS(' ', deleprimernombre, delesegundonombre, deleprimerapellido, delesegundoapellido) as nombreCompleto"))
                                 ->where('deleactivo', true)
                                 ->where('deleid', '<>', 1)
                                 ->get();
 
 			return response()->json(['success' => true, 'id' => $id, 'titulo' => $titulo, 'jurados' => $jurados, 'delegados' => $delegados]);
 		}catch(Throwable $e){
-            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message' => 'Error al obtener la información de los delegados']);
 		}
 	}
 
+    public function salve(Request $request)
+	{
+	    $request->validate(['codigo' => 'required', 'juradosAsignados' => 'required|array|min:1' ]);
+
+        DB::beginTransaction();
+		try {
+
+            foreach($request->juradosAsignados as $dataJurado){
+
+                $identificador = $dataJurado['identificador'];
+                $delegadoId    = $dataJurado['delegadoId'];
+                $tipo          = $dataJurado['tipo'];
+                $estadoActual  = $dataJurado['estado'];
+
+                if($estadoActual == 'D'){//Elimina
+                    Jurado::findOrFail($identificador)->delete();
+                }elseif($estadoActual == 'I'){
+                    $jurado                 = new Jurado();
+                    $jurado->orgeleid       = $request->codigo;
+                    $jurado->deleid         = $delegadoId;
+                    $jurado->oreljuesjurado = $tipo;
+                    $jurado->save();
+                }if($estadoActual == 'U'){
+                    $jurado                = Jurado::findOrFail($identificador);
+                    $jurado->deleid         = $delegadoId;
+                    $jurado->oreljuesjurado = $tipo;
+                    $jurado->save();
+                }
+            }
+
+            DB::commit();
+			return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito']);
+		} catch (Throwable $e){
+            DB::rollback();
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro de jurado para la elección ']);
+		}
+	}
 }

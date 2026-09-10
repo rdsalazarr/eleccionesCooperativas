@@ -676,6 +676,21 @@ h1 {
   box-shadow:0 4px 10px rgba(21, 128, 61, 0.22) !important;
 }
 
+.btnPdf {
+  background-color: #ec801c !important;
+  color: #ffffff !important;
+  border: 1px solid #ec801c !important;
+  border-left: 3px solid #9d9292 !important;
+  box-shadow: 0 2px 4px rgba(21, 128, 61, 0.18) !important; 
+}
+
+.btnPdf:hover {
+  background-color: #ff8718 !important;
+  border-color: #ff8718 !important;
+  border-left: 3px solid #9d9292 !important;
+  box-shadow:0 4px 10px rgba(21, 128, 61, 0.22) !important;
+}
+
 .btnActa {
   position: relative;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100% ) !important;
@@ -714,7 +729,7 @@ h1 {
   color: #ffffff !important;
   border: 1px solid #0f5f78 !important;
   border-left: 3px solid #084c61 !important;
-  box-shadow:        0 2px 4px rgba(15, 95, 120, 0.16) !important;
+  box-shadow: 0 2px 4px rgba(15, 95, 120, 0.16) !important;
 }
 
 .btnPublicar:hover {

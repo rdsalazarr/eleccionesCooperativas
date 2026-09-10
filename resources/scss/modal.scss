@@ -165,31 +165,61 @@ $rojoClaro  : var(--rojoClaro);
 }
 
 .modalBtnIcono {
+  position: relative;
   margin-top: 1em;
   background-color: $colorPrincipal;
+  border: 1px solid $colorPrincipal;
+  border-radius: 4px;
+  font-weight: 500;
   text-shadow: 0px -2px 2px rgba(150, 150, 150, 1);
-  transition: all 0.5s ease-in-out;
-  &:hover {
-    background: $colorSecundario;
-    transition: all 0.5s ease-in-out;
-    color: #ccc;
-  }
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; 
   &::before {
     content: "";
     position: absolute;
     left: 0;
     top: 0;
-    width: 34px;
+    width: 32px;
     height: 100%;
     background-color: #e2e2e2; 
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
+     border-radius: 3px 0 0 3px;
+    transition: background-color 0.3s ease, width 0.3s ease;
+  } 
+  &::after { 
+    content: "";
+    position: absolute;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #e2e2e2;
+    transition: left 0.3s ease, border-left-color 0.3s ease;
   }
   .icono{
+    position: relative;
     z-index: 99; 
     font-size: 2em !important;
     color: $colorPrincipal;
-    padding-right: 4px;
+    padding-right: 12px;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  &:hover {
+    background: $colorSecundario;
+    transition: all 0.5s ease-in-out;
+    color: #ccc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    &::before {
+      background-color: $colorPrincipal;
+      width: 38px;
+    }
+    &::after {
+      left: 38px;
+      border-left-color: $colorPrincipal;
+    }
+    .icono {
+      color: #fff;
+      transform: scale(1.1);
+    }
   }
 }
 

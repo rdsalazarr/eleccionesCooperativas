@@ -54,8 +54,8 @@ class GenerarPdf extends TCPDF
 
 	public function Footer()
     {
-        $parametros       = $this->parametrosFooter;         
-		$urlEmpresa       = $parametros['urlEmpresa']       ?? '';       
+        $parametros       = $this->parametrosFooter;
+		$urlEmpresa       = $parametros['urlEmpresa']       ?? '';
         $correoEmpresa    = $parametros['correoEmpresa']    ?? '';
         $telefonosEmpresa = $parametros['telefonosEmpresa'] ?? '';
         $direccionEmpresa = $parametros['direccionEmpresa'] ?? '';
@@ -93,7 +93,7 @@ class GenerarPdf extends TCPDF
             'direccionEmpresa' => $empresa->direccionEmpresa,
             'telefonosEmpresa' => $empresa->telefonosEmpresa,
         ];
-       
+
         $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
         $tcpdf->SetProtection(array('copy'), '', null, 0, null);
         $tcpdf->setParametrosHeader($parametrosFijos);
@@ -108,7 +108,7 @@ class GenerarPdf extends TCPDF
         $tcpdf->SetSubject('INSCRIPCIÓN DELEGADOS DE '.$siglaEmpresa);
         $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT, '.$numeroInscripcion);
         $tcpdf->SetTitle('Certificado aspirante a delegado número '.$numeroInscripcion);
-               
+
         $tcpdf->SetFont('helvetica','B',12);
         $tcpdf->Ln(4); 
         $tcpdf->Cell(170,5,$nombreEmpresa,0,0,'C');
@@ -139,7 +139,7 @@ class GenerarPdf extends TCPDF
 
     public static function listaAspiranteDelegado($data, $empresa, $metodo = 'I')
     {
-        $tituloEleccion = $data['tituloEleccion'];  
+        $tituloEleccion = $data['tituloEleccion'];
         $agencias       = $data['agencias'];
 
         $nombreEmpresa   = $empresa->emprnombre;
@@ -188,7 +188,7 @@ class GenerarPdf extends TCPDF
             $tcpdf->Cell(40,6,'NÚMERO',1,0,'C');
             $tcpdf->Ln(6);
             $tcpdf->SetFont('helvetica','',9); 
-           foreach ($agencia->aspirantes as $aspirante) { 
+           foreach ($agencia->aspirantes as $aspirante) {
                 $tcpdf->Cell(140,6,' '.$aspirante->nombreCompleto,1,0,'L'); 
                 $tcpdf->Cell(40,6,$aspirante->numeroAsignado,1,0,'C');
                 $tcpdf->Ln(6);
@@ -361,7 +361,7 @@ class GenerarPdf extends TCPDF
                 $totalPrincipal = $aspirante->eldeagnumerodeleprincipal;
                 $totalSuplente  = $aspirante->eldeagnumerodelesuplente;
                 $tituloCargo    = ($i <= $totalPrincipal && $aspirante->totalVotos > 0 ) ? 'PRINCIPAL' : (($i > $totalPrincipal and $i <= ($totalPrincipal + $totalSuplente)) ? 'SUPLENTE' : 'NO APTO');
-              
+
                 if($aspirante->totalVotos === '0'){
                     $tituloCargo    = 'CERO VOTOS';
                 }
@@ -392,7 +392,7 @@ class GenerarPdf extends TCPDF
             $tcpdf->SetFont('helvetica','',12);
             $tcpdf->Cell(60,6,' Para constancia firman: ',"0",0,'L');
             $tcpdf->Ln(28);
-            
+
             $xInicial = $tcpdf->GetX();
             $yInicial = $tcpdf->GetY();
 
@@ -435,7 +435,7 @@ class GenerarPdf extends TCPDF
     }
 
     public static function resultadosEleccionDelegados($data, $empresa, $metodo = 'I')
-    {        
+    {
         $eleccionDelegadoId = $data['eleccionDelegadoId'];
         $consecutivo        = $data['consecutivo'] ?? '';
         $tituloEleccion     = $data['tituloEleccion'];
@@ -580,11 +580,11 @@ class GenerarPdf extends TCPDF
             $tcpdf->SetFont('helvetica','B',12);
             $tcpdf->Ln(8);
             $tcpdf->Cell(30,6,' DOCUMENTO',1,0,'L');
-            $tcpdf->Cell(120,6,' NOMBRES Y APELLIDOS',1,0,'L'); 
+            $tcpdf->Cell(120,6,' NOMBRES Y APELLIDOS',1,0,'L');
             $tcpdf->Cell(30,6,'NÚMERO',1,0,'C');
             $tcpdf->Ln(6);
             $tcpdf->SetFont('helvetica','',9); 
-           foreach ($agencia->delegados as $delegado) { 
+           foreach ($agencia->delegados as $delegado) {
                 $tcpdf->Cell(30,6,' '.$delegado->documento,1,0,'L'); 
                 $tcpdf->Cell(120,6,' '.$delegado->nombreCompleto,1,0,'L'); 
                 $tcpdf->Cell(30,6,$delegado->numeroInscripcion,1,0,'C');
@@ -638,6 +638,71 @@ class GenerarPdf extends TCPDF
 
         $tituloPdf = "Token.pdf";
         if($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
+
+    public static function listaAspiranteTipoOrganos($data,  $empresa, $metodo = 'I')
+    {
+        $nombreTpOrgano = $data['nombreTpOrgano'];
+        $participantes  = $data['participantes'];
+        $titulo         = $data['titulo'];
+
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos); 
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('Lista aspirante al tipo de órgano '.$titulo);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('Lista aspirante al tipo de órgano '.$titulo);
+ 
+        $tcpdf->AddPage('P', 'LETTER');
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->MultiCell(170,4,$titulo,0,'L',0);
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->Ln(8);   
+        $tcpdf->Cell(40,6,' DOCUMENTO',1,0,'L');
+        $tcpdf->Cell(115,6,' NOMBRES Y APELLIDOS ',1,0,'L');
+        $tcpdf->Cell(20,6,'ORDEN',1,0,'C');
+        $tcpdf->Ln(6);
+        $tcpdf->SetFont('helvetica','',9);
+        foreach ($participantes as $aspirante) {
+            $tcpdf->Cell(40,6,' '.number_format($aspirante->deledocumento, 0, '.', '.'),"LBR",0,'L'); 
+            $tcpdf->Cell(115,6,' '.$aspirante->nombreCompleto,"LBR",0,'L'); 
+            $tcpdf->Cell(20,6,$aspirante->orelpaordenparticipacion,"LBR",0,'C');
+            $tcpdf->Ln(6);
+        }
+
+        //Descargo o muestro el pdf
+		$tituloPdf = 'Lista_aspirante_organos.pdf';
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
             return base64_encode($tcpdf->output($tituloPdf, 'S'));
         }else{
             $tcpdf->output($tituloPdf, 'I');

@@ -35,11 +35,11 @@ import GestionEleccionesDelegado from "../admin/eleccion/delegados/gestion/list"
 import BoletinVotacion from "../admin/eleccion/delegados/votacion/boletinVotacion";
 import AbrirVotacionDelegados from "../admin/eleccion/delegados/votacion/abrirVotacion";
 
-import Informacion from "../admin/eleccion/organos/token/list";
 import GenerarToken from "../admin/eleccion/organos/token/list";
 import Delegados from "../admin/eleccion/organos/delegados/list";
 import JuradosOrganosEleccion from "../admin/eleccion/organos/jurados/list";
-import AbrirVotacionOrganosEleccion from "../admin/eleccion/organos/token/list";
+import RegistrarAspiranteOrganosEleccion from "../admin/eleccion/organos/aspirante/list";
+import GenerarVotacionOrganosEleccion from "../admin/eleccion/organos/generarVotacion/list";
 
 const HeaderMenu = ({ open, setOpen }) => {
     return (
@@ -139,22 +139,21 @@ const menuComponente = [
     
     {id:11,componente : <GestionEleccionesDelegado />},
     {id:12,componente : <RegistrarAspirante />},
-    {id:13,componente : <JuradosDelegados />},
-    {id:14,componente : <AbrirVotacionDelegados />},
-    {id:15,componente : <ImprimirActas />},
-    {id:16,componente : <BoletinVotacion />},
+    {id:13,componente : <AbrirVotacionDelegados />},
+    {id:14,componente : <ImprimirActas />},
+    {id:15,componente : <BoletinVotacion />},
 
-    {id:17,componente : <Delegados />},
-    {id:18,componente : <GenerarToken />},
-    {id:19,componente : <Informacion />},
-    {id:20,componente : <JuradosOrganosEleccion />},
-    {id:21,componente : <AbrirVotacionOrganosEleccion />},
+    {id:16,componente : <Delegados />},
+    {id:17,componente : <GenerarToken />},
+    {id:18,componente : <RegistrarAspiranteOrganosEleccion />},
+    {id:19,componente : <JuradosOrganosEleccion />},
+    {id:20,componente : <GenerarVotacionOrganosEleccion />},
 
+    {id:21,componente : <EnConstruccion />},
     {id:22,componente : <EnConstruccion />},
     {id:23,componente : <EnConstruccion />},
     {id:24,componente : <EnConstruccion />},
     {id:25,componente : <EnConstruccion />},
-    {id:26,componente : <EnConstruccion />},
 */
 ];
 
@@ -192,11 +191,11 @@ const componenteMenu = [
     {   nombre: 'Órgano Elección',
         icono : 'library_books',
         itemMenu: [
-            {ruta : 'admin/organos/eleccion/delegados',     menu: 'Delegados',     icono : 'person',         componente : <Delegados /> },
-            {ruta : 'admin/organos/eleccion/generarToken',  menu: 'Generar Token', icono : 'token',          componente : <GenerarToken /> },
-            {ruta : 'admin/organos/eleccion/jurados',       menu: 'Jurados',       icono : 'assignment_add', componente : <JuradosOrganosEleccion /> },
-            {ruta : 'admin/organos/eleccion/informacion',   menu: 'Información ',  icono : 'menu_book',      componente : <Informacion /> },
-            {ruta : 'admin/organos/eleccion/abrirVotacion', menu: 'Generar',       icono : 'how_to_vote',    componente : <AbrirVotacionOrganosEleccion /> },
+            {ruta : 'admin/organos/eleccion/delegados',       menu: 'Delegados',        icono : 'person',         componente : <Delegados /> },
+            {ruta : 'admin/organos/eleccion/generarToken',    menu: 'Generar Token',    icono : 'token',          componente : <GenerarToken /> },
+            {ruta : 'admin/organos/eleccion/aspirantes',      menu: 'Aspirantes ',      icono : 'wc',             componente : <RegistrarAspiranteOrganosEleccion /> },
+            {ruta : 'admin/organos/eleccion/jurados',         menu: 'Jurados',          icono : 'assignment_add', componente : <JuradosOrganosEleccion /> },            
+            {ruta : 'admin/organos/eleccion/generarVotacion', menu: 'Generar Votación', icono : 'how_to_vote',    componente : <GenerarVotacionOrganosEleccion /> },
             
         ]
     } 

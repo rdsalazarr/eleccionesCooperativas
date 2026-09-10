@@ -12,101 +12,131 @@ import Add from '@mui/icons-material/Add';
 export default function List(){
 
     const { register, handleSubmit, getValues, setError, clearErrors, control, watch, setValue, formState: { errors } } = useForm({    
-                defaultValues: { diaNotificacion: "" }
+                defaultValues: {codigo:'', delegadoId:"", documento: "", nombreJurado: "", tipoPersona: "", tipo: "1" }
             });
 
-    const [diasNotificacion, setDiasNotificacion] = useState([]);
+    const [juradosAsignados, setJuradosAsignados] = useState([]);
     const [indiceEditar, setIndiceEditar] = useState(null);
     const [delegados, setDelegados] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [jurados, setJurados] = useState([]);
     const [titulo, setTitulo] = useState('');
     const [tipo, setTipo] = useState('I');
-
+    
     const adicionarFila = () => {
-        const diaNotificacion = getValues('diaNotificacion');
+        const documento = getValues('documento');
+        const tipo      = getValues('tipo');
 
-        if (!diaNotificacion) {
-            setError('diaNotificacion', {type: 'manual',  message: 'Debe ingresar el dia' });
+        if (!documento) {
+            setError('documento', { type: 'manual', message: 'Debe ingresar el documento' });
             return;
         }
-        clearErrors('diaNotificacion');
+        clearErrors('documento');
 
-        let nuevosDiasNotificacion = [...diasNotificacion];
+        if (!tipo) {
+            setError('tipo', { type: 'manual', message: 'Debe seleccionar el tipo' });
+            return;
+        }
+        clearErrors('tipo');
+    
+        const resultDelegados = delegados.filter((data) => data.deledocumento == documento);
+        if (resultDelegados.length === 0) {
+            ShowSnackbar('Este documento no se encuentra en la lista de delegados activos', 'error');
+            return;
+        }
+
+        const nombreJurado         = resultDelegados[0].nombreCompleto;
+        const delegadoId           = resultDelegados[0].deleid;
+        const tipoPersona          = tipo === '1' ? 'Jurado' : 'Testigo';
+        let nuevosJuradosAsignados = [...juradosAsignados];
+  
         if (indiceEditar !== null) {
-            nuevosDiasNotificacion[indiceEditar] = {
-                ...nuevosDiasNotificacion[indiceEditar],
-                diaNotificacion,
+            nuevosJuradosAsignados[indiceEditar] = {
+                ...nuevosJuradosAsignados[indiceEditar],
+                delegadoId,
+                documento,
+                nombreJurado,
+                tipoPersona,
+                tipo,
             };
-        }else{
-            if (diasNotificacion.some(rango => rango.diaNotificacion == diaNotificacion)) {
+        } else {  
+            if (juradosAsignados.some(data => data.documento == documento)) {
                 ShowSnackbar('Este registro ya fue adicionado', 'error');
                 return;
             }
-            nuevosDiasNotificacion.push({ identificador: '', diaNotificacion: diaNotificacion,  estado: 'I'});
+
+            nuevosJuradosAsignados.push({
+                identificador: '',
+                delegadoId:   delegadoId,
+                documento:    documento,
+                nombreJurado: nombreJurado,
+                tipoPersona:  tipoPersona,
+                tipo:   tipo,
+                estado: 'I'
+            });
         }
 
-        setDiasNotificacion(nuevosDiasNotificacion);
+        setJuradosAsignados(nuevosJuradosAsignados);
         limpiarFormulario();
     };
 
     const limpiarFormulario = () => {
-        setValue('diaNotificacion', '');
+        setValue('documento', '');
+        setValue('tipo', '1');
         clearErrors();
         setIndiceEditar(null);
     };
 
     const editarFila = (index) => {
-        const fila = diasNotificacion[index];
+        const fila = juradosAsignados[index];
 
         if (fila.estado === 'D') {
-            ShowSnackbar('No se puede actualizar el día de notificación porque actualmente está marcado para eliminar.', 'warning' );
+            ShowSnackbar('No se puede actualizar el jurado porque actualmente está marcado para eliminar.', 'warning' );
             return;
         }
 
-        setValue('diaNotificacion', fila.diaNotificacion);
-
+        setValue('documento', fila.documento);
+        setValue('tipo', fila.tipo);
         setIndiceEditar(index);
     };
 
     const eliminarFila = (id) =>{
 
         if (indiceEditar === id) {
-            ShowSnackbar('No se puede eliminar el día de notificación porque actualmente está siendo editado.', 'warning' );
+            ShowSnackbar('No se puede eliminar el jurado porque actualmente está siendo editado.', 'warning' );
             return;
         }
 
-        let newDiasNotificacion = []; 
-        diasNotificacion.map((res,i) =>{
+        let newJuradosAsignados = []; 
+        juradosAsignados.map((res,i) =>{
             if(res.estado === 'U' && i === id){
-                newDiasNotificacion.push({ identificador:res.identificador, diaNotificacion: res.diaNotificacion, estado: 'D' }); 
+                newJuradosAsignados.push({ identificador:res.identificador, delegadoId:res.delegadoId, documento: res.documento, nombreJurado: res.nombreJurado, tipoPersona: res.tipoPersona, tipo: res.tipo, estado: 'D' }); 
             }else if(res.estado === 'D' && i === id){
-                newDiasNotificacion.push({identificador:res.identificador, diaNotificacion: res.diaNotificacion, estado: 'U'});
+                newJuradosAsignados.push({identificador:res.identificador, delegadoId:res.delegadoId, documento: res.documento, nombreJurado: res.nombreJurado, tipoPersona: res.tipoPersona, tipo: res.tipo, estado: 'U'});
             }else if((res.estado === 'D' || res.estado === 'U') && i !== id){
-                newDiasNotificacion.push({identificador:res.identificador, diaNotificacion: res.diaNotificacion, estado:res.estado});
+                newJuradosAsignados.push({identificador:res.identificador, delegadoId:res.delegadoId, documento: res.documento, nombreJurado: res.nombreJurado, tipoPersona: res.tipoPersona, tipo: res.tipo, estado:res.estado});
             }else{
                 if(i != id){
-                    newDiasNotificacion.push({identificador:res.identificador, diaNotificacion: res.diaNotificacion, estado: 'I' });
+                    newJuradosAsignados.push({identificador:res.identificador, delegadoId:res.delegadoId, documento: res.documento, nombreJurado: res.nombreJurado, tipoPersona: res.tipoPersona, tipo: res.tipo, estado: 'I' });
                 }
             }
         })
-        setDiasNotificacion(newDiasNotificacion);
+        setJuradosAsignados(newJuradosAsignados);
     }
 
     const onSubmit = (formValues) => {
 
-        if(diasNotificacion.length === 0){
-            ShowSnackbar('Debe adicionar como mínimo una día de notificación', 'error');
+        if(juradosAsignados.length === 0){
+            ShowSnackbar('Debe adicionar como mínimo un jurado', 'error');
             return;
         }
 
         const payload = {
             ...formValues,
-            diasNotificacion: diasNotificacion
+            juradosAsignados: juradosAsignados
         };
 
         setLoader(true); 
-        instance.post('/admin/dias/notificacion/salve', payload).then(res=>{
+        instance.post('/admin/organos/eleccion/jurados/salve', payload).then(res=>{
             let icono = (res.success) ? 'success' : 'error';
             ShowSnackbar(res.message, icono);
             if (res.success) {
@@ -124,25 +154,27 @@ export default function List(){
         instance.get('/admin/organos/eleccion/jurados/list').then(res=>{
             if(res.success) {
                 setDelegados(res.delegados);
-                 setJurados(res.jurados);
-                setTitulo(res.titulo);      
-                
+                setValue('codigo', res.id);
+                setTitulo(res.titulo);
+                if(res.jurados.length > 0){
+                    let nuevosJuradosAsignados = [];
+                    res.jurados.forEach(function(data){
+                        nuevosJuradosAsignados.push({
+                            identificador: data.oreljuid,
+                            delegadoId:    data.deleid,
+                            documento:     data.deledocumento,
+                            nombreJurado:  data.nombreCompleto,
+                            tipoPersona:   data.tipoJurado,
+                            tipo:          data.oreljuesjurado,
+                            estado: 'U'
+                        });
+                    });
+                    setJuradosAsignados(nuevosJuradosAsignados);
+                    setTipo('U');
+                }
             } else{
                 ShowSnackbar(res.message, 'error');
-            } 
-
-            /*if(res.data.length > 0){
-                let nuevosDiasNotificacion = [];
-                res.data.forEach(function(rango){
-                    nuevosDiasNotificacion.push({
-                        identificador:   rango.dianotid,
-                        diaNotificacion: rango.dianotdias,
-                        estado: 'U'
-                    });
-                });
-                setDiasNotificacion(nuevosDiasNotificacion);
-               setTipo('U');
-            }*/
+            }  
             setLoader(false);
         }) 
     }
@@ -162,62 +194,93 @@ export default function List(){
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <Grid container spacing={2}  sx={{ justifyContent: 'center', alignItems: 'center' }}>
 
-                        <Grid size={{ xs: 8, sm: 9, md: 4}}>
-                            <Controller
-                                name="diaNotificacion"
+                        <Grid size={{ xs: 12 }}>
+                            <Box className='divisionFormulario'>
+                                Consultar jurado
+                            </Box>
+                        </Grid>
+
+                        <Grid size={{ xs: 6, sm: 4, md: 4}}>
+                            <TextField
+                                label="Documento"
+                                type="number"
                                 fullWidth
+                                variant="standard"
+                                {...register("documento")}
+                                error={!!errors.documento}
+                                helperText={errors.documento?.message}
+                                slotProps={{
+                                        htmlInput: {
+                                            autoComplete: "off",
+                                            maxLength: 15
+                                        },
+                                        inputLabel: { shrink: true },
+                                    }}
+                            />
+                        </Grid>
+
+                        <Grid size={{ xs: 6, sm: 3, md: 3}}>
+                            <Controller
+                                name="tipo"
                                 control={control}
                                 render={({ field }) => (
                                     <TextField
-                                        label="Días de notificación"
-                                        type="number"
-                                        variant="standard"
+                                        select
+                                        label="Tipo"
                                         fullWidth
+                                        variant="standard"
                                         {...field}
-                                        error={!!errors.diaNotificacion}
-                                        helperText={errors.diaNotificacion?.message}
-                                        onChange={(e) => {
-                                            const value = e.target.value;
-                                            if (value === '' || (Number(value) <= 99 && value.length <= 2)) {
-                                                field.onChange(value);
-                                                clearErrors('diaNotificacion');
-                                            }
-                                        }}
-                                    />
+                                        error={!!errors.tipo}
+                                        helperText={errors.tipo?.message}
+                                    >
+                                        <MenuItem value="">Seleccione</MenuItem>
+                                        <MenuItem value={"1"}>Jurado</MenuItem>
+                                        <MenuItem value={"0"}>Testigo</MenuItem>
+                                    </TextField>
                                 )}
                             />
                         </Grid>
 
-                        <Grid size={{ xs: 4, sm: 3, md: 3 }}>
+                        <Grid size={{ xs: 6, sm: 3, md: 3 }}>
                             <Button type={"button"} className={'modalBtnIcono'}
                                 startIcon={indiceEditar !== null ? <Edit className='icono' /> : <Add className='icono' /> } onClick={() => {adicionarFila()}}> {indiceEditar !== null ? 'Actualizar' : 'Agregar'}
                             </Button>
                         </Grid>
 
-                        {(diasNotificacion.length > 0) ?
+                        {(juradosAsignados.length > 0) ?
                             <Fragment>
                                 <Grid size={{ xs: 12 }}>
                                     <Box className='divisionFormulario'>
-                                        Listado de días asignados
+                                        Jurados asignados
                                     </Box>
                                 </Grid>
 
                                 <Grid size={{ xs: 12 }}>
-                                    <Table className={'tableAdicional'} sx={{width: '60%', margin:'auto'}} sm={{maxHeight: '90%', margin:'auto'}} >
+                                    <Table className={'tableAdicional'} sx={{width: '94%', margin:'auto'}} sm={{maxHeight: '98%', margin:'auto'}} >
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>Día</TableCell>
+                                                <TableCell>Documento</TableCell>
+                                                <TableCell>Nombre</TableCell>
+                                                <TableCell>Tipo</TableCell>
                                                 <TableCell style={{width: '5%'}} className='cellCenter'>Editar </TableCell>
                                                 <TableCell style={{width: '5%'}} className='cellCenter'>Eliminar </TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                        { diasNotificacion.map((rango, a) => {
+                                        { juradosAsignados.map((data, a) => {
                                             return(
-                                                <TableRow key={'rowD-' +a} className={(rango['estado'] == 'D')? 'tachado': null}>
+                                                <TableRow key={'rowD-' +a} className={(data['estado'] == 'D')? 'tachado': null}>
 
                                                     <TableCell>
-                                                        {rango['diaNotificacion']}
+                                                        {data['documento']}
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        {data['nombreJurado']}
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        {data['tipoPersona']}
                                                     </TableCell>
 
                                                     <TableCell className='cellCenter'>
