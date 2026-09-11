@@ -644,7 +644,7 @@ class GenerarPdf extends TCPDF
         }
     }
 
-    public static function listaAspiranteTipoOrganos($data,  $empresa, $metodo = 'I')
+    public static function listaAspiranteTipoOrganos($data, $empresa, $metodo = 'I')
     {
         $nombreTpOrgano = $data['nombreTpOrgano'];
         $participantes  = $data['participantes'];
@@ -698,6 +698,410 @@ class GenerarPdf extends TCPDF
 
         //Descargo o muestro el pdf
 		$tituloPdf = 'Lista_aspirante_organos.pdf';
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
+
+    public static function actaApertura($data, $empresa, $metodo = 'I')
+    {
+        $titulo     = $data['tipoEleccion'];
+        $fechanicio = $data['fechanicio'];
+        $contenido  = $data['contenido'];
+        $tituloPdf  = $data['tituloPdf'];
+        $jurados    = $data['jurados'];
+
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos);
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('ACTA DE APERTURA DE '.$titulo);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('ACTA DE APERTURA DE '.$titulo);
+ 
+        $tcpdf->AddPage('P', 'LETTER');
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->Ln(4);
+        $tcpdf->Cell(170,5,'ACTA APERTURA ELECCIONES',0,0,'C');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(170,5,'Fecha '.$fechanicio, 0,0,'C');
+        $tcpdf->Ln(16); 
+        $tcpdf->SetFont('helvetica','',12);
+        $tcpdf->MultiCell(0,4,$contenido."\n",0,'J',0);
+        $tcpdf->Ln(8); 
+        $tcpdf->Cell(170,5,'Material entregado:',0,0,'L');
+        $tcpdf->Ln(12); 
+        $tcpdf->Cell(170,5,'   * Computadores.',0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(170,5,'   * Listado delegados hábiles.',0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(170,5,'   * Planilla registro de sufragantes.',0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(170,5,'   * Reglamento para elecciones de delegados.',0,0,'L');
+        $tcpdf->Ln(18);
+        $tcpdf->Cell(170,5,' Para constancia firman',0,0,'L');
+        $tcpdf->Ln(26);
+        $tcpdf->SetFont('helvetica','B',12);
+        $i = 0;
+        foreach ($jurados as $jurado) {
+            $i ++;
+            $html = '<b>'.$jurado->nombreCompleto.'<br>CC No. '.number_format($jurado->documento, 0, '.', '.');
+            $html .= ' <br>'.$jurado->tipoPersona.'</b><br>';
+            if($i == 1){
+                $tcpdf->writeHTMLCell(80, 0, 20, '', $html, "T", 0, 0, true, 'J');
+            }else{
+                $tcpdf->writeHTMLCell(80, 0, 110, '', $html, "T", 0, 0, true, 'J');
+                $tcpdf->Ln(36);
+                $i = 0;
+            }  
+        }
+
+        //Descargo o muestro el pdf
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
+
+    public static function listaResultado($data, $empresa, $metodo = 'I')
+    {
+        $totalVotosBlanco = $data['totalVotosBlanco'];
+        $totalPrincipal   = $data['totalPrincipal'];
+        $totalSuplente    = $data['totalSuplente'];
+        $participantes    = $data['participantes'];
+        $titulo           = $data['tipoEleccion'];
+        $tituloPdf        = $data['tituloPdf'];
+
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos);
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('INFORME DE RESULTADOS DE '.$titulo);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('INFORME DE RESULTADOS DE LA VOTACIÓN DEL '.$titulo);
+ 
+        $tcpdf->AddPage('P', 'LETTER');
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->Ln(4);
+        $tcpdf->SetTextColor(102,102,102);
+        $tcpdf->MultiCell(0,4,'INFORME DE RESULTADOS DE LA VOTACIÓN DEL '.$titulo.''."\n",0,'C',0);
+        $tcpdf->SetTextColor(0);
+        $tcpdf->Ln(12);
+        $tcpdf->SetFont('helvetica','B',10);
+        $tcpdf->SetFillColor(231,231,231);
+        $tcpdf->Cell(15,5,'Ítem',1,0,'C',true);
+    	$tcpdf->Cell(30,5,' Documento',1,0,'C',true);
+    	$tcpdf->Cell(100,5,' Nombre y Apellidos',1,0,'C',true); 
+    	$tcpdf->Cell(15,5,'Votos',1,0,'C',true);
+        $tcpdf->Cell(20,5,'Tipo',1,0,'C',true);
+    	$tcpdf->Ln(5);
+		$tcpdf->SetFont('helvetica','',10);
+
+		$i = 0;	
+    	foreach ($participantes as $participante) {
+			$i ++;
+
+    		if($i <= $totalPrincipal){
+    			$tipo = 'Principal';
+    		}else if($i > $totalPrincipal and $i <= ($totalPrincipal + $totalSuplente)){
+    			$tipo = 'Suplente';
+    		}else{
+    			$tipo = '';
+    		}
+
+            if($participante->totalVotos == '0'){
+                $tipo = '';
+            }
+
+    		$tcpdf->Cell(15,5, $i, "LBR", 0, 'C');
+	    	$tcpdf->Cell(30,5,' '.number_format($participante->documento, 0, '.', '.'), "LBR" ,0, 'L');
+	    	$tcpdf->Cell(100,5,' '.substr($participante->nombreCompleto,  0, 45), "LBR", 0, 'L');
+	    	$tcpdf->Cell(15,5,$participante->totalVotos, "LBR" ,0, 'C');
+            $tcpdf->Cell(20,5,$tipo, "LBR", 0, 'C');
+	    	$tcpdf->Ln(5);
+    	}
+
+		$tcpdf->Ln(5); 
+		$tcpdf->SetFont('helvetica','B',10);
+		$tcpdf->Cell(45,5,'Votos en blanco:',0,0,'C',true);
+		$tcpdf->Cell(30,5,$totalVotosBlanco,0,0,'C');
+
+        //Descargo o muestro el pdf
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
+
+    public static function actaEscrutinio($data, $empresa, $metodo = 'I')
+    {
+        $totalDelegadosHabiles = $data['totalDelegadosHabiles'];
+        $totalVotosNoMarcados  = $data['totalVotosNoMarcados'];
+        $totalVotosMarcados    = $data['totalVotosMarcados'];
+        $totalVotosBlancos     = $data['totalVotosBlancos'];
+        $fechaEleccion         = $data['fechaEleccion'];
+        $titulo                = $data['tipoEleccion'];
+        $totalVotos            = $data['totalVotos'];
+        $contenido             = $data['contenido'];
+        $tituloPdf             = $data['tituloPdf'];
+        $jurados               = $data['jurados'];
+
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos);
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('ACTA RESULTADOS DE ESCRUTINIO '.$titulo);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('ACTA RESULTADOS DE ESCRUTINIO '.$titulo);
+ 
+        $tcpdf->AddPage('P', 'LETTER');
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->Ln(4);
+        $tcpdf->Cell(170,5,'ACTA RESULTADOS DE ESCRUTINIO',0,0,'C');
+        $tcpdf->Cell(170,5,'ELECCIONES '.$fechaEleccion,0,0,'C');
+        $tcpdf->Ln(16); 
+        $tcpdf->SetFont('helvetica','',12);
+        $tcpdf->MultiCell(0,4,$contenido."\n",0,'J',0);
+        $tcpdf->Ln(8); 
+        $tcpdf->Cell(170,5,'El proceso de elección dio el siguiente resultado :',0,0,'L');
+        $tcpdf->Ln(12); 
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->Cell(50,5,'Delegados Hábiles:',0,0,'L');
+        $tcpdf->Cell(50,5,$totalDelegadosHabiles,0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(50,5,'Votos Marcados:',0,0,'L');
+        $tcpdf->Cell(50,5,$totalVotosMarcados,0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(50,5,'Votos no Marcados:',0,0,'L');
+        $tcpdf->Cell(50,5,$totalVotosNoMarcados,0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(50,5,'Votos en Blancos:',0,0,'L');
+        $tcpdf->Cell(50,5,$totalVotosBlancos,0,0,'L');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(50,5,'Total Votos:',0,0,'L');
+        $tcpdf->Cell(50,5, $totalVotos,0,0,'L');
+        $tcpdf->Ln(18);
+        $tcpdf->SetFont('helvetica','',12);
+        $tcpdf->Cell(170,5,' Para constancia firman',0,0,'L');
+        $tcpdf->Ln(28);
+
+        $i = 0;
+        foreach ($jurados as $jurado) {
+            $i ++;
+            $html = '<b>'.$jurado->nombreCompleto.'<br>CC No. '.number_format($jurado->documento, 0, '.', '.');
+            $html .= ' <br>'.$jurado->tipo.'</b><br>';
+            if($i == 1){
+                $tcpdf->writeHTMLCell(80, 0, 20, '', $html, "T", 0, 0, true, 'J');
+            }else{
+                $tcpdf->writeHTMLCell(80, 0, 110, '', $html, "T", 0, 0, true, 'J');
+                $tcpdf->Ln(36);
+                $i = 0;
+            }  
+        } 
+
+        //Descargo o muestro el pdf
+        if($metodo == 'F'){
+            $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
+            $tcpdf->output($rutaPDF, 'F');
+            return $rutaPDF;
+		}elseif($metodo === 'S'){
+            return base64_encode($tcpdf->output($tituloPdf, 'S'));
+        }else{
+            $tcpdf->output($tituloPdf, 'I');
+        }
+    }
+
+    public static function actaResultado($data, $empresa, $metodo = 'I')
+    {
+        $totalPrincipal = $data['totalPrincipal'];
+        $tituloEleccion = $data['tituloEleccion'];
+        $totalSuplente  = $data['totalSuplente'];
+        $fechaEleccion  = $data['fechaEleccion'];
+        $participantes  = $data['participantes'];
+        $titulo         = $data['tipoEleccion'];
+        $contenido      = $data['contenido'];
+        $tituloPdf      = $data['tituloPdf'];
+        $periodo        = $data['periodo'];
+        $jurados        = $data['jurados'];
+
+        $nombreEmpresa   = $empresa->emprnombre;
+        $siglaEmpresa    = $empresa->emprsigla;
+        $nitEmpresa      = $empresa->emprnit;
+        $parametrosFijos = [
+            'urlEmpresa'       => $empresa->emprurl,
+            'nitEmpresa'       => $empresa->nitEmpresa,
+            'logoEmpresa'      => $empresa->logoEmpresa,
+            'lemaEmpresa'      => $empresa->emprlema,
+            'nombreEmpresa'    => $empresa->emprnombre,
+            'correoEmpresa'    => $empresa->correoElectronico,
+            'direccionEmpresa' => $empresa->direccionEmpresa,
+            'telefonosEmpresa' => $empresa->telefonosEmpresa,
+        ];
+
+        $tcpdf = new GenerarPdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $tcpdf->SetProtection(array('copy'), '', null, 0, null);
+        $tcpdf->setParametrosHeader($parametrosFijos);
+        $tcpdf->setParametrosFooter($parametrosFijos);
+        $tcpdf->SetPrintHeader(true);
+        $tcpdf->SetPrintFooter(true);
+        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetAutoPageBreak(true, 35);
+
+        $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
+        $tcpdf->SetCreator('Sistema elecciones de '.$siglaEmpresa);
+        $tcpdf->SetSubject('ACTA RESULTADOS DE '.$titulo);
+        $tcpdf->SetKeywords('Sistema, Delegados, '.$siglaEmpresa.', IMPLESOFT ');
+        $tcpdf->SetTitle('ACTA RESULTADOS DE '.$titulo);
+ 
+        $tcpdf->AddPage('P', 'LETTER');
+        $tcpdf->SetFont('helvetica','B',12);
+        $tcpdf->Ln(4); 
+        $tcpdf->Cell(170,5,$nombreEmpresa,0,0,'C');
+        $tcpdf->Ln(5);
+        $tcpdf->Cell(170,5,$siglaEmpresa,0,0,'C');
+        $tcpdf->Ln(5);
+        $tcpdf->Cell(170,5,$nitEmpresa,0,0,'C');
+        $tcpdf->Ln(8);
+        $tcpdf->MultiCell(170,4,'RESULTADOS DE ELECCIONES MIEMBROS '.$titulo,0,'C',0);
+        $tcpdf->Cell(170,5,mb_strtoupper($tituloEleccion,'UTF-8'),0,0,'C');
+        $tcpdf->Ln(5);
+        $tcpdf->Cell(170,5,mb_strtoupper($fechaEleccion,'UTF-8'),0,0,'C');
+        $tcpdf->Ln(12); 
+        $tcpdf->SetFont('helvetica','',12);
+        $tcpdf->MultiCell(0,4,$contenido."\n",0,'J',0);
+        $tcpdf->Ln(8);
+        $tcpdf->SetFont('helvetica','B',9);
+        $tcpdf->Cell(178,6,'MIEMBROS DE '.$titulo.' PARA EL PERÍODO '.$periodo,1,0,'C');
+        $tcpdf->Ln(6); 
+        $tcpdf->Cell(76,6,' NOMBRES Y APELLIDOS',"LBR",0,'L');
+        $tcpdf->Cell(32,6,' IDENTIFICACIÓN ',"LBR",0,'L');
+        $tcpdf->Cell(50,6,' FECHA EXPEDICIÓN CÉDULA',"LBR",0,'L');
+        $tcpdf->Cell(20,6,' CARGO',"LBR",0,'L');
+        $tcpdf->Ln(6);
+        $tcpdf->SetFont('helvetica','',9); 
+
+        $i = 0;
+        foreach ($participantes as $participante) {
+            $i ++;
+
+            if($i <= $totalPrincipal){
+                $tipo = 'Principal';
+            }else if($i > $totalPrincipal and $i <= ($totalPrincipal + $totalSuplente)){
+                $tipo = 'Suplente';
+            }else{
+                $tipo = '';
+            }
+
+            if($participante->totalVotos == '0'){
+                $tipo = '';
+            }
+
+            $tcpdf->Cell(76,6,' '.substr($participante->nombreCompleto,  0, 34),"LBR",0,'L');
+            $tcpdf->Cell(32,6,' '.number_format($participante->documento, 0, '.', '.'),"LBR",0,'L');
+            $tcpdf->Cell(50,6,' '.$participante->fechaExpedicion,"LBR",0,'L');
+            $tcpdf->Cell(20,6,' '.$tipo,"LBR",0,'L');
+            $tcpdf->Ln(6);
+        }
+       
+        $tcpdf->Ln(12);
+        $tcpdf->SetFont('helvetica','',12);
+        $tcpdf->Cell(170,5,' Para constancia firman',0,0,'L');
+        $tcpdf->Ln(20);
+
+        $i = 0;
+        foreach ($jurados as $jurado) {
+            $i ++;
+            $html = '<b>'.$jurado->nombreCompleto.'<br>CC No. '.number_format($jurado->documento, 0, '.', '.');
+            $html .= ' <br>'.$jurado->tipo.'</b><br>';
+            if($i == 1){
+                $tcpdf->writeHTMLCell(80, 0, 20, '', $html, "T", 0, 0, true, 'J');
+            }else{
+                $tcpdf->writeHTMLCell(80, 0, 110, '', $html, "T", 0, 0, true, 'J');
+                $tcpdf->Ln(36);
+                $i = 0;
+            }
+        }
+
+        //Descargo o muestro el pdf
         if($metodo == 'F'){
             $rutaPDF = public_path().'/archivos/pdf/'.$tituloPdf;
             $tcpdf->output($rutaPDF, 'F');

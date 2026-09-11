@@ -56,15 +56,19 @@ class General
 		return $dia." de ".$mesEnLetra." de ".$anyo; 
 	}
 
-	public static function formatearFechaHora($fechaFor){ //2015-08-09 09:45:08
-		$separarfech = explode('-',$fechaFor);
+	public static function formatearFechaHora($fecha, $mostrarHora = true){ //2015-08-09 09:45:08
+		$separarfech = explode('-',$fecha);
 		$anyo        = $separarfech[0];
 		$mes         = $separarfech[1];
 		$dia         = $separarfech[2];
 		$dia         = substr($separarfech[2], 0, 2);
 		$hora        = substr($separarfech[2], 3, 5);//no trae los segundos
-		$mesEnLetra   =self::obtenerMes($mes);
-		return $dia." de ".$mesEnLetra." de ".$anyo." a las ".$hora; 
+		$mesEnLetra  = self::obtenerMes($mes);
+		if($mostrarHora){
+			return $dia." de ".$mesEnLetra." de ".$anyo." a las ".$hora; 
+		}else{
+			return $dia." de ".$mesEnLetra." de ".$anyo; 
+		}		
 	}
 
 	public static function obtenerMes($mes){
