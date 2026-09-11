@@ -1,0 +1,791 @@
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard {
+    width: 100%;
+
+    min-height: calc(100vh - 80px);
+
+    padding: 28px;
+
+    box-sizing: border-box;
+
+    /*
+     * No se coloca background aquí.
+     * Se conserva el fondo definido por tu layout:
+     *
+     * background: #f4f7fa;
+     */
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.dashboard-hero {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 20px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.06) !important;
+}
+
+
+/*
+ * Línea institucional lateral
+ */
+
+.dashboard-hero::before {
+    content: '';
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background: linear-gradient(
+        180deg,
+        #013a63 0%,
+        #075985 55%,
+        #2e7d5b 100%
+    );
+}
+
+
+.dashboard-hero-content {
+    position: relative;
+
+    min-height: 285px;
+
+    padding: 42px 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TEXTO DEL HERO
+   ========================================================= */
+
+.dashboard-hero-text {
+    position: relative;
+
+    z-index: 2;
+
+    flex: 1;
+}
+
+
+.dashboard-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 17px;
+}
+
+
+.dashboard-status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #2e7d5b;
+
+    box-shadow:
+        0 0 0 4px rgba(46, 125, 91, 0.10);
+}
+
+
+.dashboard-status-text {
+    font-size: 12px !important;
+
+    font-weight: 600 !important;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+
+    color: #64748b;
+}
+
+
+.dashboard-title {
+    font-size: 31px !important;
+
+    line-height: 1.12 !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: -0.8px;
+
+    color: #013a63;
+}
+
+
+.dashboard-subtitle {
+    margin-top: 16px !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.65 !important;
+
+    font-weight: 400 !important;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   GRÁFICO DECORATIVO DEL HERO
+   ========================================================= */
+
+.dashboard-hero-graphic {
+    position: absolute;
+
+    right: 315px;
+
+    top: 50%;
+
+    width: 210px;
+
+    height: 180px;
+
+    transform: translateY(-50%);
+
+    opacity: 0.85;
+}
+
+
+.graphic-circle {
+    position: absolute;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+}
+
+
+.graphic-circle svg {
+    font-size: 30px;
+}
+
+
+.graphic-circle-1 {
+    width: 82px;
+
+    height: 82px;
+
+    top: 48px;
+
+    left: 58px;
+
+    color: #013a63;
+
+    background: rgba(1, 58, 99, 0.07);
+
+    border: 1px solid rgba(1, 58, 99, 0.12);
+}
+
+
+.graphic-circle-2 {
+    width: 45px;
+
+    height: 45px;
+
+    top: 10px;
+
+    right: 20px;
+
+    color: #2e7d5b;
+
+    background: rgba(46, 125, 91, 0.08);
+
+    border: 1px solid rgba(46, 125, 91, 0.12);
+}
+
+
+.graphic-circle-2 svg {
+    font-size: 21px;
+}
+
+
+.graphic-line {
+    position: absolute;
+
+    height: 1px;
+
+    transform-origin: left center;
+
+    background: #cbd5e1;
+}
+
+
+.graphic-line-1 {
+    width: 75px;
+
+    top: 65px;
+
+    left: 125px;
+
+    transform: rotate(-35deg);
+}
+
+
+.graphic-line-2 {
+    width: 65px;
+
+    top: 110px;
+
+    left: 120px;
+
+    transform: rotate(28deg);
+}
+
+
+.graphic-line-3 {
+    width: 55px;
+
+    top: 55px;
+
+    left: 55px;
+
+    transform: rotate(140deg);
+}
+
+
+/* =========================================================
+   USUARIO
+   ========================================================= */
+
+.dashboard-user {
+    position: relative;
+
+    z-index: 2;
+
+    min-width: 225px;
+
+    padding: 14px 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+}
+
+
+.dashboard-user-avatar {
+    width: 43px !important;
+
+    height: 43px !important;
+
+    font-size: 16px !important;
+
+    font-weight: 700 !important;
+
+    color: #ffffff !important;
+
+    background: #013a63 !important;
+}
+
+
+.dashboard-user-label {
+    font-size: 11px !important;
+
+    font-weight: 500 !important;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+
+    color: #94a3b8;
+}
+
+
+.dashboard-user-name {
+    margin-top: 2px !important;
+
+    font-size: 14px !important;
+
+    font-weight: 700 !important;
+
+    color: #172b3a;
+}
+
+
+/* =========================================================
+   CARACTERÍSTICAS
+   ========================================================= */
+
+.dashboard-features {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.dashboard-feature-card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 245px;
+
+    border-radius: 17px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 5px 20px rgba(15, 23, 42, 0.04) !important;
+
+    transition:
+        transform 220ms ease,
+        box-shadow 220ms ease,
+        border-color 220ms ease;
+}
+
+
+/*
+ * Hover mucho más suave.
+ */
+
+.dashboard-feature-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 24px rgba(15, 23, 42, 0.07) !important;
+
+    border-color: #cbd5e1;
+}
+
+
+.dashboard-feature-card .MuiCardContent-root {
+    position: relative;
+
+    height: 100%;
+
+    padding: 27px !important;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PARTE SUPERIOR DE LA CARD
+   ========================================================= */
+
+.dashboard-feature-top {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    min-height: 70px;
+}
+
+
+/* =========================================================
+   ICONO
+   ========================================================= */
+
+.dashboard-feature-icon {
+    width: 46px;
+
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+}
+
+
+.dashboard-feature-icon svg {
+    font-size: 25px;
+}
+
+
+/*
+ * Participación
+ */
+
+.dashboard-card-participacion
+.dashboard-feature-icon {
+    color: #075985;
+
+    background: rgba(7, 89, 133, 0.08);
+}
+
+
+/*
+ * Seguridad
+ */
+
+.dashboard-card-seguridad
+.dashboard-feature-icon {
+    color: #2e7d5b;
+
+    background: rgba(46, 125, 91, 0.08);
+}
+
+
+/*
+ * Control
+ */
+
+.dashboard-card-control
+.dashboard-feature-icon {
+    color: #64748b;
+
+    background: rgba(100, 116, 139, 0.10);
+}
+
+
+/* =========================================================
+   LOTTIE
+   ========================================================= */
+
+.dashboard-feature-lottie {
+    width: 82px;
+
+    height: 82px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    margin-top: -8px;
+
+    margin-right: -5px;
+
+    pointer-events: none;
+
+    opacity: 0.85;
+
+    transition:
+        transform 300ms ease,
+        opacity 300ms ease;
+}
+
+
+/*
+ * Hace que el Lottie respete
+ * el tamaño del contenedor.
+ */
+
+.dashboard-feature-lottie > * {
+    width: 100% !important;
+
+    height: 100% !important;
+}
+
+
+/*
+ * Pequeña interacción al pasar
+ * el mouse sobre la tarjeta.
+ */
+
+.dashboard-feature-card:hover
+.dashboard-feature-lottie {
+    transform: scale(1.04);
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   TITULO DE LA CARD
+   ========================================================= */
+
+.dashboard-feature-title {
+    margin-top: 18px !important;
+
+    font-size: 13px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: 1px;
+
+    color: #013a63;
+}
+
+
+/* =========================================================
+   DESCRIPCIÓN
+   ========================================================= */
+
+.dashboard-feature-description {
+    max-width: 90%;
+
+    margin-top: 10px !important;
+
+    font-size: 14px !important;
+
+    line-height: 1.6 !important;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   DETALLE
+   ========================================================= */
+
+.dashboard-feature-footer {
+    margin-top: 18px !important;
+
+    font-size: 11px !important;
+
+    font-weight: 600 !important;
+
+    letter-spacing: 0.3px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   TRAZABILIDAD
+   ========================================================= */
+
+.dashboard-traceability {
+    margin-top: 20px;
+
+    border-radius: 17px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 5px 20px rgba(15, 23, 42, 0.04) !important;
+}
+
+
+.dashboard-traceability .MuiCardContent-root {
+    min-height: 105px;
+
+    padding: 25px 30px !important;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+.dashboard-traceability-icon {
+    width: 52px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    color: #013a63;
+
+    background: rgba(1, 58, 99, 0.07);
+}
+
+
+.dashboard-traceability-icon svg {
+    font-size: 27px;
+}
+
+
+.dashboard-traceability-content {
+    flex: 1;
+}
+
+
+.dashboard-traceability-title {
+    font-size: 13px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: 1px;
+
+    color: #013a63;
+}
+
+
+.dashboard-traceability-description {
+    margin-top: 7px !important;
+
+    font-size: 14px !important;
+
+    line-height: 1.5 !important;
+
+    color: #64748b;
+}
+
+
+.dashboard-traceability-chip {
+    border-radius: 20px !important;
+
+    font-size: 12px !important;
+
+    font-weight: 600 !important;
+
+    color: #2e7d5b !important;
+
+    background: rgba(46, 125, 91, 0.08) !important;
+
+    border: 1px solid rgba(46, 125, 91, 0.15);
+}
+
+
+.dashboard-traceability-chip .MuiChip-icon {
+    color: #2e7d5b !important;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .dashboard-hero-graphic {
+        display: none;
+    }
+
+
+    .dashboard-user {
+        min-width: 200px;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .dashboard {
+        padding: 18px;
+    }
+
+
+    .dashboard-hero-content {
+        min-height: auto;
+
+        padding: 32px 30px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 25px;
+    }
+
+
+    .dashboard-user {
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+
+    .dashboard-features {
+        grid-template-columns: 1fr;
+    }
+
+
+    .dashboard-traceability .MuiCardContent-root {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .dashboard-title {
+        font-size: 25px !important;
+    }
+
+
+    .dashboard-subtitle {
+        font-size: 14px !important;
+    }
+
+
+    .dashboard-hero-content {
+        padding: 27px 23px;
+    }
+
+
+    .dashboard-feature-card {
+        min-height: auto;
+    }
+
+
+    .dashboard-feature-description {
+        max-width: 100%;
+    }
+
+
+    .dashboard-traceability-chip {
+        margin-left: 72px;
+    }
+
+}

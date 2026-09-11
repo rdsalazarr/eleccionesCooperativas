@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
     Box,
     Card,
@@ -18,77 +17,41 @@ import {
     CheckCircleOutlined
 } from '@mui/icons-material';
 
-import { Lottie } from 'lottie-react';
 import participacionAnimation from '../../../images/json/informeVotacion.json'
-import seguridadAnimation from '../../../images/json/informeVotacion.json'
-import controlAnimation from '../../../images/json/informeVotacion.json'
-import "../../../scss/dashboard.scss";
+import { Lottie } from 'lottie-react';
 
+import "../../../scss/dashboard.scss";
+ import TextoAnimado from '../layout/textoAnimado';
 
 const Dashboard = ({ usuario }) => {
 
     const nombreUsuario = usuario?.nombre || 'Pepito Pérez';
 
-
     const caracteristicas = [
         {
-            titulo: 'PARTICIPACIÓN',
-
-            descripcion:
-                'Facilita la administración y seguimiento de los diferentes procesos que intervienen en una jornada electoral, desde su organización hasta la participación de los asociados.',
-
-            detalle:
-                'Registro · Organización · Votación',
-
             icono: <GroupsOutlined />,
-
-            animacion: participacionAnimation,
-
+            titulo: 'PARTICIPACIÓN',
+            descripcion:'Facilita la administración y seguimiento de los diferentes procesos que intervienen en una jornada electoral.',
             clase: 'dashboard-card-participacion'
         },
-
         {
-            titulo: 'SEGURIDAD',
-
-            descripcion:
-                'Protege cada etapa del proceso electoral mediante controles orientados a preservar la integridad de la información y garantizar una gestión confiable.',
-
-            detalle:
-                'Integridad · Protección · Confianza',
-
             icono: <SecurityOutlined />,
-
-            animacion: seguridadAnimation,
-
+            titulo: 'SEGURIDAD',
+            descripcion: 'Protege la información y establece controles durante las diferentes etapas del proceso electoral, contribuyendo a preservar la integridad de la información.',
             clase: 'dashboard-card-seguridad'
         },
-
         {
-            titulo: 'CONTROL',
-
-            descripcion:
-                'Centraliza la información y documentación asociada a los procesos electorales, facilitando su administración, consulta y organización.',
-
-            detalle:
-                'Información · Gestión · Evidencia',
-
             icono: <FactCheckOutlined />,
-
-            animacion: controlAnimation,
-
+            titulo: 'CONTROL',
+            descripcion: 'Centraliza la información relacionada con los procesos electorales, facilitando su administración, consulta y organización.',
             clase: 'dashboard-card-control'
         }
     ];
 
-
     return (
-
         <Box className="dashboard">
 
-            {/* =====================================================
-                ENCABEZADO
-            ====================================================== */}
-
+            {/* ENCABEZADO */}
             <Card className="dashboard-hero">
 
                 <Box className="dashboard-hero-content">
@@ -96,15 +59,12 @@ const Dashboard = ({ usuario }) => {
                     <Box className="dashboard-hero-text">
 
                         <Box className="dashboard-status">
-
                             <span className="dashboard-status-dot"></span>
 
                             <Typography className="dashboard-status-text">
                                 Plataforma operativa
                             </Typography>
-
                         </Box>
-
 
                         <Typography className="dashboard-title">
                             SISTEMA INSTITUCIONAL
@@ -120,9 +80,7 @@ const Dashboard = ({ usuario }) => {
 
                     </Box>
 
-
-                    {/* ELEMENTO DECORATIVO */}
-
+                    {/* ELEMENTO VISUAL */}
                     <Box className="dashboard-hero-graphic">
 
                         <Box className="graphic-circle graphic-circle-1">
@@ -134,16 +92,12 @@ const Dashboard = ({ usuario }) => {
                         </Box>
 
                         <Box className="graphic-line graphic-line-1"></Box>
-
                         <Box className="graphic-line graphic-line-2"></Box>
-
                         <Box className="graphic-line graphic-line-3"></Box>
 
                     </Box>
 
-
                     {/* USUARIO */}
-
                     <Box className="dashboard-user">
 
                         <Avatar className="dashboard-user-avatar">
@@ -151,15 +105,13 @@ const Dashboard = ({ usuario }) => {
                         </Avatar>
 
                         <Box>
-
                             <Typography className="dashboard-user-label">
                                 Sesión iniciada
                             </Typography>
 
                             <Typography className="dashboard-user-name">
-                                {nombreUsuario}
+                                <TextoAnimado texto={nombreUsuario} />
                             </Typography>
-
                         </Box>
 
                     </Box>
@@ -169,10 +121,39 @@ const Dashboard = ({ usuario }) => {
             </Card>
 
 
-            {/* =====================================================
-                CARACTERÍSTICAS
-            ====================================================== */}
+<Card className="dashboard-feature-card">
 
+    <CardContent>
+
+        <Box className="dashboard-feature-animation">
+         
+            <Lottie src={participacionAnimation} autoplay loop />
+        </Box>
+
+        <Box className="dashboard-feature-icon">
+            <GroupsOutlined />
+        </Box>
+
+        <Typography className="dashboard-feature-title">
+            PARTICIPACIÓN
+        </Typography>
+
+        <Typography className="dashboard-feature-description">
+            Facilita la administración y seguimiento de los
+            diferentes procesos que intervienen en una jornada
+            electoral.
+        </Typography>
+
+        <Typography className="dashboard-feature-footer">
+            Registro · Organización · Votación
+        </Typography>
+
+    </CardContent>
+
+</Card>
+
+
+            {/* CARACTERÍSTICAS */}
             <Box className="dashboard-features">
 
                 {caracteristicas.map((item, index) => (
@@ -184,50 +165,16 @@ const Dashboard = ({ usuario }) => {
 
                         <CardContent>
 
-                            {/* PARTE SUPERIOR */}
-
-                            <Box className="dashboard-feature-top">
-
-                                {/* ICONO */}
-
-                                <Box className="dashboard-feature-icon">
-                                    {item.icono}
-                                </Box>
-
-
-                                {/* LOTTIE */}
-
-                                <Box className="dashboard-feature-lottie">
-
-                                    <Lottie
-                                        src={item.animacion}
-                                        autoplay
-                                        loop
-                                    />
-
-                                </Box>
-
+                            <Box className="dashboard-feature-icon">
+                                {item.icono}
                             </Box>
-
-
-                            {/* TITULO */}
 
                             <Typography className="dashboard-feature-title">
                                 {item.titulo}
                             </Typography>
 
-
-                            {/* DESCRIPCIÓN */}
-
                             <Typography className="dashboard-feature-description">
                                 {item.descripcion}
-                            </Typography>
-
-
-                            {/* DETALLE */}
-
-                            <Typography className="dashboard-feature-footer">
-                                {item.detalle}
                             </Typography>
 
                         </CardContent>
@@ -236,13 +183,18 @@ const Dashboard = ({ usuario }) => {
 
                 ))}
 
+                <Box className="dashboard-feature-animation">
+                    <Lottie
+                        animationData={participacionAnimation}
+                        loop
+                        autoplay
+                    />
+                </Box>
+
             </Box>
 
 
-            {/* =====================================================
-                TRAZABILIDAD
-            ====================================================== */}
-
+            {/* TRAZABILIDAD */}
             <Card className="dashboard-traceability">
 
                 <CardContent>
@@ -251,24 +203,19 @@ const Dashboard = ({ usuario }) => {
                         <TimelineOutlined />
                     </Box>
 
-
                     <Box className="dashboard-traceability-content">
 
                         <Typography className="dashboard-traceability-title">
                             TRAZABILIDAD
                         </Typography>
 
-
                         <Typography className="dashboard-traceability-description">
-
                             Cada proceso cuenta con registro, control y
-                            evidencia que permiten mantener una gestión
-                            electoral organizada, verificable y confiable.
-
+                            evidencia para facilitar una gestión electoral
+                            confiable.
                         </Typography>
 
                     </Box>
-
 
                     <Chip
                         icon={<CheckCircleOutlined />}
@@ -280,10 +227,17 @@ const Dashboard = ({ usuario }) => {
 
             </Card>
 
-        </Box>
 
+            <Box className="dashboard-feature-animation">
+    <Lottie
+        animationData={participacionAnimation}
+        loop
+        autoplay
+    />
+</Box>
+
+        </Box>
     );
 };
-
 
 export default Dashboard;
