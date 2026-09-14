@@ -15,7 +15,7 @@ class PerfilUsuarioController extends Controller
     public function index()
 	{
 		try {
-			$dataUsuario = ['nombreCompleto' => Auth::user()->name.' '.Auth::user()->apellidos,
+			$dataUsuario = ['nombreCompleto' => Auth::user()->usuanombre.' '.Auth::user()->usuaapellidos,
 							'usuanick'       => Auth::user()->usuanick
 							];
 			return response()->json(['success' => true,  "dataUsuario" => $dataUsuario]);

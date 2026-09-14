@@ -206,15 +206,17 @@ export default function Contenedor() {
     const [menuAbierto, setMenuAbierto] = useState(null);
     const [componente, setComponente] = useState([]);
     const [loader, setLoader] = useState(false);
+    const [usuario, setUsuario] = useState([]);
     const [open, setOpen] = useState(true);
 
-    /*useEffect(() => {
-        setLoader();
+    useEffect(() => {
+        setLoader(true);
         instance.post('/admin/generar/menu').then(res => {
+            setUsuario(res.dataUsuario);
             setComponente(res.data);
             setLoader(false);
         })
-    }, []);*/
+    }, []);
 
     if (loader) {
         return <Loader />
@@ -233,7 +235,7 @@ export default function Contenedor() {
                     <HeaderAdmon />
                     <Box className='containerAdmin' style={{ marginTop: '2em' }}>
                         <Routes >
-                            <Route exact={`true`} path="/dashboard" element={<Welcome />} />
+                            <Route exact={`true`} path="/dashboard" element={<Welcome usuario={usuario} />} />
                             {/*componente.map(item=>{
                                 return item.itemMenu.map((res, i) =>{
                                     const resultado = menuComponente.find( resul => resul.id === parseInt(res.id));

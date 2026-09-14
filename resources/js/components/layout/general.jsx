@@ -3,6 +3,7 @@ import { useState, useEffect, Fragment } from 'react';
 import { Box, Grid, Card, CardContent, Stack, Avatar, IconButton, Badge, Typography, Menu, MenuItem, Divider, Button} from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/NotificationsActive';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LockIcon from '@mui/icons-material/Lock';
 import MailIcon from '@mui/icons-material/Mail';
 import logo from "../../../images/logo.png";
@@ -10,7 +11,6 @@ import "../../../scss/general.scss";
 import instance from './instance';
 
 export function Header(){
-
     return (
         <Box className={'banner animate__animated animate__fadeInDown'}>
             <Box className='container'>
@@ -57,7 +57,7 @@ export function Footer(){
 
                         <Grid size={{ xs: 12 }}>
                             <Box className="pieBottom">
-                                <span>IMPLESOFT | Todos los derechos reservados | Copyright © 2020 - {anioActual}</span>
+                                <span>IMPLESOFT | Todos los derechos reservados | Copyright © 2019 - {anioActual}</span>
                                 <span className='implesoft'>Diseño y desarrollo <a href="http://implesoft.com/" target="_black" title="Implesoft.com">Implesoft.com</a> (Versión: 3.0) <a href="/admin"  title="admin"><LockIcon className='implesoft' /></a>
                                     </span>
                             </Box>
@@ -71,29 +71,16 @@ export function Footer(){
 
 export function HeaderAdmon(){
 
-    const [notificaciones, setNotificaciones] = useState([]);  
-    const [mostarDatos , setMostarDatos] = useState(false);
-    const [anchorNotif, setAnchorNotif] = useState(null);
-    const [indicadores, setIndicadores] = useState([]);
-    const [nameUser , setNameUser] = useState('');
-   
-    const handleOpenNotif = (event) => {
-        setAnchorNotif(event.currentTarget);
-    };
-
-    const handleCloseNotif = () => {
-        setAnchorNotif(null);
-    };
+    const [nameUser , setNameUser] = useState(''); 
  
-    /*useEffect(() => {
+    useEffect(() => {
         instance.post('/admin/consultar/informacion/usuario').then(res=>{
-             if(res.success){
-                setIndicadores(res.indicadores);
+            if(res.success){
                 setNameUser(res.nombreUsuario);
                 setMostarDatos(true);
-             }
+            }
          });
-     }, []);*/
+     }, []);
 
     return (
         <Box className={"headerAdmon"}>
@@ -101,9 +88,18 @@ export function HeaderAdmon(){
                 <Grid size={{ xs: 1, sm:1, md: 1}} />
                 <Grid size={{ xs: 6, sm: 6, md: 8 }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
                     <h2>Administración del sistema de elecciones</h2>
-                </Grid>  
+                </Grid>
                 <Grid size={{ xs: 5, sm: 5, md: 3 }}>
-                          
+                    <Box className='informacionPersonal'>
+                        <Box className='iconosContainer'>
+                            <IconButton size="large" className='exitButton'>
+                                <a href='/logout' title='Salir y cerrar sesión'>
+                                    <ExitToAppIcon />
+                                </a>
+                            </IconButton>
+                        </Box>
+                        <Box className='titleUsuario'>{nameUser}</Box>
+                    </Box>
                 </Grid>
             </Grid>
         </Box>
@@ -125,7 +121,7 @@ export function FooterAdmon() {
                  <Grid size={{ xs: 12, sm: 5 }}>
                     <Box className='derechosReservados'>
                         <span className='implesoft'>
-                            Todos los derechos Reservados | Copyright Coopigon |  Diseño y desarrollo<a href='https://implesoft.com/' target="_black" title="Implesoft.com" >Implesoft</a> © 2020 - {anioActual}
+                            Todos los derechos Reservados | Copyright Coopigon | Diseño y desarrollo <a href='https://implesoft.com/' target="_black" title="Implesoft.com" >Implesoft</a> © 2019 - {anioActual}
                         </span>
                     </Box>
                 </Grid>

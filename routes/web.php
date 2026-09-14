@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
     Route::get('reset', [DashboardController::class, 'reset']);
     Route::post('admin/generar/menu', [DashboardController::class, 'menu']);
     Route::get('admin/welcome', [DashboardController::class, 'welcome']);//->middleware(['verifySource'])
+    Route::post('admin/consultar/informacion/usuario', [DashboardController::class, 'informacion']);
 
     Route::middleware(['preload'])->group(function (){//para recargar la pagina con f5
         Route::get('/admin/{id}', [DashboardController::class, 'index']);

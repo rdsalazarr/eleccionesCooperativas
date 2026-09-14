@@ -210,6 +210,60 @@ $grisClaro:       var(--grisClaro);
     }
 }
 
+.informacionPersonal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    margin-top: 1em;
+    .iconosContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        gap: 30px;
+        width: 100%;
+        padding: 0 20px;
+        flex-wrap: wrap;
+    }
+    .exitButton {
+        color: white !important;
+        transition: all 0.3s ease;
+        padding: 4px;
+        &::hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+            background-color: #dc3545 !important;
+        }
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            line-height: 1;
+        }
+        svg {
+            font-size: 30px;
+        }
+    }    
+    .titleUsuario {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1.4;
+        margin-top: -1em;
+        width: 100%;
+    }
+}
+
 .margenTab{
     width: 97%;
     margin: auto;
