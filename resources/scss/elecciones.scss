@@ -1,0 +1,199 @@
+:root{
+    --verde-claro:#5ebd52;
+    --verde-oscuro:#058b4a;
+    --amarillo:#ffcb13;
+    --azul:#1a8fcb;
+    --negro:#302f2f;
+    --verde-50:#F0FAEF;
+    --verde-100:#E1F4DE;
+    --verde-200:#C5E9BF;
+    --bg:#F5F8F4;
+    --card:#FFFFFF;
+    --muted:#7A7A7A;
+    --border:#E4EBE2;
+    --text:var(--negro);
+    --shadow:0 10px 30px rgba(5,139,74,.08);
+    --shadow-lg:0 25px 60px rgba(5,139,74,.15);
+    --radius:20px;
+  }
+
+body{
+    background:
+        radial-gradient(1200px 600px at 10% -10%, #E1F4DE 0%, transparent 60%),
+        radial-gradient(1000px 500px at 110% 10%, #FFF8DC 0%, transparent 55%),
+        var(--bg);
+    color:var(--text);
+    padding:24px 16px 60px;
+}
+
+
+.container{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.card{
+    width:100%;  
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:44px 48px;
+    border:1px solid rgba(228,235,226,.7);
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:5px;
+    background:linear-gradient(90deg,var(--verde-oscuro),var(--verde-claro),var(--amarillo),var(--verde-oscuro));
+    background-size:300% 100%;
+    animation:slide 8s linear infinite;
+}
+
+@keyframes slide{
+    to{
+        background-position:300% 0
+    }
+}
+
+/*
+.progress{
+    width:100%;max-width:920px;
+    display:flex;align-items:center;
+    margin-bottom:28px;padding:0 8px;
+  }
+  .step{
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;font-weight:600;color:var(--muted);
+    transition:.3s;
+  }
+  .step .dot{
+    width:32px;height:32px;border-radius:50%;
+    display:grid;place-items:center;
+    background:#fff;border:2px solid var(--border);
+    font-size:13px;font-weight:700;color:var(--muted);
+    transition:.3s;
+  }
+  .step.active{color:var(--verde-oscuro)}
+  .step.active .dot{
+    background:linear-gradient(135deg,var(--verde-claro),var(--verde-oscuro));
+    border-color:transparent;color:#fff;
+    box-shadow:0 6px 16px rgba(5,139,74,.4);
+  }
+  .step.done .dot{background:var(--verde-oscuro);border-color:transparent;color:#fff}
+  .line{
+    flex:1;height:2px;background:var(--border);margin:0 12px;border-radius:2px;
+    position:relative;overflow:hidden;
+  }
+  .line.done::after{content:"";position:absolute;inset:0;background:var(--verde-oscuro)}*/
+
+
+  .progress {
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 0 8px;
+}
+
+/* Cada paso */
+.progress .step {
+    padding: 0;
+}
+
+/* Texto del paso */
+.progress .MuiStepLabel-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: .3s;
+}
+
+/* Paso activo */
+.progress .MuiStepLabel-label.Mui-active {
+    color: var(--verde-oscuro);
+}
+
+/* Paso completado */
+.progress .MuiStepLabel-label.Mui-completed {
+    color: var(--verde-oscuro);
+}
+
+/* Círculo */
+.progress .MuiStepIcon-root {
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    background: #fff;
+    transition: .3s;
+}
+
+/* Número dentro del círculo */
+.progress .MuiStepIcon-text {
+    fill: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Paso activo */
+.progress .MuiStepIcon-root.Mui-active {
+    background: linear-gradient(
+        135deg,
+        var(--verde-claro),
+        var(--verde-oscuro)
+    );
+
+    border-color: transparent;
+
+    color: transparent;
+
+    box-shadow: 0 6px 16px rgba(5, 139, 74, .4);
+}
+
+.progress .MuiStepIcon-root.Mui-active .MuiStepIcon-text {
+    fill: #fff;
+}
+
+/* Paso completado */
+.progress .MuiStepIcon-root.Mui-completed {
+    background: var(--verde-oscuro);
+    border-color: transparent;
+    color: transparent;
+}
+
+.progress .MuiStepIcon-root.Mui-completed .MuiStepIcon-text {
+    fill: #fff;
+}
+
+/* Línea entre pasos */
+.progress .MuiStepConnector-line {
+    border: 0;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+}
+
+/* Línea completada */
+.progress .MuiStepConnector-root.Mui-completed
+.MuiStepConnector-line {
+    background: var(--verde-oscuro);
+}
+
+/* Línea que llega al paso activo */
+.progress .MuiStepConnector-root.Mui-active
+.MuiStepConnector-line {
+    background: var(--verde-oscuro);
+}
+
+/* Separación horizontal */
+.progress .MuiStepConnector-root {
+    margin: 0 12px;
+}

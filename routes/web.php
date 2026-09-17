@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\Eleccion\Organos\RegistrarAspiranteController as 
 
 
 Route::get('/', [FrondController::class, 'index']);
+Route::get('/admin', [FrondController::class, 'admin']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::match(array('GET', 'POST'),'/logout',[LoginController::class, 'logout'])->name('logout');
 

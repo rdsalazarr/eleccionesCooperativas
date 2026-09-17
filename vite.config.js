@@ -8,10 +8,10 @@ export default defineConfig({
     },
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 
-                    //'resources/js/components/page/app.jsx',
+            input: ['resources/css/app.css',
+                    'resources/js/components/page/home.jsx',
                     'resources/js/components/page/admin.jsx',
-                    //'resources/js/components/page/reset.jsx',
+                    'resources/js/components/page/reset.jsx',
                     'resources/js/components/admin/dashboard.jsx',
                     'resources/js/components/page/errors/E401.jsx',
                     'resources/js/components/page/errors/E403.jsx',

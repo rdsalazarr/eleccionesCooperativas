@@ -36,7 +36,7 @@ export function Footer(){
     var fechaActual = new Date();
     var anioActual  = fechaActual.getFullYear();
     return (
-        <footer className={'footer animate__animated animate__fadeInUp'}>
+        <footer className={'animate__animated animate__fadeInUp'}>
             <Box className='piePagina'>
                 <Box className='container'>
                     <Grid container spacing={2}>
