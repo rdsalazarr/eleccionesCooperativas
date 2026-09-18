@@ -45,6 +45,7 @@ php artisan make:model Eleccion/OrganoEleccionParticipanteVoto
 App\Http\Controllers\Home
 
 php artisan make:controller Home\FrondController
+php artisan make:controller Home\EleccionDelegadoController
 php artisan make:controller Admin\DashboardController
 php artisan make:controller Admin\Configurar\ActaController
 php artisan make:controller Admin\Gestionar\TipoOrganoController

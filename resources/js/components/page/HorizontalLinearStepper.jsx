@@ -1,10 +1,19 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import {useEffect, useState, useCallback, useRef, Fragment } from 'react';
+import {Grid, Box, TextField, MenuItem, Stepper, Step, StepLabel, Button, Typography, InputAdornment} from '@mui/material';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+import {ShowSnackbar} from '../layout/snackBar';
+import { LoaderModal } from "../layout/loader";
+import instance from '../layout/instance';
+import * as yup from "yup";
+
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SaveIcon from '@mui/icons-material/Save';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const steps = [
     'Verificación',
@@ -12,13 +21,37 @@ const steps = [
     'Confirmación'
 ];
 
+  const candidatos = [
+    { id:1, nombre:"María Fernanda Ríos"},
+    { id:2, nombre:"Carlos Andrés Pérez"},
+    { id:3, nombre:"Luisa Gómez Torres"},
+    { id:4, nombre:"Jorge Enrique Díaz" },
+    { id:5, nombre:"Ana Patricia Muñoz"},
+    { id:6, nombre:"Diego Armando Rojas"},
+    { id:7, nombre:"Pepito perez duran chinchilla" },
+  ];
+
+const schema = yup.object({
+        tipoIdentificacion: yup.string().required('Debe seleccionar un tipo de identificación'),
+        numeroDocumento:    yup.string().required("El número de documento es obligatorio"),
+        fechaExpedicion:    yup.string().required("La fecha de expedición es obligatoria"),
+    });
 
 export default function HorizontalLinearStepper() {
 
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
+     const { register, handleSubmit,   watch,setValue, reset, control, formState: { errors } } = useForm({
+                    resolver: yupResolver(schema),
+                    defaultValues:{tipoIdentificacion: '2', numeroDocumento: '1978917', fechaExpedicion: '1998-03-16',  candidato: ""},
+                    mode: "onSubmit"
+                });
 
-    const isStepOptional = React.useCallback((step) => {
+    const [tiposIdentificaciones, setTiposIdentificaciones] = useState([]);
+    const [habilitado, setHabilitado] = useState(true);    
+    const [skipped, setSkipped] = useState(new Set());
+    const [activeStep, setActiveStep] = useState(0);    
+    const [loader, setLoader] = useState(false);
+
+    const isStepOptional = useCallback((step) => {
         return step === 1;
     }, []);
 
@@ -31,10 +64,8 @@ export default function HorizontalLinearStepper() {
         let newSkipped = skipped;
 
         if (isStepSkipped(activeStep)) {
-
             newSkipped = new Set(newSkipped.values());
             newSkipped.delete(activeStep);
-
         }
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -48,21 +79,16 @@ export default function HorizontalLinearStepper() {
     const handleSkip = () => {
 
         if (!isStepOptional(activeStep)) {
-
             throw new Error(
                 "You can't skip a step that isn't optional."
             );
-
         }
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
         setSkipped((prevSkipped) => {
-
             const newSkipped = new Set(prevSkipped.values());
-
             newSkipped.add(activeStep);
-
             return newSkipped;
         });
     };
@@ -71,13 +97,37 @@ export default function HorizontalLinearStepper() {
         setActiveStep(0);
     };
 
-    const previousActiveStepRef = React.useRef(activeStep);
+    const previousActiveStepRef = useRef(activeStep);
 
-    const resetButtonRef = React.useRef(null);
-    const nextButtonRef = React.useRef(null);
+    const resetButtonRef = useRef(null);
+    const nextButtonRef = useRef(null);
+
+    
+
+
+    const onSubmitConsulta = (formValues) => {
+        console.log("Candidato seleccionado:", formValues.candidato);
+        handleNext();
+        /*setLoader(true);
+        instance.post('/consultar/asociados/activo', formValues).then(res => {    
+            if(res.success){
+                //setValue()
+                handleNext();
+            }else{
+                ShowSnackbar(res.message, 'error')
+            }
+            setLoader(false);
+        });*/
+    }
+
+    const onSubmitVoto = (formValues) => {
+
+        handleNext();
+
+    }
 
     // Control del foco cuando cambia el paso activo
-    React.useEffect(() => {
+    useEffect(() => {
 
         const previousActiveStep = previousActiveStepRef.current;
 
@@ -116,11 +166,33 @@ export default function HorizontalLinearStepper() {
 
     }, [activeStep, isStepOptional]);
 
-    return (
-      <>
-        <Box sx={{ width: '100%' }}>
 
-            <Stepper activeStep={activeStep}>
+    useEffect(()=>{
+        setLoader(true);
+        instance.post('/consultar/informacion/elecciones/delegado').then(res=>{
+            if(res.success){
+                setTiposIdentificaciones(res.tiposIdentificaciones);
+            }else{
+                ShowSnackbar(res.message, 'error')
+            }
+            setLoader(false);
+        })
+    }, []);
+
+
+    if (loader) {
+        return <LoaderModal />;
+    }
+
+    return (
+        <Fragment> 
+
+            <h1 className="tituloEleccion">
+                Elecciones de delegado para el período
+                <span>2027 - 2030</span>
+            </h1>
+
+            <Stepper activeStep={activeStep} className="progress">
 
                 {steps.map((label, index) => {
 
@@ -128,7 +200,6 @@ export default function HorizontalLinearStepper() {
                     const labelProps = {};
 
                     if (isStepSkipped(index)) {
-
                         stepProps.completed = false;
                     }
 
@@ -148,140 +219,356 @@ export default function HorizontalLinearStepper() {
 
             </Stepper>
 
-            {activeStep === steps.length ? (
+            <Box className='eleccionesDelegado'>
+                {
+                    (activeStep === 0) ? 
+                        <form onSubmit={handleSubmit(onSubmitConsulta)}>
+                            <Grid container spacing={4}>
+                                <Grid size={{ xs: 12}} >
+                                    <span class="eyebrow">Elección de Delegados 2026</span>
+                                    <h1>Verifica tu identidad para votar</h1>
+                                    <p class="subtitle">
+                                    Ingresa tu número de documento y la fecha de expedición tal como aparecen en tu cédula. 
+                                    Validaremos tus datos contra los asociados habilitados.
+                                    </p>
 
-                // --------------------------------
-                // TODOS LOS PASOS COMPLETADOS
-                // --------------------------------
+                                </Grid>
+                                
+                                <Grid size={{ xs: 12, sm: 4 }}>
+                                    <Controller
+                                        name="tipoIdentificacion"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                select
+                                                label="Tipo de identificación"
+                                                fullWidth
+                                                className="campoEleccion"
+                                                variant="outlined"
+                                                {...field}
+                                                error={!!errors.tipoIdentificacion}
+                                                helperText={errors.tipoIdentificacion?.message}
+                                                slotProps={{
+                                                    input: {
+                                                        startAdornment: (
+                                                            <InputAdornment >
+                                                                <AssignmentIndIcon />
+                                                            </InputAdornment>
+                                                        ),
+                                                    },
+                                                }}
+                                            >
+                                                <MenuItem value="">Seleccione</MenuItem>
+                                                {tiposIdentificaciones.map(res => (
+                                                    <MenuItem value={res.tipideid} key={res.tipideid}> {res.tipidenombre}</MenuItem>
+                                                ))}
+                                            </TextField>
+                                        )}
+                                    />
+                                </Grid>
 
-                <React.Fragment>
+                                <Grid size={{ xs: 12, sm: 4 }}>
+                                    <TextField
+                                        className="campoEleccion"
+                                        label="Número de documento"
+                                        fullWidth
+                                        variant="outlined"
+                                        {...register("numeroDocumento")}
+                                        error={!!errors.numeroDocumento}
+                                        helperText={errors.numeroDocumento?.message}
+                                        placeholder="Ej: 1234567890" 
+                                        autocomplete="off"
+                                        type='number'
+                                        slotProps={{
+                                            input: {
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <BadgeOutlinedIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            },
+                                        }}
+                                    />
+                                </Grid>
 
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                        All steps completed - you're finished
-                    </Typography>
+                                <Grid size={{ xs: 12, sm: 4 }}>
+                                    <TextField
+                                        className="campoEleccion"
+                                        label="Fecha de expedición"
+                                        fullWidth
+                                        variant="outlined"
+                                        type="date"
+                                        {...register("fechaExpedicion")}
+                                        error={!!errors.fechaExpedicion}
+                                        helperText={errors.fechaExpedicion?.message}
+                                        slotProps={{
+                                            input: {
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <CalendarMonthOutlinedIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            },
+                                        }}
+                                    />
+                                </Grid>
 
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            pt: 2
-                        }}
-                    >
+                                <Grid size={{ xs: 12}} >
+                                    <Box class="informacion">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+                                        </svg>
+                                        <span>Si tus datos no coinciden, comunícate con la cooperativa al <b>311 591 1923</b> antes de intentar nuevamente.</span>
+                                    </Box>
+                                </Grid>
 
-                        <Box sx={{ flex: '1 1 auto' }} />
+                                <Grid size={{ xs: 12}} style={{textAlign: 'right'}} >
+                                    <button type="submit" class="btn btn-primary">
+                                        Verificar identidad
+                                        <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                                    </button>
+                                </Grid>
 
-                        <Button
-                            onClick={handleReset}
-                            ref={resetButtonRef}
-                        >
-                            Reset
-                        </Button>
+                            </Grid>
+                        </form>
+                    :(activeStep === 1) ?      
+                        <form onSubmit={handleSubmit(onSubmitConsulta)}>
+                            <Grid container spacing={3}>
+                                <Grid size={{ xs: 12 }}>
+                                    <div className="list-head">
+                                        <div className="list-head-info">
+                                            <span className="eyebrow">
+                                                Paso 2 · Selección
+                                            </span>
+                                            <h2>
+                                                Elige tu candidato a Delegado
+                                            </h2>
+                                            <div className="votante-info">
+                                                <span className="votante-label">
+                                                    Votante
+                                                </span>
+                                                <strong>
+                                                    ramon david salazar rincon
+                                                </strong>
+                                            </div>
 
-                    </Box>
+                                            <p className="instruccion-voto">
+                                                Selecciona <b>una sola opción</b> o marca <b>Voto en blanco</b>.
+                                            </p>
+                                            <p className="seguridad-voto">
+                                                Tu selección será registrada de forma segura y tu voto será secreto.
+                                            </p>
+                                        </div>
 
-                </React.Fragment>
+                                    </div>
+                                </Grid>
 
-            ) : (
+                                {candidatos.map((res) => (
+                                    <Grid
+                                        size={{ xs: 12, sm: 6, md: 4 }}
+                                        key={res.id}>
 
-                // --------------------------------
-                // PASO ACTUAL
-                // --------------------------------
+                                        <Box
+                                            className={`candidate ${
+                                                watch("candidato") === res.id
+                                                    ? "selected"
+                                                    : ""
+                                            }`}
+                                            onClick={() => setValue("candidato", res.id, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            })}
+                                        >
 
-                <React.Fragment>
+                                            <div className="avatar">
+                                                <span>Foto</span>
+                                            </div>
+                                            <div className="c-info">
+                                                <h3>
+                                                    {res.nombre}
+                                                </h3>
+                                                {res.documento && (
+                                                    <p>
+                                                        {res.documento}
+                                                    </p>
+                                                )}
+                                            </div>
 
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                        Step {activeStep + 1}
-                    </Typography>
+                                        </Box>
+                                    </Grid>
+                                ))}
 
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            pt: 2
-                        }}
-                    >
+                                <Grid size={{ xs: 12 }}>
+                                    <Box
+                                        className={`candidate blanco ${
+                                            watch("candidato") === "BLANCO"
+                                                ? "selected"
+                                                : ""
+                                        }`}
+                                        onClick={() => setValue("candidato", "BLANCO", {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        })}>
+                                        <div className="avatar">
+                                            ✓
+                                        </div>
+                                        <div className="c-info">
+                                            <h3>
+                                                Voto en blanco
+                                            </h3>
+                                            <p>
+                                                No deseo seleccionar ninguno de los candidatos.
+                                            </p>
+                                        </div>
+                                    </Box>
+                                </Grid>
 
-                        <Button
-                            color="inherit"
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            sx={{ mr: 1 }}
-                        >
-                            Back
-                        </Button>
+                                {errors.candidato && (
+                                    <Grid size={{ xs: 12 }}>
+                                        <p className="error-candidato">
+                                            {errors.candidato.message}
+                                        </p>
+                                    </Grid>
+                                )}
 
-                        <Box sx={{ flex: '1 1 auto' }} />
+                                <Grid size={{ xs: 6}}>
+                                    <Button onClick={handleBack} class="btn btn-ghost" startIcon={<ArrowBackIcon />}>
+                                        Volver
+                                    </Button>
+                                </Grid>
 
-                        {isStepOptional(activeStep) && (
+                                <Grid size={{ xs: 6 }} style={{textAlign: 'right'}}>
+                                    <Button type="submit" class="btn btn-primary" endIcon={<HowToVoteIcon /> }>
+                                        Emitir voto 
+                                    </Button>
+                                </Grid> 
 
-                            <Button
-                                color="inherit"
-                                onClick={handleSkip}
-                                sx={{ mr: 1 }}
-                            >
-                                Skip
-                            </Button>
+                            </Grid>
+                        </form>
+                    :(activeStep === 2) ? 
+                        <form onSubmit={handleSubmit(onSubmitVoto)}>
+                            <Grid container spacing={3}>
 
-                        )}
+                                <Grid size={{ xs: 12 }}>
+                                    <div className="confirmacion-voto">
+                                        <span className="eyebrow">
+                                            Paso 3 · Confirmación
+                                        </span>
+                                        <h2>
+                                            Confirma tu voto
+                                        </h2>
+                                        <p className="confirmacion-intro">
+                                            Verifica que la selección sea correcta antes de registrar
+                                            tu votación.
+                                        </p>
+                                        <div className="voto-seleccionado">
 
-                        <Button
-                            onClick={handleNext}
-                            ref={nextButtonRef}
-                        >
-                            {activeStep === steps.length - 1
-                                ? 'Finish'
-                                : 'Next'
-                            }
-                        </Button>
+                                            <div className="voto-seleccionado-foto">
+                                                {/* Posteriormente aquí irá la foto */}
+                                                <span>Foto</span>
+                                            </div>
 
-                    </Box>
+                                            <div className="voto-seleccionado-info">
 
-                </React.Fragment>
+                                                <span className="voto-seleccionado-label">
+                                                    Tu selección
+                                                </span>
 
-            )}
+                                                <h3>
+                                                    peptito perez
+                                                </h3>
 
-        </Box>
-        
+                                                <p>
+                                                    Candidato a Delegado
+                                                </p>
 
-      
+                                            </div>
 
-      <Stepper
-          activeStep={activeStep}
-          className="progress"
-      >
-          {steps.map((label, index) => {
+                                            <div className="voto-seleccionado-check">
+                                                ✓
+                                            </div>
 
-              const stepProps = {};
-              const labelProps = {};
-           
-              if (isStepSkipped(index)) {
-                  stepProps.completed = false;
-              }
+                                        </div>
+                                        <div className="mensaje-confirmacion">
 
-              return (
-                  <Step
-                      key={label}
-                      {...stepProps}
-                      className={`step ${
-                          activeStep === index
-                              ? 'active'
-                              : activeStep > index
-                                  ? 'done'
-                                  : ''
-                      }`}
-                  >
+                                            <div className="mensaje-confirmacion-icono">
+                                                !
+                                            </div>
 
-                      <StepLabel {...labelProps}>
-                          {label}
-                      </StepLabel>
+                                            <div>
+                                                <strong>
+                                                    Antes de registrar tu voto
+                                                </strong>
 
-                  </Step>
-              );
-          })}
-      </Stepper>
+                                                <p>
+                                                    Una vez registrado, tu voto será definitivo y
+                                                    no podrá ser modificado.
+                                                </p>
+                                            </div>
 
+                                        </div>
+                                    </div>
+                                </Grid>
 
-        
-        </>
+                                <Grid size={{ xs: 6}}>
+                                    <Button onClick={handleBack} class="btn btn-ghost" disabled={!habilitado} startIcon={<ArrowBackIcon />}>
+                                        Volver
+                                    </Button>
+                                </Grid>
+
+                                <Grid size={{ xs: 6 }} style={{textAlign: 'right'}}>
+                                    <Button type="submit" class="btn btn-primary" disabled={!habilitado} endIcon={<SaveIcon /> }>
+                                        Registrar mi voto
+                                    </Button>
+                                </Grid> 
+
+                            </Grid>
+                        </form>
+                    :                    
+                        <Grid container spacing={3}>
+                            <Grid size={{ xs: 12 }}>
+                                <div className="confirmacion-voto">
+                                    <span className="eyebrow">
+                                        Proceso finalzado 
+                                    </span>
+                                 
+                              
+                                    <div className="voto-seleccionado">
+
+                                        <div className="voto-seleccionado-foto">                                         
+                                            <span>Foto</span>
+                                        </div>
+
+                                        <div className="voto-seleccionado-info">
+
+                                            <span className="voto-seleccionado-label">
+                                                Votacion realizada por 
+                                            </span>
+                                            <h3>
+                                                peptito perez
+                                            </h3>
+                                            <p>
+                                                Candidato a Delegado numero 27
+                                            </p>
+                                        </div>
+                                        <div className="voto-seleccionado-check">
+                                            ✓
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                            </Grid>
+
+                            <Grid size={{ xs: 12}} style={{textAlign: 'center'}}>
+                                <Button onClick={() => setActiveStep(0)} class="btn btn-ghost" disabled={!habilitado} startIcon={<ExitToAppIcon />}>
+                                    Cerrar sesión
+                                </Button>
+                            </Grid>
+
+                        </Grid>
+                }
+            </Box>
+
+     </Fragment>
     );
 }

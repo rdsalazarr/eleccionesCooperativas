@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\FrondController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Home\EleccionDelegadoController;
 use App\Http\Controllers\Security\MantenimientoController;
 
 use App\Http\Controllers\Admin\Configurar\RolController;
@@ -40,6 +41,10 @@ Route::get('/', [FrondController::class, 'index']);
 Route::get('/admin', [FrondController::class, 'admin']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::match(array('GET', 'POST'),'/logout',[LoginController::class, 'logout'])->name('logout');
+
+Route::post('/consultar/asociados/activo', [EleccionDelegadoController::class, 'consultar']);
+Route::post('/registrar/elecccion/delegado', [EleccionDelegadoController::class, 'registrar']);
+Route::post('/consultar/informacion/elecciones/delegado', [EleccionDelegadoController::class, 'index']);
 
 Route::middleware(['auth'])->group(function () {//'revalidate',
     Route::get('dashboard', [DashboardController::class, 'index']);

@@ -8,6 +8,7 @@ import Loader from '../layout/loader';
 import "../../../scss/elecciones.scss";
 
 import HorizontalLinearStepper from './HorizontalLinearStepper'
+import { color } from 'framer-motion';
 
 export default function Admin(){
 
@@ -22,9 +23,9 @@ export default function Admin(){
             <Header />
             <SnackbarSettings>
 
-                <Grid container spacing={2} className="container">
+                <Grid container spacing={2} className="containerElecciones">
                     <br></br>
-                    <Grid size={{ xs: 12}} className='card'>
+                    <Grid size={{ xs: 12}} >
 
                         <HorizontalLinearStepper />
                  
