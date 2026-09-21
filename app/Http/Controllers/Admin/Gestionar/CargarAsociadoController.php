@@ -67,7 +67,7 @@ class CargarAsociadoController extends Controller
                 $tipoDocumento = [
                     'TI - Tarjeta de identidad'                 => 1,
                     'CC - Cédula de ciudadanía'                 => 2,
-                    'RC'                                        => 3,
+                    'RC - Registro civil'                       => 3,
                     'NIT - Número de identificación tributaria' => 4,
                 ];
 
@@ -78,11 +78,13 @@ class CargarAsociadoController extends Controller
                     if (empty($documento)) {
                         continue;
                     }
+                    
+                    //'agenid'              => $asociadoTemporal->asotemagencia === 'Principal' ? 1 : 2,
 
                     $asociados[] = [
                         'asocnumerodocumento' => $documento,
                         'tipideid'            => $tipoDocumento[trim($asociadoTemporal->asotemtipodocumento)] ?? null,
-                        'agenid'              => $asociadoTemporal->asotemagencia === 'Principal' ? 1 : 2,
+                        'agenid'              => $asociadoTemporal->asotemagencia === 'Gonzalez' ? 1 : 2,
                         'asocnombrecompleto'  => mb_strtoupper(trim($asociadoTemporal->asotemnombrecompleto),'UTF-8'),
                         'asocfechanacimiento' => $asociadoTemporal->asotemfechanacimiento,
                         'asocfechaexpedicion' => $asociadoTemporal->asotemfechaexpedicion,
@@ -116,6 +118,7 @@ class CargarAsociadoController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Proceso realizado con éxito']);
         } catch (Throwable $e) {
+            dd($e);
             Log::error('Error al procesar asociados temporales', [
                 'message' => $e->getMessage(),
                 'file'    => $e->getFile(),

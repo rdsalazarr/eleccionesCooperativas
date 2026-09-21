@@ -1,35 +1,25 @@
-import {useEffect, useState, useCallback, useRef, Fragment } from 'react';
-import {Grid, Box, TextField, MenuItem, Stepper, Step, StepLabel, Button, Typography, InputAdornment} from '@mui/material';
+import {useEffect, useState, useRef, Fragment } from 'react';
+import {Grid, Box, TextField, MenuItem, Stepper, Step, StepLabel, Button, InputAdornment} from '@mui/material';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import fotoDefault from '../../../images/fotoDefault.png'
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
+import SaveIcon from '@mui/icons-material/Save';
 import {ShowSnackbar} from '../layout/snackBar';
 import { LoaderModal } from "../layout/loader";
 import instance from '../layout/instance';
 import * as yup from "yup";
-
-import HowToVoteIcon from '@mui/icons-material/HowToVote';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import SaveIcon from '@mui/icons-material/Save';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const steps = [
     'Verificación',
     'Selección',
     'Confirmación'
 ];
-
-  const candidatos = [
-    { id:1, nombre:"María Fernanda Ríos"},
-    { id:2, nombre:"Carlos Andrés Pérez"},
-    { id:3, nombre:"Luisa Gómez Torres"},
-    { id:4, nombre:"Jorge Enrique Díaz" },
-    { id:5, nombre:"Ana Patricia Muñoz"},
-    { id:6, nombre:"Diego Armando Rojas"},
-    { id:7, nombre:"Pepito perez duran chinchilla" },
-  ];
 
 const schema = yup.object({
         tipoIdentificacion: yup.string().required('Debe seleccionar un tipo de identificación'),
@@ -39,28 +29,45 @@ const schema = yup.object({
 
 export default function HorizontalLinearStepper() {
 
-     const { register, handleSubmit,   watch,setValue, reset, control, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, setValue, reset, setError, clearErrors, control, formState: { errors } } = useForm({
                     resolver: yupResolver(schema),
-                    defaultValues:{tipoIdentificacion: '2', numeroDocumento: '1978917', fechaExpedicion: '1998-03-16',  candidato: ""},
+                    defaultValues:{tipoIdentificacion: '', numeroDocumento: '', fechaExpedicion: '', asociadoId:'', eleccionId:'',  candidato: ""},
                     mode: "onSubmit"
                 });
 
     const [tiposIdentificaciones, setTiposIdentificaciones] = useState([]);
-    const [habilitado, setHabilitado] = useState(true);    
+    const [eleccionDelegado, setEleccionDelegado] = useState([]);
+    const [dataAspirante, setDataAspirante] = useState([]);    
+    const [idVotoBlanco, setIdVotoBlanco] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
-    const [activeStep, setActiveStep] = useState(0);    
+    const [aspirantes, setAspirantes] = useState([]);
+    const [activeStep, setActiveStep] = useState(0);
+    const [asociado, setAsociado] = useState([]);
     const [loader, setLoader] = useState(false);
-
-    const isStepOptional = useCallback((step) => {
-        return step === 1;
-    }, []);
+    const timerFinalizar = useRef(null);
 
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
 
-    const handleNext = () => {
+    const iniciar = () => {
+        reset({tipoIdentificacion: '', numeroDocumento: '', fechaExpedicion: '', asociadoId:'', eleccionId:'',  candidato: ""});
+        setDataAspirante([])
+        setAspirantes([]);
+        setActiveStep(0)
+    };
 
+    const finalizar = () => {
+
+        if (timerFinalizar.current) {
+            clearTimeout(timerFinalizar.current);
+            timerFinalizar.current = null;
+        }
+
+        iniciar();
+    };
+
+    const handleNext = () => {
         let newSkipped = skipped;
 
         if (isStepSkipped(activeStep)) {
@@ -76,102 +83,84 @@ export default function HorizontalLinearStepper() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleSkip = () => {
-
-        if (!isStepOptional(activeStep)) {
-            throw new Error(
-                "You can't skip a step that isn't optional."
-            );
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
-    const previousActiveStepRef = useRef(activeStep);
-
-    const resetButtonRef = useRef(null);
-    const nextButtonRef = useRef(null);
-
-    
-
-
     const onSubmitConsulta = (formValues) => {
-        console.log("Candidato seleccionado:", formValues.candidato);
-        handleNext();
-        /*setLoader(true);
-        instance.post('/consultar/asociados/activo', formValues).then(res => {    
+        setLoader(true);
+        instance.post('/consultar/asociados/activo', formValues).then(res => {
             if(res.success){
-                //setValue()
+                setValue('asociadoId', res.asociadoId);
+                setValue('eleccionId', res.eleccionId);
+                setIdVotoBlanco(res.idVotoBlanco);
+                setAspirantes(res.aspirantes);
+                setAsociado(res.asociado);
                 handleNext();
             }else{
                 ShowSnackbar(res.message, 'error')
             }
             setLoader(false);
-        });*/
+        });
     }
+    
+    const onSubmitEleccion = (formValues) => {
 
-    const onSubmitVoto = (formValues) => {
+        const candidatoSeleccionado = formValues.candidato;
+        if (candidatoSeleccionado === "" || candidatoSeleccionado === null || candidatoSeleccionado === undefined) {
+             setError('candidato', {type: 'manual',  message: 'Debe seleccionar un candidato o el voto en blanco' });
+            return;
+        }
+        clearErrors('candidato');
+
+        if (Number(candidatoSeleccionado) === Number(idVotoBlanco)) {
+            setDataAspirante({
+                nombreCompleto: "Voto en blanco",
+                eldeasnumero: null,
+                eldeasimagen: false,
+                rutaFoto: null,
+                esVotoBlanco: true
+            });
+            handleNext();
+            return;
+        }
+
+        const candidato = aspirantes.find((res) => Number(res.eldeasid) === Number(candidatoSeleccionado));
+        if (!candidato) {
+            ShowSnackbar("No fue posible identificar el candidato seleccionado", "error");
+            return;
+        }
+
+        setDataAspirante({
+            eldeasid: candidato.eldeasid,
+            nombreCompleto: candidato.nombreCompleto,
+            eldeasnumero: candidato.eldeasnumero,
+            eldeasimagen: candidato.eldeasimagen,
+            rutaFoto: candidato.rutaFoto,
+            esVotoBlanco: false
+        });
 
         handleNext();
-
     }
 
-    // Control del foco cuando cambia el paso activo
-    useEffect(() => {
-
-        const previousActiveStep = previousActiveStepRef.current;
-
-        previousActiveStepRef.current = activeStep;
-
-        // Cuando termina todos los pasos,
-        // coloca el foco en el botón Reset.
-        if (activeStep === steps.length) {
-
-            resetButtonRef.current?.focus();
-
-            return;
-        }
-
-        // Cuando hace Reset después de terminar,
-        // coloca el foco en Next.
-        if (
-            activeStep === 0 &&
-            previousActiveStep === steps.length
-        ) {
-
-            nextButtonRef.current?.focus();
-
-            return;
-        }
-
-        // Si se saltó un paso opcional,
-        // coloca el foco en Next.
-        if (
-            isStepOptional(previousActiveStep) &&
-            !isStepOptional(activeStep)
-        ) {
-
-            nextButtonRef.current?.focus();
-        }
-
-    }, [activeStep, isStepOptional]);
-
+    const onSubmitVoto = (formValues) => { 
+        setLoader(true);
+        instance.post('/registrar/elecccion/delegado', formValues).then(res=>{
+            if(res.success){
+                setDataAspirante(res.aspirante);
+                handleNext();
+                timerFinalizar.current = setTimeout(() => {
+                                                iniciar();
+                                            }, 5000);
+            }else{
+                ShowSnackbar(res.message, 'error')
+            }
+            setLoader(false);
+        })
+    }
 
     useEffect(()=>{
         setLoader(true);
         instance.post('/consultar/informacion/elecciones/delegado').then(res=>{
             if(res.success){
                 setTiposIdentificaciones(res.tiposIdentificaciones);
+                setEleccionDelegado(res.eleccionDelegado);
             }else{
                 ShowSnackbar(res.message, 'error')
             }
@@ -179,6 +168,13 @@ export default function HorizontalLinearStepper() {
         })
     }, []);
 
+    useEffect(() => {
+        return () => {
+            if (timerFinalizar.current) {
+                clearTimeout(timerFinalizar.current);
+            }
+        };
+    }, []);
 
     if (loader) {
         return <LoaderModal />;
@@ -188,8 +184,8 @@ export default function HorizontalLinearStepper() {
         <Fragment> 
 
             <h1 className="tituloEleccion">
-                Elecciones de delegado para el período
-                <span>2027 - 2030</span>
+                {eleccionDelegado?.eledeltitulo}
+                <span>{eleccionDelegado.eledelperiodo}</span>
             </h1>
 
             <Stepper activeStep={activeStep} className="progress">
@@ -225,13 +221,12 @@ export default function HorizontalLinearStepper() {
                         <form onSubmit={handleSubmit(onSubmitConsulta)}>
                             <Grid container spacing={4}>
                                 <Grid size={{ xs: 12}} >
-                                    <span class="eyebrow">Elección de Delegados 2026</span>
+                                    <span className="tituloCategoria">Elección de Delegados 2026</span>
                                     <h1>Verifica tu identidad para votar</h1>
-                                    <p class="subtitle">
+                                    <p className="subtitle">
                                     Ingresa tu número de documento y la fecha de expedición tal como aparecen en tu cédula. 
                                     Validaremos tus datos contra los asociados habilitados.
                                     </p>
-
                                 </Grid>
                                 
                                 <Grid size={{ xs: 12, sm: 4 }}>
@@ -276,8 +271,7 @@ export default function HorizontalLinearStepper() {
                                         {...register("numeroDocumento")}
                                         error={!!errors.numeroDocumento}
                                         helperText={errors.numeroDocumento?.message}
-                                        placeholder="Ej: 1234567890" 
-                                        autocomplete="off"
+                                        placeholder="Ej: 1234567890"
                                         type='number'
                                         slotProps={{
                                             input: {
@@ -314,131 +308,128 @@ export default function HorizontalLinearStepper() {
                                 </Grid>
 
                                 <Grid size={{ xs: 12}} >
-                                    <Box class="informacion">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
-                                        </svg>
+                                    <Box className="informacion">
                                         <span>Si tus datos no coinciden, comunícate con la cooperativa al <b>311 591 1923</b> antes de intentar nuevamente.</span>
                                     </Box>
                                 </Grid>
 
                                 <Grid size={{ xs: 12}} style={{textAlign: 'right'}} >
-                                    <button type="submit" class="btn btn-primary">
-                                        Verificar identidad
-                                        <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                                    </button>
+                                    <Button type="submit" className="boton btnFormulario" endIcon={<BadgeOutlinedIcon /> }>
+                                         Verificar identidad
+                                    </Button>
                                 </Grid>
-
                             </Grid>
                         </form>
-                    :(activeStep === 1) ?      
-                        <form onSubmit={handleSubmit(onSubmitConsulta)}>
+                    :(activeStep === 1) ?
+                        <form onSubmit={handleSubmit(onSubmitEleccion)}>
                             <Grid container spacing={3}>
                                 <Grid size={{ xs: 12 }}>
-                                    <div className="list-head">
-                                        <div className="list-head-info">
-                                            <span className="eyebrow">
+                                    <Box className="listaCategoria">
+                                        <Box className="listaCategoriaInfo">
+                                            <span className="tituloCategoria">
                                                 Paso 2 · Selección
                                             </span>
                                             <h2>
                                                 Elige tu candidato a Delegado
                                             </h2>
-                                            <div className="votante-info">
-                                                <span className="votante-label">
+                                            <Box className="informacionVotante">
+                                                <span className="textoVotante">
                                                     Votante
                                                 </span>
                                                 <strong>
-                                                    ramon david salazar rincon
+                                                    {asociado.asocnombrecompleto}
                                                 </strong>
-                                            </div>
+                                            </Box>
 
-                                            <p className="instruccion-voto">
+                                            <p className="instruccionVoto">
                                                 Selecciona <b>una sola opción</b> o marca <b>Voto en blanco</b>.
                                             </p>
-                                            <p className="seguridad-voto">
+                                            <p className="seguridadVoto">
                                                 Tu selección será registrada de forma segura y tu voto será secreto.
                                             </p>
-                                        </div>
+                                        </Box>
 
-                                    </div>
+                                    </Box>
                                 </Grid>
 
-                                {candidatos.map((res) => (
+                                {aspirantes.map((res) => (
                                     <Grid
                                         size={{ xs: 12, sm: 6, md: 4 }}
-                                        key={res.id}>
+                                        key={res.eldeasid}>
 
                                         <Box
-                                            className={`candidate ${
-                                                watch("candidato") === res.id
+                                            className={`candidato ${
+                                                watch("candidato") === res.eldeasid
                                                     ? "selected"
                                                     : ""
                                             }`}
-                                            onClick={() => setValue("candidato", res.id, {
+                                            onClick={() => setValue("candidato", res.eldeasid, {
                                                 shouldValidate: true,
                                                 shouldDirty: true
                                             })}
                                         >
 
-                                            <div className="avatar">
-                                                <span>Foto</span>
-                                            </div>
-                                            <div className="c-info">
-                                                <h3>
-                                                    {res.nombre}
-                                                </h3>
-                                                {res.documento && (
-                                                    <p>
-                                                        {res.documento}
-                                                    </p>
+                                            <Box className="avatar">
+                                                {res.eldeasimagen ? (
+                                                    <img src={res.rutaFoto} alt={res.nombreCompleto} />
+                                                ) : (
+                                                    <span><img src={fotoDefault} /> {res.eldeasnumero}</span>
                                                 )}
-                                            </div>
+                                            </Box>
 
+                                            <Box className="informacionCandidato">
+                                                <h3>
+                                                    {res.nombreCompleto}
+                                                </h3>
+                                                <span className="numeroInscripcion">
+                                                    Nº {res.eldeasnumero}
+                                                </span>
+                                            </Box>
                                         </Box>
                                     </Grid>
                                 ))}
 
                                 <Grid size={{ xs: 12 }}>
                                     <Box
-                                        className={`candidate blanco ${
-                                            watch("candidato") === "BLANCO"
+                                        className={`candidato blanco ${
+                                            watch("candidato") === idVotoBlanco
                                                 ? "selected"
                                                 : ""
                                         }`}
-                                        onClick={() => setValue("candidato", "BLANCO", {
+                                        onClick={() => setValue("candidato", idVotoBlanco, {
                                             shouldValidate: true,
                                             shouldDirty: true
                                         })}>
-                                        <div className="avatar">
+                                        <Box className="avatar">
                                             ✓
-                                        </div>
-                                        <div className="c-info">
+                                        </Box>
+                                        <Box className="informacionCandidato">
                                             <h3>
                                                 Voto en blanco
                                             </h3>
                                             <p>
                                                 No deseo seleccionar ninguno de los candidatos.
                                             </p>
-                                        </div>
+                                        </Box>
                                     </Box>
                                 </Grid>
 
                                 {errors.candidato && (
                                     <Grid size={{ xs: 12 }}>
-                                        <p className="error-candidato">
+                                        <p className="errorCandidato">
                                             {errors.candidato.message}
                                         </p>
                                     </Grid>
                                 )}
 
                                 <Grid size={{ xs: 6}}>
-                                    <Button onClick={handleBack} class="btn btn-ghost" startIcon={<ArrowBackIcon />}>
+                                    <Button onClick={handleBack} className="boton btnVolver" startIcon={<ArrowBackIcon />}>
                                         Volver
                                     </Button>
                                 </Grid>
 
                                 <Grid size={{ xs: 6 }} style={{textAlign: 'right'}}>
-                                    <Button type="submit" class="btn btn-primary" endIcon={<HowToVoteIcon /> }>
+                                    <Button type="submit" className="boton btnFormulario" endIcon={<HowToVoteIcon /> }>
                                         Emitir voto 
                                     </Button>
                                 </Grid> 
@@ -447,120 +438,121 @@ export default function HorizontalLinearStepper() {
                         </form>
                     :(activeStep === 2) ? 
                         <form onSubmit={handleSubmit(onSubmitVoto)}>
-                            <Grid container spacing={3}>
+                            <Grid container spacing={3}  className="animate__animated animate__zoomIn">
 
                                 <Grid size={{ xs: 12 }}>
-                                    <div className="confirmacion-voto">
-                                        <span className="eyebrow">
+                                    <Box className="confirmacionVoto">
+                                        <span className="tituloCategoria">
                                             Paso 3 · Confirmación
                                         </span>
                                         <h2>
                                             Confirma tu voto
                                         </h2>
-                                        <p className="confirmacion-intro">
+                                        <p className="confirmacionEntrada">
                                             Verifica que la selección sea correcta antes de registrar
                                             tu votación.
                                         </p>
-                                        <div className="voto-seleccionado">
-
-                                            <div className="voto-seleccionado-foto">
-                                                {/* Posteriormente aquí irá la foto */}
-                                                <span>Foto</span>
-                                            </div>
-
-                                            <div className="voto-seleccionado-info">
-
-                                                <span className="voto-seleccionado-label">
+                                        <Box className="votoSeleccionado">
+                                            <Box className="votoSeleccionadoFoto">
+                                                  {dataAspirante?.esVotoBlanco ? (
+                                                    <span className="votoBlancoIcono">✓</span>
+                                                ) : dataAspirante?.eldeasimagen ? (
+                                                    <img
+                                                        src={dataAspirante.rutaFoto}
+                                                        alt={dataAspirante.nombreCompleto}
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src={fotoDefault}
+                                                        alt="Foto no disponible"
+                                                    />
+                                                )}
+                                            </Box>
+                                            <Box className="votoSeleccionadoInfo">
+                                                <span className="votoSeleccionadoLabel">
                                                     Tu selección
                                                 </span>
-
                                                 <h3>
-                                                    peptito perez
+                                                    {dataAspirante?.nombreCompleto}
                                                 </h3>
-
                                                 <p>
-                                                    Candidato a Delegado
+                                                    {dataAspirante?.esVotoBlanco
+                                                        ? "Voto en blanco"
+                                                        : `Candidato a Delegado Nº ${dataAspirante?.eldeasnumero}`
+                                                    }
                                                 </p>
-
-                                            </div>
-
-                                            <div className="voto-seleccionado-check">
+                                            </Box>
+                                            <Box className="votoSeleccionadoCheck">
                                                 ✓
-                                            </div>
-
-                                        </div>
-                                        <div className="mensaje-confirmacion">
-
-                                            <div className="mensaje-confirmacion-icono">
+                                            </Box>
+                                        </Box>
+                                        <Box className="mensajeConfirmacion">
+                                            <Box className="mensajeConfirmacionIcono">
                                                 !
-                                            </div>
-
-                                            <div>
+                                            </Box>
+                                            <Box>
                                                 <strong>
                                                     Antes de registrar tu voto
                                                 </strong>
-
                                                 <p>
                                                     Una vez registrado, tu voto será definitivo y
                                                     no podrá ser modificado.
                                                 </p>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                            </Box>
+                                        </Box>
+                                    </Box>
                                 </Grid>
 
                                 <Grid size={{ xs: 6}}>
-                                    <Button onClick={handleBack} class="btn btn-ghost" disabled={!habilitado} startIcon={<ArrowBackIcon />}>
+                                    <Button onClick={handleBack} className="boton btnVolver" startIcon={<ArrowBackIcon />}>
                                         Volver
                                     </Button>
                                 </Grid>
 
                                 <Grid size={{ xs: 6 }} style={{textAlign: 'right'}}>
-                                    <Button type="submit" class="btn btn-primary" disabled={!habilitado} endIcon={<SaveIcon /> }>
-                                        Registrar mi voto
+                                    <Button type="submit" className="boton btnFormulario" endIcon={<SaveIcon /> }>
+                                        <span className="textoLargo">Registrar mi voto</span>
+                                        <span className="textoCorto">Registrar</span>
                                     </Button>
                                 </Grid> 
 
                             </Grid>
                         </form>
-                    :                    
-                        <Grid container spacing={3}>
+                    :
+                        <Grid container spacing={3} className="animate__animated animate__zoomIn" >
                             <Grid size={{ xs: 12 }}>
-                                <div className="confirmacion-voto">
-                                    <span className="eyebrow">
+                                <Box className="confirmacionVoto">
+                                    <span className="tituloCategoria">
                                         Proceso finalzado 
                                     </span>
-                                 
-                              
-                                    <div className="voto-seleccionado">
-
-                                        <div className="voto-seleccionado-foto">                                         
-                                            <span>Foto</span>
-                                        </div>
-
-                                        <div className="voto-seleccionado-info">
-
-                                            <span className="voto-seleccionado-label">
+                                    <Box className="votoSeleccionado">
+                                        <Box className="votoSeleccionadoFoto">
+                                           {dataAspirante.eldeasimagen ? (
+                                                <img src={dataAspirante.rutaFoto} alt={dataAspirante.nombreCompleto} />
+                                            ) : (
+                                                <span><img src={fotoDefault} /> {dataAspirante.eldeasnumero}</span>
+                                            )}
+                                        </Box>
+                                        <Box className="votoSeleccionadoInfo">
+                                            <span className="votoSeleccionadoLabel">
                                                 Votacion realizada por 
                                             </span>
                                             <h3>
-                                                peptito perez
+                                                {dataAspirante?.nombreCompleto}
                                             </h3>
                                             <p>
-                                                Candidato a Delegado numero 27
+                                                Candidato a Delegado Número ({dataAspirante?.eldeasnumero})
                                             </p>
-                                        </div>
-                                        <div className="voto-seleccionado-check">
+                                        </Box>
+                                        <Box className="votoSeleccionadoCheck">
                                             ✓
-                                        </div>
-                                    </div>
-                                
-                                </div>
+                                        </Box>
+                                    </Box>
+                                </Box>
                             </Grid>
 
                             <Grid size={{ xs: 12}} style={{textAlign: 'center'}}>
-                                <Button onClick={() => setActiveStep(0)} class="btn btn-ghost" disabled={!habilitado} startIcon={<ExitToAppIcon />}>
+                                <Button onClick={() => finalizar()} className="boton btnVolver" startIcon={<ExitToAppIcon />}>
                                     Cerrar sesión
                                 </Button>
                             </Grid>

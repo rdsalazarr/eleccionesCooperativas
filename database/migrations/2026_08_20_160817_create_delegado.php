@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('eledelabrireleccion')->default(false)->comment('Determina si la elección se debe abrir');
             $table->boolean('eledelcerrareleccion')->default(false)->comment('Determina si la elección se debe cerrar');
             $table->boolean('eledelpublicareleccion')->default(false)->comment('Determina si la elección de delegado esta publicada');
+            $table->date('eledelfechafinalpublicacion')->nullable()->comment('Fecha final de publicación de los resultados en el portal de elecciones');
             $table->timestamps();
         });
 
@@ -78,7 +79,7 @@ return new class extends Migration
             $table->increments('eldeprid')->comment('Identificador de la tabla inscripcion delegado proceso');
             $table->unsignedSmallInteger('eledelid')->comment('Identificador de la elección de delegado');
             $table->unsignedInteger('asocid')->comment('Identificador de la tabla asociado');
-            $table->date('eldeprfecha')->comment('Fecha en la cual se registra el voto por el asociado');
+            $table->date('eldeprfecha')->comment('Fecha en la cual se registra el voto por el asociado');//No se puede registrar la hora por la unica
             $table->time('eldeprhora')->comment('Hora en la cual se registra el voto por el asociado');
             $table->timestamps();
             $table->unique(['eledelid', 'asocid','eldeprfecha'],'uk_elecciondelegadoproceso');

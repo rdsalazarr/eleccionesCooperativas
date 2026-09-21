@@ -20,7 +20,6 @@ class DelegadoSeeder extends Seeder
             'delesegundonombre'   => null,
             'deleprimerapellido'  => 'BLANCO',
             'delesegundoapellido' => null,
-            'delefechaexpedicion' => '2026-10-01',
             'delenumero'          => 99,
             'delecorreo'          => null,
             'deletelefono'        => null,

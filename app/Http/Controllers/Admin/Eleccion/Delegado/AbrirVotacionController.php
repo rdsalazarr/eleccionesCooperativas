@@ -74,7 +74,8 @@ class AbrirVotacionController extends Controller
                 $eleccionDelegado->eledelcerrareleccion = true;
             }
             if($request->tipo == 'PUBLICAR'){
-                $eleccionDelegado->eledelpublicareleccion = true;
+                $eleccionDelegado->eledelpublicareleccion      = true;
+                $eleccionDelegado->eledelfechafinalpublicacion = Carbon::now()->addDays(10)->format('Y-m-d');
             }
             $eleccionDelegado->save();
 

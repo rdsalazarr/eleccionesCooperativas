@@ -7,7 +7,7 @@ use App\Models\Eleccion\Delegado\Agencia;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['eledelanio','eledeltitulo','eledelperiodo','eledelhorainicio',
-            'eledelhoracierre','eledelabrireleccion','eledelcerrareleccion','eledelpublicareleccion'])]
+            'eledelhoracierre','eledelabrireleccion','eledelcerrareleccion','eledelpublicareleccion','eledelfechafinalpublicacion'])]
 class EleccionDelegado extends Model
 {
     protected $table      = 'elecciondelegado';
@@ -15,7 +15,7 @@ class EleccionDelegado extends Model
 
     //Para realizar la relacion
     public function delegadoAgencia(){ 
-        return $this->hasMany(Agencia::class, 'eledelid', 'eledelid');    
+        return $this->hasMany(Agencia::class, 'eledelid', 'eledelid');
     }
 
     protected static function booted()

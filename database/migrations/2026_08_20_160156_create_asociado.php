@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('asociadotemporal', function (Blueprint $table) {
             $table->increments('asotemid')->comment('Identificador de la tabla asociado temporal');
             $table->string('asotemagencia', 20)->nullable()->comment('Agencia en la cual pertenece el asociado');
-            $table->string('asotemtipodocumento', 30)->nullable()->comment('Tipo de documento del asociado');
+            $table->string('asotemtipodocumento', 50)->nullable()->comment('Tipo de documento del asociado');
             $table->string('asotemnumero', 20)->nullable()->comment('Número de documento del asociado');
             $table->string('asotemnombrecompleto', 100)->nullable()->comment('Nombre completo del asociado');
             $table->string('asotemfechaingreso', 20)->nullable()->comment('Fecha de ingreso del asociado a la cooperativa');

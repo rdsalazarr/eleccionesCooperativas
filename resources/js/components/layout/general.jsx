@@ -77,7 +77,6 @@ export function HeaderAdmon(){
         instance.post('/admin/consultar/informacion/usuario').then(res=>{
             if(res.success){
                 setNameUser(res.nombreUsuario);
-                setMostarDatos(true);
             }
          });
      }, []);
