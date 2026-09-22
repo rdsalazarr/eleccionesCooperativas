@@ -494,8 +494,8 @@ class GenerarPdf extends TCPDF
            foreach($agencia->aspirantes as $aspirante){
                 $i ++;
                 $votosTotal += $aspirante->totalVotos;
-                $tcpdf->Cell(20,6,'', 1, 0,'C'); 
-                $tcpdf->Cell(10,6, $i, 1, 0,'L');
+                $tcpdf->Cell(20,6,'', 0, 0,'C'); 
+                $tcpdf->Cell(10,6, $i, 1, 0,'C');
                 $tcpdf->Cell(120,6,' '.$aspirante->nombreCompleto, 1 ,0,'L'); 
                 $tcpdf->Cell(20,6,$aspirante->totalVotos, 1 ,0,'C');
                 $tcpdf->Ln(6);
@@ -503,7 +503,7 @@ class GenerarPdf extends TCPDF
 
             $votosBlanco = 0;
             if($agencia->totalVotosBlanco){
-                $votosBlanco = $agencia->totalVotosBlanco->votosBlanco;
+                $votosBlanco = $agencia->totalVotosBlanco->totalVotos;
             }
 
             $tcpdf->Ln(6);

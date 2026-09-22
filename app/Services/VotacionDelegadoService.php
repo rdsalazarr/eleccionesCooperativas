@@ -137,46 +137,93 @@ class VotacionDelegadoService
             ];
     }
 
+    public function resultadosPublicosEleccionDelegados()
+    {
+        $anyo = date('Y');  
+
+        $eleccionId   = DB::table('elecciondelegado')->where('eledelanio', $anyo)->value('eledelid');
+
+        $estadisticas = DB::table('asociado as a')
+                            ->select(
+                                DB::raw('COUNT(DISTINCT a.asocid) AS totalAsociadosHabiles'),
+                                DB::raw('(
+                                    SELECT COUNT(DISTINCT edv.eldevoid)
+                                    FROM elecciondelegadovoto edv
+                                    INNER JOIN elecciondelegadoaspirante eda
+                                        ON edv.eldeasid = eda.eldeasid
+                                    WHERE eda.eledelid = ' . $eleccionId . '
+                                ) AS totalVotosRealizados'),
+                                DB::raw('(
+                                    SELECT COUNT(DISTINCT edv.eldevoid)
+                                    FROM elecciondelegadovoto edv
+                                    INNER JOIN elecciondelegadoaspirante eda
+                                        ON edv.eldeasid = eda.eldeasid
+                                    WHERE eda.eledelid = ' . $eleccionId . '
+                                    AND eda.eldeasesvotoblanco = 1
+                                ) AS totalVotosBlanco'))
+                            ->where('a.asocactivo', true)
+                            ->first();
+
+        $agencias = DB::table('agencia as a')->select('a.agenid', 'a.agennombre', 'eda.eldeagid')
+                        ->join('elecciondelegadoagencia as eda', 'eda.agenid', '=', 'a.agenid')
+                        ->where('eda.eledelid', $eleccionId)
+                        ->orderBy('a.agennombre')
+                        ->get();
+        foreach ($agencias as $agencia) {
+            $agencia->aspirantes       = $this->datosVotacionDelegados($agencia->agenid, $eleccionId);
+            $agencia->totalVotosBlanco = $this->datosVotosBlancos($agencia->agenid, $eleccionId);
+        }
+
+        return [
+                'totalVotosRegistrados' => $estadisticas->totalAsociadosHabiles + $estadisticas->totalVotosRealizados,
+                'totalAsociadosHabiles' => $estadisticas->totalAsociadosHabiles,
+                'totalVotosRealizados'  => $estadisticas->totalVotosRealizados,
+                'totalVotosBlanco'      => $estadisticas->totalVotosBlanco,
+                'agencias'              => $agencias,
+            ];
+    }
+    
     public function datosVotacionDelegados($agenid, $eledelid)
     {
         return DB::table('elecciondelegadoaspirante as eda')
-                                    ->select('edag.eldeagnumerodeleprincipal','edag.eldeagnumerodelesuplente',
-                                        DB::raw("CONCAT(ti.tipidesigla,' - ', eda.eldeasdocumento ) as tipoIdentificacion"),
-                                        DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre, eda.eldeasprimerapellido, eda.eldeassegundoapellido ) as nombreCompleto"),
-                                        DB::raw('(SELECT count(eldevoid) as voto 
-                                                    FROM elecciondelegadovoto 
-                                                    WHERE eledelid = ed.eledelid and eldeasid = eda.eldeasid
-                                                    ) AS totalVotos'))
-                                    ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
-                                    ->join('tipoidentificacion as ti', 'ti.tipideid', '=', 'eda.tipideid')
-                                    ->join('elecciondelegadoagencia as edag', function($join)
-                                            {
-                                                $join->on('edag.agenid',  '=', 'eda.agenid');
-                                                $join->on('edag.eledelid', '=', 'eda.eledelid'); 
-                                            })
-                                    ->where('eda.agenid', $agenid)
-                                    ->where('eda.eledelid', $eledelid)
-                                    ->where('eda.eldeasactivo', true)
-                                    ->where('eda.eldeasesvotoblanco', false)
-                                    ->where('ed.eledelcerrareleccion', true)
-                                    ->orderByDesc('totalVotos')
-                                    ->orderBy('eda.eldeasnumero')
-                                    ->get();
-    }
+                    ->select('edag.eldeagnumerodeleprincipal','edag.eldeagnumerodelesuplente',
+                        DB::raw("CONCAT(LPAD(eda.eldeasnumero,  2, 0)) as eldeasnumero"),
+                        DB::raw("CONCAT(ti.tipidesigla,' - ', eda.eldeasdocumento ) as tipoIdentificacion"),
+                        DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre, eda.eldeasprimerapellido, eda.eldeassegundoapellido ) as nombreCompleto"),
+                        DB::raw('(SELECT count(eldevoid) as voto 
+                                    FROM elecciondelegadovoto 
+                                    WHERE eledelid = ed.eledelid and eldeasid = eda.eldeasid
+                                    ) AS totalVotos'))
+                    ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
+                    ->join('tipoidentificacion as ti', 'ti.tipideid', '=', 'eda.tipideid')
+                    ->join('elecciondelegadoagencia as edag', function($join)
+                            {
+                                $join->on('edag.agenid',  '=', 'eda.agenid');
+                                $join->on('edag.eledelid', '=', 'eda.eledelid'); 
+                            })
+                    ->where('eda.agenid', $agenid)
+                    ->where('eda.eledelid', $eledelid)
+                    ->where('eda.eldeasactivo', true)
+                    ->where('eda.eldeasesvotoblanco', false)
+                    ->where('ed.eledelcerrareleccion', true)
+                    ->orderByDesc('totalVotos')
+                    ->orderBy('eda.eldeasnumero')
+                    ->get();
+    } 
 
     public function datosVotosBlancos($agenid, $eledelid)
     {
         return  DB::table('elecciondelegadoaspirante as eda')
-                        ->select(DB::raw('(SELECT count(eldevoid) as voto 
-                                    FROM elecciondelegadovoto 
-                                    WHERE eledelid = ed.eledelid and eldeasid = eda.eldeasid
-                                    ) AS totalVotos')
-                                )
-                        ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
-                        ->where('eda.agenid', $agenid)
-                        ->where('eda.eledelid', $eledelid)
-                        ->where('eda.eldeasesvotoblanco', true)
-                        ->orderByDesc('totalVotos')
-                        ->first();
+                    ->select(DB::raw('(SELECT count(eldevoid) as voto 
+                                FROM elecciondelegadovoto 
+                                WHERE eledelid = ed.eledelid and eldeasid = eda.eldeasid
+                                ) AS totalVotos')
+                            )
+                    ->join('elecciondelegado as ed', 'ed.eledelid', '=', 'eda.eledelid')
+                    ->where('eda.agenid', $agenid)
+                    ->where('eda.eledelid', $eledelid)
+                    ->where('eda.eldeasesvotoblanco', true)
+                    ->orderByDesc('totalVotos')
+                    ->first();
     }
 }

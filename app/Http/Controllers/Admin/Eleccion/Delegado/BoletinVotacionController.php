@@ -105,7 +105,7 @@ class BoletinVotacionController extends Controller
 			return response()->json(['success' => true, "data" => $dataPdfBase64]);
 		} catch (Throwable $e){
 			Log::error($e->getMessage());
-			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al obtener el PDF generado durante el inforem ']);
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al obtener el PDF generado durante el informe']);
 		}
 	}
 }

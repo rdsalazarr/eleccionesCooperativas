@@ -3,16 +3,16 @@ import {Grid, Box, TextField, MenuItem, Stepper, Step, StepLabel, Button, InputA
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import fotoDefault from '../../../../../images/fotoDefault.png'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import fotoDefault from '../../../images/fotoDefault.png'
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
+import {ShowSnackbar} from '../../../layout/snackBar';
+import { LoaderModal } from "../../../layout/loader";
+import instance from '../../../layout/instance';
 import SaveIcon from '@mui/icons-material/Save';
-import {ShowSnackbar} from '../layout/snackBar';
-import { LoaderModal } from "../layout/loader";
-import instance from '../layout/instance';
 import * as yup from "yup";
 
 const steps = [
@@ -45,6 +45,9 @@ export default function EleccionDelegados() {
     const [asociado, setAsociado] = useState([]);
     const [loader, setLoader] = useState(false);
     const timerFinalizar = useRef(null);
+
+    const fechaActual = new Date();
+    const anioActual  = fechaActual.getFullYear();
 
     const isStepSkipped = (step) => {
         return skipped.has(step);
@@ -220,12 +223,12 @@ export default function EleccionDelegados() {
                     (activeStep === 0) ? 
                         <form onSubmit={handleSubmit(onSubmitConsulta)}>
                             <Grid container spacing={4}>
-                                <Grid size={{ xs: 12}} >
-                                    <span className="tituloCategoria">Elección de Delegados 2026</span>
+                                <Grid size={{ xs: 12}}>
+                                    <span className="tituloCategoria">Elección de Delegados {anioActual}</span>
                                     <h1>Verifica tu identidad para votar</h1>
                                     <p className="subtitle">
-                                    Ingresa tu número de documento y la fecha de expedición tal como aparecen en tu cédula. 
-                                    Validaremos tus datos contra los asociados habilitados.
+                                        Ingresa tu número de documento y la fecha de expedición tal como aparecen en tu cédula. 
+                                        Validaremos tus datos contra los asociados habilitados.
                                     </p>
                                 </Grid>
                                 

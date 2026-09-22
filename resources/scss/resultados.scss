@@ -1,0 +1,530 @@
+
+:root{
+    --verde-claro:#5ebd52;
+    --verde-oscuro:#058b4a;
+    --amarillo:#ffcb13;
+    --azul:#1a8fcb;
+    --negro:#302f2f;
+    --verde-50:#F0FAEF;
+    --verde-100:#E1F4DE;
+    --verde-200:#C5E9BF;
+    --bg:#F5F8F4;
+    --card:#FFFFFF;
+    --muted:#7A7A7A;
+    --border:#E4EBE2;
+    --text:var(--negro);
+    --shadow:0 10px 30px rgba(5,139,74,.08);
+    --shadow-lg:0 25px 60px rgba(5,139,74,.15);
+    --radius:16px;
+}
+
+
+.resultadosContainer{
+    width:90%;  
+    margin: auto;
+    /*padding:35px 25px 50px;*/
+}
+
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+.resultadosEncabezado{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:25px;
+    margin-bottom:30px;
+}
+
+.tituloCategoria{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--verde-oscuro);
+}
+
+.tituloEleccion{
+    margin:6px 0 0;
+    font-size:30px;
+    line-height:1.2;
+    font-weight:800;
+    color:var(--negro);
+}
+
+.periodoEleccion{
+    margin:7px 0 0;
+    font-size:15px;
+    color:var(--muted);
+}
+
+
+.estadoEleccion{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 15px;
+    border-radius:25px;
+    background:#f0f7f2;
+    color:var(--verde-oscuro);
+    font-size:13px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.estadoEleccion svg{
+    font-size:20px;
+}
+
+
+/* =========================================
+   RESUMEN
+========================================= */
+
+.resumenResultados{
+    margin-bottom:35px;
+}
+
+.resumenResultado{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    min-height:85px;
+    padding:2px 10px 2px 10px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.resumenResultadoIcono{
+    width:44px;
+    height:44px;
+    min-width:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:#f0f6f1;
+    color:var(--verde-oscuro);
+}
+
+.resumenResultadoIcono svg{
+    font-size:23px;
+}
+
+.resumenResultado span{
+    display:block;
+    margin-bottom:4px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.resumenResultado strong{
+    display:block;
+    font-size:23px;
+    line-height:1;
+    color:var(--negro);
+}
+
+
+/* =========================================
+   AGENCIAS
+========================================= */
+
+.resultadosAgencias{
+    width:100%;
+}
+
+.resultadoAgencia{
+    margin-bottom:40px;
+}
+
+.encabezadoAgencia{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:18px;
+    padding-bottom:13px;
+    border-bottom:1px solid var(--border);
+}
+
+.encabezadoAgencia h2{
+    margin:5px 0 0;
+    font-size:22px;
+    font-weight:800;
+    color:var(--negro);
+}
+
+.informacionAgencia{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.informacionAgencia span{
+    padding:7px 11px;
+    border-radius:20px;
+    background:#f5f7f5;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:700;
+}
+
+.gridResultadosCandidatos{
+    width:100%;
+}
+
+
+/* =========================================
+   TARJETA CANDIDATO
+========================================= */
+
+.resultadoCandidato{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-height:100px;
+    height:100%;
+       padding: 5px 10px 5px 10px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    transition:.25s;
+}
+
+.resultadoCandidato:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+
+/* FOTO */
+
+.resultadoAvatar{
+    width:52px;
+    height:52px;
+    min-width:52px;
+    overflow:hidden;
+    border-radius:50%;
+    background:#f1f4f2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.resultadoAvatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+
+/* INFORMACIÓN */
+
+.resultadoInformacion{
+    flex:1;
+    min-width:0;
+}
+
+.numeroCandidato{
+    display:block;
+    margin-bottom:3px;
+    font-size:10px;
+    font-weight:800;
+    color:var(--verde-oscuro);
+}
+
+.resultadoInformacion h3{
+    margin:0 0 8px;
+    font-size:14px;
+    line-height:1.2;
+    font-weight:700;
+    color:var(--negro);
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+
+/* BARRA */
+
+.barraResultado{
+    width:100%;
+    height:5px;
+    overflow:hidden;
+    border-radius:10px;
+    background:#edf1ee;
+}
+
+.barraResultadoValor{
+    height:100%;
+    border-radius:10px;
+    background:linear-gradient(
+        90deg,
+        var(--verde-oscuro),
+        var(--verde-claro)
+    );
+    transition:width .4s ease;
+}
+
+
+/* VOTOS */
+
+.resultadoVotos{
+    min-width:52px;
+    text-align:right;
+}
+
+.resultadoVotos strong{
+    display:block;
+    font-size:20px;
+    line-height:1;
+    color:var(--verde-oscuro);
+}
+
+.resultadoVotos span{
+    display:block;
+    margin-top:3px;
+    font-size:9px;
+    color:var(--muted);
+}
+
+.resultadoVotos small{
+    display:block;
+    margin-top:3px;
+    font-size:9px;
+    color:var(--muted);
+}
+
+
+/* =========================================
+   VOTO EN BLANCO
+========================================= */
+
+.resultadoVotoBlanco{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-top:5px;
+    padding:17px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.resultadoVotoBlancoIcono{
+    width:48px;
+    height:48px;
+    min-width:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#f1f5f2;
+    color:var(--verde-oscuro);
+}
+
+.resultadoVotoBlancoIcono svg{
+    font-size:25px;
+}
+
+.resultadoVotoBlancoInformacion{
+    flex:1;
+}
+
+.resultadoVotoBlancoInformacion span{
+    display:block;
+    font-size:11px;
+    color:var(--muted);
+}
+
+.resultadoVotoBlancoInformacion h3{
+    margin:3px 0 0;
+    font-size:16px;
+    font-weight:800;
+    color:var(--negro);
+}
+
+.resultadoVotoBlancoVotos{
+    min-width:80px;
+    text-align:right;
+}
+
+.resultadoVotoBlancoVotos strong{
+    display:block;
+    font-size:21px;
+    color:var(--verde-oscuro);
+}
+
+.resultadoVotoBlancoVotos span{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+}
+
+.resultadoVotoBlancoVotos small{
+    display:block;
+    margin-top:2px;
+    font-size:10px;
+    color:var(--muted);
+}
+
+
+/* =========================================
+   ACCIONES
+========================================= */
+
+.accionesResultados{
+    display:flex;
+    justify-content:center;
+    margin-top:35px;
+    padding-top:25px;
+    border-top:1px solid var(--border);
+}
+
+
+
+.tabsAgencias{
+    min-height:52px !important;
+    margin-bottom:25px;
+    border-bottom:1px solid var(--border);
+}
+
+
+/* CONTENEDOR INTERNO DE LAS TABS */
+
+.tabsAgencias .MuiTabs-flexContainer{
+    gap:8px;
+}
+
+
+/* TAB */
+
+.tabsAgencias .MuiTab-root{
+    min-height:52px;
+    padding:13px 24px;
+    border-radius:10px 10px 0 0;
+
+    color:var(--muted);
+
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+
+    text-transform:none;
+
+    transition:.25s;
+}
+
+
+/* HOVER */
+
+.tabsAgencias .MuiTab-root:hover{
+    color:var(--verde-oscuro);
+    background:#f4f8f5;
+}
+
+
+/* TAB ACTIVA */
+
+.tabsAgencias .MuiTab-root.Mui-selected{
+    color:var(--verde-oscuro);
+    background:#f4f8f5;
+}
+
+
+/* INDICADOR */
+
+.tabsAgencias .MuiTabs-indicator{
+    height:3px;
+    border-radius:3px 3px 0 0;
+    background:var(--verde-oscuro);
+}
+
+
+/* CONTENIDO DEL TAB */
+
+.tabPanelResultados{
+    padding-top:5px;
+}
+
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width:768px){
+
+    .resultadosContainer{
+        padding:25px 15px 40px;
+    }
+
+    .resultadosEncabezado{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .tituloEleccion{
+        font-size:25px;
+    }
+
+    .estadoEleccion{
+        align-self:flex-start;
+    }
+
+    .encabezadoAgencia{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .informacionAgencia{
+        width:100%;
+    }
+
+    .resultadoCandidato{
+        min-height:95px;
+    }
+
+}
+
+
+@media (max-width:480px){
+
+    .resultadoCandidato{
+        padding:11px;
+        gap:9px;
+    }
+
+    .resultadoAvatar{
+        width:45px;
+        height:45px;
+        min-width:45px;
+    }
+
+    .resultadoInformacion h3{
+        font-size:13px;
+    }
+
+    .resultadoVotos{
+        min-width:45px;
+    }
+
+    .resultadoVotos strong{
+        font-size:18px;
+    }
+
+    .informacionAgencia{
+        flex-wrap:wrap;
+    }
+
+    .resultadoVotoBlanco{
+        padding:14px;
+    }
+
+}

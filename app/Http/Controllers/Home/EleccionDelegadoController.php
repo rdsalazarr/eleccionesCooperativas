@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Home;
 
 use Illuminate\Contracts\Encryption\DecryptException;
+use App\Services\VotacionDelegadoService;
 use App\Models\Eleccion\Delegado\Proceso;
 use App\Models\Eleccion\Delegado\Voto;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Throwable, DB, Log, URL;
+use App\Util\GenerarPdf;
+use App\Util\Empresa;
 use Carbon\Carbon;
 
 class EleccionDelegadoController extends Controller
@@ -83,7 +86,6 @@ class EleccionDelegadoController extends Controller
                 return response()->json(['success' => false, 'message' =>  'Los datos ingresados no corresponden a un asociado apto para realizar dicho proceso, por favor comunique con la oficina']);
             }
 		}catch(Throwable $e){
-            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message' => 'Error al obtener la información del asociado para las elecciones de delegado']);
 		}
@@ -149,10 +151,37 @@ class EleccionDelegadoController extends Controller
 			DB::commit();
             return response()->json(['success' => true, 'message' => 'Proceso realizado con éxito', 'aspirante' => $aspirante]);
         }catch(Throwable $e){
-            dd($e);
             DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro de la votación de delegados ']);
+		}
+	}
+
+	public function resultados(Request $request, VotacionDelegadoService $service)
+	{
+		try {
+
+			$data = $service->resultadosPublicosEleccionDelegados();
+
+			return response()->json(['success' => true, "data" => $data]);
+		}catch(Throwable $e){
+			dd($e);
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message' => 'Error al obtener la información de los resultado de la elección de delegados']);
+		}
+	}
+
+	public function imprimir(Request $request, VotacionDelegadoService $service)
+	{
+		try {
+		    $empresa = Empresa::informacion();
+            $data    = $service->resultadosEleccionDelegados();
+            $dataPdf = GenerarPdf::resultadosEleccionDelegados($data, $empresa);
+   
+			return response()->json(['success' => true, "data" => $dataPdf]);
+		} catch (Throwable $e){
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de los resultados ']);
 		}
 	}
 }

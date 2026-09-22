@@ -4,8 +4,11 @@ import {Box, Tab, Tabs} from '@mui/material';
 import Password from './password';
 import Perfil from './perfil';
 
-export default function MiPerfil(){  
-    const [value, setValue] = useState(0);
+export default function MiPerfil(){
+
+    const [variantTab, setVariantTab] = useState((window.innerWidth <= 768) ? 'scrollable' : 'fullWidth');
+    const [value, setValue] = useState(0); 
+
     const handleChangeTab = (event, newValue) => {
         setValue(newValue);
     };      
@@ -16,7 +19,7 @@ export default function MiPerfil(){
                 sx={{background: '#e2e2e2'}}
                 indicatorColor="secondary"
                 textColor="secondary"
-                variant="fullWidth">
+                variant={variantTab} >
                 <Tab label="Perfil del usuario" />
                 <Tab label="Actualizar mi contraseña" />
             </Tabs>
