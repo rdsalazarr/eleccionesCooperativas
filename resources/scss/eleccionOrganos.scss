@@ -1,0 +1,443 @@
+
+:root{
+    --verde-claro:#5ebd52;
+    --verde-oscuro:#058b4a;
+    --amarillo:#ffcb13;
+    --azul:#1a8fcb;
+    --negro:#302f2f;
+    --verde-50:#F0FAEF;
+    --verde-100:#E1F4DE;
+    --verde-200:#C5E9BF;
+    --bg:#F5F8F4;
+    --card:#FFFFFF;
+    --muted:#7A7A7A;
+    --border:#E4EBE2;
+    --text:var(--negro);
+    --shadow:0 10px 30px rgba(5,139,74,.08);
+    --shadow-lg:0 25px 60px rgba(5,139,74,.15);
+    --radius:16px;
+}
+
+.linea-horizontal {
+  border: none;
+  height: 2px;
+  background-color: #333;
+}
+
+.organo-counter{
+    background:var(--verde-50);color:var(--verde-oscuro);
+    padding:9px 16px;border-radius:999px;font-size:12.5px;font-weight:700;
+    border:1px solid var(--verde-100);white-space:nowrap;height:fit-content;
+    display:flex;align-items:center;gap:8px;
+}
+.organo-counter.warn{background:#FFF8DC;color:#8a6a00;border-color:#FFEBA1}
+.organo-counter .num{font-size:15px;font-weight:800}
+
+
+  .election-tag{
+    display:inline-flex;align-items:center;gap:7px;
+    background:#FFF8DC;color:#8a6a00;
+    font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:6px 12px;border-radius:999px;margin-bottom:18px;
+    border:1px solid #FFEBA1;
+  }
+  .election-tag .pulse{
+    width:7px;height:7px;border-radius:50%;background:var(--verde-oscuro);
+    box-shadow:0 0 0 4px rgba(5,139,74,.2);animation:pulse 1.8s ease infinite;
+  }
+
+  .period{font-size:13px;color:var(--muted);margin-bottom:22px}
+
+  /*@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(5,139,74,.2)}50%{box-shadow:0 0 0 8px rgba(5,139,74,0)}}*/
+
+
+    .voter-card{
+    display:none;background:linear-gradient(135deg,var(--verde-50),#FBFFF9);
+    border:1.5px solid var(--verde-200);border-radius:14px;padding:16px;margin-bottom:20px;
+  }
+  .voter-card.show{display:block}
+  .voter-card .vc-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--verde-oscuro);margin-bottom:10px}
+  .voter-card .vc-row{display:flex;align-items:center;gap:12px}
+  .voter-card .vc-avatar{
+    width:42px;height:42px;border-radius:12px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--verde-claro),var(--verde-oscuro));
+    color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;
+  }
+  .voter-card .vc-name{font-size:14.5px;font-weight:700;color:var(--negro);line-height:1.25}
+  .voter-card .vc-doc{font-size:12px;color:var(--muted);margin-top:2px;font-family:ui-monospace,monospace}
+
+
+
+
+.eleccionesOrganos {
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr);
+    gap: 28px;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   COLUMNA IZQUIERDA
+   ========================================================= */
+
+.columnaOrganos {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ESTADO DE LA ELECCIÓN
+   ========================================================= */
+
+.estadoEleccion {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 5px 12px;
+    margin-bottom: 18px;
+
+    background: #fff9e5;
+    border: 1px solid #f1df9b;
+    border-radius: 20px;
+
+    color: #866400;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+/*
+.estadoEleccion::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--verde-oscuro);
+
+    box-shadow: 0 0 0 4px rgba(5, 139, 74, .12);
+}*/
+
+.estadoEleccion .pulse{
+    width:7px;height:7px;border-radius:50%;background:var(--verde-oscuro);
+    box-shadow:0 0 0 4px rgba(5,139,74,.2);animation:pulse 1.8s ease infinite;
+  }
+
+
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(5,139,74,.2)}50%{box-shadow:0 0 0 8px rgba(5,139,74,0)}}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.tituloEleccion1 {
+    margin: 0;
+    color: var(--negro);
+    font-size: 21px;
+    line-height: 1.25;
+    font-weight: 750;
+    letter-spacing: -.02em;
+}
+
+.subtituloEleccion {
+    margin: 5px 0 20px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* =========================================================
+   DELEGADO VERIFICADO
+   ========================================================= */
+
+.delegadoVerificado {
+    padding: 16px;
+    background: #f8fcf8;
+    border: 1px solid #bde4bd;
+    border-radius: 14px;
+    box-sizing: border-box;
+}
+
+.delegadoEtiqueta {
+    margin-bottom: 10px;
+
+    color: var(--verde-oscuro);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.delegadoInformacion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Avatar */
+
+.delegadoAvatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+
+    background: linear-gradient(
+        135deg,
+        var(--verde-claro),
+        var(--verde-oscuro)
+    );
+
+    border-radius: 11px;
+
+    color: var(--blanco);
+    font-size: 14px;
+    font-weight: 750;
+}
+
+/* Datos */
+
+.delegadoDatos {
+    min-width: 0;
+}
+
+.delegadoNombre {
+    margin: 0 0 3px;
+
+    color: var(--negro);
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.delegadoDocumento {
+    margin: 0;
+
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* =========================================================
+   SEPARADOR
+   ========================================================= */
+
+.separadorOrganos {
+    width: 100%;
+    height: 1px;
+    margin: 20px 0;
+
+    background: #dfe7df;
+}
+
+/* =========================================================
+   TÍTULO ÓRGANOS
+   ========================================================= */
+
+.tituloOrganos {
+    margin: 0 0 12px;
+
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   LISTA DE ÓRGANOS
+   ========================================================= */
+
+.listaOrganos {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* =========================================================
+   ÓRGANO
+   ========================================================= */
+
+.organoItem {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    width: 100%;
+    min-height: 58px;
+
+    padding: 9px 12px;
+
+    box-sizing: border-box;
+
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+/* Órgano habilitado */
+
+.organoItem.habilitado {
+    cursor: pointer;
+}
+
+.organoItem.habilitado:hover {
+    background: #f5faf5;
+    border-color: #cce5cc;
+}
+
+/* Órgano seleccionado */
+
+.organoItem.activo {
+    background: #f4fbf4;
+    border-color: var(--verde-oscuro);
+}
+
+/* =========================================================
+   NUMERO DEL ÓRGANO
+   ========================================================= */
+
+.organoNumero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+
+    border-radius: 9px;
+
+    background: var(--verde-oscuro);
+    color: var(--blanco);
+
+    font-size: 13px;
+    font-weight: 750;
+}
+
+/* =========================================================
+   ÓRGANO BLOQUEADO
+   ========================================================= */
+
+.organoBloqueado .organoNumero {
+    background: #f1f1f1;
+    color: #c0c0c0;
+}
+
+/* =========================================================
+   INFORMACIÓN DEL ÓRGANO
+   ========================================================= */
+
+.organoContenido {
+    min-width: 0;
+}
+
+.organoNombre {
+    margin: 0;
+
+    color: var(--negro);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.organoEstado {
+    margin: 2px 0 0;
+
+    color: var(--verde-oscuro);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.organoBloqueado .organoNombre {
+    color: #999;
+}
+
+.organoBloqueado .organoEstado {
+    color: #b3b3b3;
+}
+
+/* =========================================================
+   ICONO DE BLOQUEO
+   ========================================================= */
+
+.organoBloqueo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+
+    background: #f5f5f5;
+    border-radius: 50%;
+
+    font-size: 13px;
+    color: #b4b4b4;
+}
+
+
+/* =========================================================
+   COLUMNA DERECHA
+   ========================================================= */
+
+.columnaVotacion {
+    min-width: 0;
+
+    background: var(--blanco);
+    border: 1px solid #e3e9e3;
+    border-radius: 16px;
+    padding: 24px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .eleccionesOrganos {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 16px;
+    }
+
+    .columnaOrganos {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .eleccionesOrganos {
+        padding: 12px;
+    }
+
+    .tituloEleccion {
+        font-size: 19px;
+    }
+
+    .columnaVotacion {
+        padding: 18px;
+    }
+}

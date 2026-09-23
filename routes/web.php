@@ -7,6 +7,7 @@ use App\Http\Controllers\Home\FrondController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Home\EleccionDelegadoController;
 use App\Http\Controllers\Security\MantenimientoController;
+use App\Http\Controllers\Home\EleccionOrganosControlController;
 
 use App\Http\Controllers\Admin\Configurar\RolController;
 use App\Http\Controllers\Admin\Configurar\ActaController;
@@ -39,15 +40,19 @@ use App\Http\Controllers\Admin\Eleccion\Organos\RegistrarAspiranteController as 
 
 Route::get('/', [FrondController::class, 'index']);
 Route::get('/admin', [FrondController::class, 'admin']);
+Route::get('/login', [FrondController::class, 'admin']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::match(array('GET', 'POST'),'/logout',[LoginController::class, 'logout'])->name('logout');
 
 Route::post('/consultar/asociados/activo', [EleccionDelegadoController::class, 'consultar']);
 Route::post('/registrar/elecccion/delegado', [EleccionDelegadoController::class, 'registrar']);
+Route::get('/generar/informe/resultado/delegado/pdf', [EleccionDelegadoController::class, 'imprimir']);
+Route::post('/obtener/resultado/eleccion/delegado', [EleccionDelegadoController::class, 'resultados']);
 Route::post('/consultar/informacion/elecciones/delegado', [EleccionDelegadoController::class, 'index']);
-Route::match(array('GET', 'POST'), '/generar/informe/resultado/delegado/pdf', [EleccionDelegadoController::class, 'imprimir']);
 
-Route::get('/obtener/resultado/eleccion/delegado', [EleccionDelegadoController::class, 'resultados']);
+
+Route::post('/consultar/delegados/activo', [EleccionOrganosControlController::class, 'consultar']);
+Route::post('/consultar/informacion/organos/eleccion', [EleccionOrganosControlController::class, 'index']);
 
 
 Route::middleware(['auth'])->group(function () {//'revalidate',

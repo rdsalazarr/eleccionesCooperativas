@@ -46,6 +46,7 @@ App\Http\Controllers\Home
 
 php artisan make:controller Home\FrondController
 php artisan make:controller Home\EleccionDelegadoController
+php artisan make:controller Home\EleccionOrganosControlController
 php artisan make:controller Admin\DashboardController
 php artisan make:controller Admin\Configurar\ActaController
 php artisan make:controller Admin\Gestionar\TipoOrganoController

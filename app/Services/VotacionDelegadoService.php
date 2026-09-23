@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Throwable, DB, Auth;
+use Throwable, DB, Auth, URL;
 
 class VotacionDelegadoService
 {
@@ -31,7 +31,7 @@ class VotacionDelegadoService
                     $agencias = $consulta->orderBy('a.agennombre')->get();
 
         foreach ($agencias as $agencia) {
-            $idActa    = ($agencia->agenid == 1) ? 4 : 5;
+            $idActa    = ($agencia->agenid == 1) ? 1 : 2;
             $acta      =  DB::table('acta')->where('actaid', $idActa)->first(); 
             $titulo    = 'No hay acta gestionada para esta agencia';
             $contenido = 'No hay contenido gestionado para el acta de esta agencia';
@@ -78,7 +78,7 @@ class VotacionDelegadoService
                 $agencias = $consulta->orderBy('a.agennombre')->get();
 
         foreach ($agencias as $agencia) {
-            $idActa    = ($agencia->agenid == 1) ? 6 : 7;
+            $idActa    = ($agencia->agenid == 1) ? 3 : 4;
             $acta      =  DB::table('acta')->where('actaid', $idActa)->first(); 
             $titulo    = 'No hay acta gestionada para esta agencia';
             $contenido = 'No hay contenido gestionado para el acta de esta agencia';
@@ -138,10 +138,17 @@ class VotacionDelegadoService
     }
 
     public function resultadosPublicosEleccionDelegados()
-    {
-        $anyo = date('Y');  
+    {      
+        $eleccionDelegado = DB::table('elecciondelegado')
+                                    ->select('eledelid', 'eledeltitulo', 'eledelperiodo')
+                                    ->where('eledelanio', date('Y'))->first();
+        if (!$eleccionDelegado) {
+            return null;
+        }
 
-        $eleccionId   = DB::table('elecciondelegado')->where('eledelanio', $anyo)->value('eledelid');
+        $eleccionId = $eleccionDelegado->eledelid;
+        $titulo     = $eleccionDelegado->eledeltitulo;
+        $periodo    = $eleccionDelegado->eledelperiodo;
 
         $estadisticas = DB::table('asociado as a')
                             ->select(
@@ -170,16 +177,18 @@ class VotacionDelegadoService
                         ->orderBy('a.agennombre')
                         ->get();
         foreach ($agencias as $agencia) {
-            $agencia->aspirantes       = $this->datosVotacionDelegados($agencia->agenid, $eleccionId);
+            $agencia->candidatos       = $this->datosVotacionDelegados($agencia->agenid, $eleccionId);
             $agencia->totalVotosBlanco = $this->datosVotosBlancos($agencia->agenid, $eleccionId);
         }
 
         return [
-                'totalVotosRegistrados' => $estadisticas->totalAsociadosHabiles + $estadisticas->totalVotosRealizados,
+                'totalVotosRealizados'  => $estadisticas->totalVotosRealizados - $estadisticas->totalVotosBlanco,
                 'totalAsociadosHabiles' => $estadisticas->totalAsociadosHabiles,
-                'totalVotosRealizados'  => $estadisticas->totalVotosRealizados,
+                'totalVotosRegistrados' => $estadisticas->totalVotosRealizados,
                 'totalVotosBlanco'      => $estadisticas->totalVotosBlanco,
                 'agencias'              => $agencias,
+                'periodo'               => $periodo,
+                'titulo'                => $titulo,
             ];
     }
     
@@ -189,6 +198,11 @@ class VotacionDelegadoService
                     ->select('edag.eldeagnumerodeleprincipal','edag.eldeagnumerodelesuplente',
                         DB::raw("CONCAT(LPAD(eda.eldeasnumero,  2, 0)) as eldeasnumero"),
                         DB::raw("CONCAT(ti.tipidesigla,' - ', eda.eldeasdocumento ) as tipoIdentificacion"),
+                        DB::raw("CASE 
+                                    WHEN eldeasimagen IS NOT NULL AND eldeasimagen <> ''
+                                    THEN CONCAT('" . URL::to('/') . "/archivos/images/aspirante/', eldeasimagen)
+                                    ELSE NULL
+                                END AS rutaFoto"),
                         DB::raw("CONCAT_WS(' ', eda.eldeasprimernombre, eda.eldeassegundonombre, eda.eldeasprimerapellido, eda.eldeassegundoapellido ) as nombreCompleto"),
                         DB::raw('(SELECT count(eldevoid) as voto 
                                     FROM elecciondelegadovoto 

@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef, Fragment } from 'react';
+import {useEffect, useState, useRef } from 'react';
 import {Grid, Box, TextField, MenuItem, Stepper, Step, StepLabel, Button, InputAdornment} from '@mui/material';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
@@ -184,7 +184,7 @@ export default function EleccionDelegados() {
     }
 
     return (
-        <Fragment> 
+        <Box className="containerElecciones"> 
 
             <h1 className="tituloEleccion">
                 {eleccionDelegado?.eledeltitulo}
@@ -218,7 +218,7 @@ export default function EleccionDelegados() {
 
             </Stepper>
 
-            <Box className='eleccionesDelegado'>
+            <Box className="eleccionesDelegado">
                 {
                     (activeStep === 0) ? 
                         <form onSubmit={handleSubmit(onSubmitConsulta)}>
@@ -226,7 +226,7 @@ export default function EleccionDelegados() {
                                 <Grid size={{ xs: 12}}>
                                     <span className="tituloCategoria">Elección de Delegados {anioActual}</span>
                                     <h1>Verifica tu identidad para votar</h1>
-                                    <p className="subtitle">
+                                    <p className="subTitulo">
                                         Ingresa tu número de documento y la fecha de expedición tal como aparecen en tu cédula. 
                                         Validaremos tus datos contra los asociados habilitados.
                                     </p>
@@ -352,7 +352,6 @@ export default function EleccionDelegados() {
                                                 Tu selección será registrada de forma segura y tu voto será secreto.
                                             </p>
                                         </Box>
-
                                     </Box>
                                 </Grid>
 
@@ -565,6 +564,6 @@ export default function EleccionDelegados() {
                 }
             </Box>
 
-     </Fragment>
+        </Box>
     );
 }

@@ -1,8 +1,10 @@
 
 import { useState, useEffect } from 'react';
 import {createRoot} from "react-dom/client";
+import FrmVotacion from './eleccion/delegados/frmVotacion';
 import Resultados from './eleccion/delegados/resultados';
 import { SnackbarSettings } from "../layout/snackBar";
+import FrmOrganos from './eleccion/organos/frm';
 import {Header, Footer} from '../layout/general';
 import { Box, Grid} from '@mui/material';
 import Loader from '../layout/loader';
@@ -21,11 +23,11 @@ export default function Home(){
             <Header />
             <SnackbarSettings>
 
-                <Grid container spacing={2} className="containerElecciones">
+                <Grid container spacing={2}>
                     <br></br>
                     <Grid size={{ xs: 12}} >
 
-                        <Resultados />
+                        <FrmOrganos />
                  
                     </Grid>
                 </Grid>

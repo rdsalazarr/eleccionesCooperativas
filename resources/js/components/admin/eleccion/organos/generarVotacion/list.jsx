@@ -112,7 +112,7 @@ export default function List(){
                                             <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                                                 <Button fullWidth className="btnElecciones btnActa"
                                                     startIcon={<DescriptionIcon />}
-                                                    onClick={() => abrirModal({oreltoid: res.oreltoid}, 2)}
+                                                    onClick={() => abrirModal({tiporgid: res.tiporgid}, 2)}
                                                     sx={{ py: 1.5 }} 
                                                     disabled={!res.habilitarCerrarVotacion}>
                                                     Acta de apertura
@@ -132,7 +132,7 @@ export default function List(){
                                             <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                                                 <Button fullWidth className="btnElecciones btnPdf"
                                                     startIcon={<FormatListBulletedIcon />}
-                                                    onClick={() => abrirModal({oreltoid: res.oreltoid}, 4)}
+                                                    onClick={() => abrirModal({tiporgid: res.tiporgid}, 4)}
                                                     sx={{ py: 1.5 }} 
                                                     disabled={!res.habilitarImpresionVotacion}>
                                                     Lista de resultados
@@ -142,7 +142,7 @@ export default function List(){
                                             <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                                                 <Button fullWidth className="btnElecciones btnActa"
                                                     startIcon={<LibraryBooksIcon />}
-                                                    onClick={() => abrirModal({oreltoid: res.oreltoid}, 5)}
+                                                    onClick={() => abrirModal({tiporgid: res.tiporgid}, 5)}
                                                     sx={{ py: 1.5 }} 
                                                     disabled={!res.habilitarImpresionVotacion}>
                                                     Acta de escrutinio

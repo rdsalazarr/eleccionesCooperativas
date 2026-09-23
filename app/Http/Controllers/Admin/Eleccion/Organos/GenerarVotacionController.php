@@ -55,7 +55,6 @@ class GenerarVotacionController extends Controller
 
 			return response()->json(['success' => true, 'data' => $data, 'titulo' => $titulo]);
 		}catch(Throwable $e){
-            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message' => 'Error al obtener la información de los organos de control activos']);
 		}
@@ -173,7 +172,7 @@ class GenerarVotacionController extends Controller
                                 ->orderByDesc('oej.oreljuesjurado')
                                 ->get();
 
-            $acta = DB::table('acta')->select('actatitulo','actacontenido')->where('actaid', 1)->first(); 
+            $acta = DB::table('acta')->select('actatitulo','actacontenido')->where('actaid', 5)->first(); 
 
             $tituloPdf      = str_replace('anio', date("Y"), $acta->actatitulo);
             $lugarEvento    = $tipoOrgano->orgelelugar;
@@ -317,7 +316,7 @@ class GenerarVotacionController extends Controller
                                 ->orderByDesc('oej.oreljuesjurado')
                                 ->get();
 
-            $acta = DB::table('acta')->where('actaid', 2)->first();
+            $acta = DB::table('acta')->where('actaid', 6)->first();
 
             $tipoEleccion          = mb_strtoupper($tipoOrgano->tiporgnombre,'UTF-8');
             $totalDelegadosHabiles = $tipoOrgano->totalDelegados;
@@ -424,7 +423,7 @@ class GenerarVotacionController extends Controller
                                 ->orderByDesc('oej.oreljuesjurado')
                                 ->get();
 
-            $acta = DB::table('acta')->select('actatitulo','actacontenido')->where('actaid', 3)->first(); 
+            $acta = DB::table('acta')->select('actatitulo','actacontenido')->where('actaid', 7)->first(); 
 
             $totalPrincipal = $tipoOrgano->tiporgtotalprincipales;
             $totalSuplente  = $tipoOrgano->tiporgtotalsuplente;
