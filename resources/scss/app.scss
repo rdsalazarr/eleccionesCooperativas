@@ -11,15 +11,17 @@ $colorFondo:      var(--colorFondo);
 $fondoLogin:      var(--fondoLogin);
 $rojoOscuro:      var(--rojoOscuro);
 $grisClaro:       var(--grisClaro);
-$azul-900:        var(--azul-900);
-$azul-800:        var(--azul-800);
-$azul-700:        var(--azul-700);
-$azul-600:        var(--azul-600);
-$azul-400:        var(--azul-400);
-$azul-200:        var(--azul-200);
-$azul-100:        var(--azul-100);
-$azul-50:         var(--azul-50);
 $transitionSmooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.contenedorApp {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.contenedorApp > footer {
+  margin-top: auto;
+}
 
 .container{
   width: 90%;

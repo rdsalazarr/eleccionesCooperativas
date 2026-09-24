@@ -1,4 +1,4 @@
-import {useState, Fragment} from 'react';
+import {useState, useEffect, Fragment} from 'react';
 import {Dropzone, ContentFile} from '../../../layout/dropzone';
 import { Button, Grid, Box, TextField } from '@mui/material';
 import {ShowSnackbar} from '../../../layout/snackBar';
@@ -71,6 +71,14 @@ export default function Frm({data, tipo}){
             setLoader(false);
         });
     };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoader(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     if(loader){
         return <LoaderModal />

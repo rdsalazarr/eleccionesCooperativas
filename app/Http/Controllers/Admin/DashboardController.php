@@ -15,7 +15,7 @@ class DashboardController extends Controller
     public function index()
 	{
 		return (auth()->user()->usuacambiarpassword) ? view('page.reset',['title' => 'Modificar credenciales de acceso al sistema']) :
-														view('page.dashboard',['title' => 'Dashboard del sistema de PQRSDF']);
+														view('page.dashboard',['title' => 'Dashboard del sistema de elecciones de COOPIGON']);
 	}
 
     public function reset()

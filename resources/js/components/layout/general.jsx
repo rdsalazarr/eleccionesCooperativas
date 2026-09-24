@@ -1,11 +1,8 @@
 
-import { useState, useEffect, Fragment } from 'react';
-import { Box, Grid, Card, CardContent, Stack, Avatar, IconButton, Badge, Typography, Menu, MenuItem, Divider, Button} from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/NotificationsActive';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useState, useEffect } from 'react';
+import { Box, Grid, Card, CardContent, IconButton} from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LockIcon from '@mui/icons-material/Lock';
-import MailIcon from '@mui/icons-material/Mail';
 import logo from "../../../images/logo.png";
 import "../../../scss/general.scss";
 import instance from './instance';
@@ -15,16 +12,17 @@ export function Header(){
         <Box className={'banner animate__animated animate__fadeInDown'}>
             <Box className='container'>
                 <Grid container spacing={2}>
-                    <Grid size={{ xs: 9, sm: 9, md: 10 }}>
-                        <Box className='contenidoBanner'>
-                            <h1>IMPLESOFT S.A.S</h1>
-                            <h5>Sistema de elecciones</h5>
-                        </Box>
-                    </Grid>
-                    <Grid size={{ xs: 3, sm: 3, md: 2 }}>
+                     <Grid size={{ xs: 3, sm: 3, md: 2 }}>
                         <a href="/">
                             <img src={logo} alt="Logo" className='logo'/> 
                         </a>
+                    </Grid>
+                    <Grid size={{ xs: 9, sm: 9, md: 10 }}>
+                        <Box className='contenidoBanner'>
+                            <h1>COOPERATIVA ESPECIALIZADA DE AHORRO Y CRÉDITO</h1>
+                            <h1>COOPIGON</h1>
+                            <h5>SISTEMA DE ELECCIONES </h5>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
@@ -39,27 +37,16 @@ export function Footer(){
         <footer className={'animate__animated animate__fadeInUp'}>
             <Box className='piePagina'>
                 <Box className='container'>
-                    <Grid container spacing={2}>
-                        <Grid size={{ xs: 12, sm: 6, md: 5 }} className='pieContainer'>
-                            <h4 className='pieSeccion'>Empresa</h4>
-                            <p>IMPLESOFT S.A.S - Norte De Santander</p>
-                            <p>Dirección:  Carrera 4 N 36 49 - Santa Clara</p>
-                            <p>Correo:  radasa10@hotmail.com</p>
-                            <p>Teléfono: 3204018506</p>
-                        </Grid>
-
-                        <Grid size={{ xs: 12, sm: 7, md: 7 }}>
-                            <h4 className='pieSeccion'>Información</h4>
-                            <p>Horarios de atención</p>
-                            <p>Lunes a Viernes De 8:00 a.m a 1:00 p.m y de 2:00 p.m a 5:00 p.m</p>
-                            <p>Código Postal: 205030</p>
-                        </Grid>
-
+                    <Grid container spacing={2}> 
                         <Grid size={{ xs: 12 }}>
+                            <p style={{textAlign:'center'}}>COOPERATIVA ESPECIALIZADA DE AHORRO Y CRÉDITO COOPIGON</p>
                             <Box className="pieBottom">
-                                <span>IMPLESOFT | Todos los derechos reservados | Copyright © 2019 - {anioActual}</span>
-                                <span className='implesoft'>Diseño y desarrollo <a href="http://implesoft.com/" target="_black" title="Implesoft.com">Implesoft.com</a> (Versión: 3.0) <a href="/admin"  title="admin"><LockIcon className='implesoft' /></a>
-                                    </span>
+                                <span>Todos los derechos reservados | Copyright © 2019 - {anioActual}</span>
+                                <span className='implesoft'>Diseño y desarrollo 
+                                    <a href="http://implesoft.com/" target="_black" title="Implesoft.com">Implesoft.com</a> 
+                                    (Versión: 3.0) 
+                                    <a href="/admin"  title="admin"><LockIcon className='implesoft' /></a>
+                                </span>
                             </Box>
                         </Grid>
                     </Grid>
@@ -84,11 +71,11 @@ export function HeaderAdmon(){
     return (
         <Box className={"headerAdmon"}>
             <Grid container spacing={2}>
-                <Grid size={{ xs: 1, sm:1, md: 1}} />
-                <Grid size={{ xs: 6, sm: 6, md: 8 }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
+                <Grid size={{ xs: 1, sm: 1, md: 1}} />
+                <Grid size={{ xs: 5, sm: 6, md: 7 }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
                     <h2>Administración del sistema de elecciones</h2>
                 </Grid>
-                <Grid size={{ xs: 5, sm: 5, md: 3 }}>
+                <Grid size={{ xs: 3, sm: 3, md: 2 }}>
                     <Box className='informacionPersonal'>
                         <Box className='iconosContainer'>
                             <IconButton size="large" className='exitButton'>
@@ -99,6 +86,11 @@ export function HeaderAdmon(){
                         </Box>
                         <Box className='titleUsuario'>{nameUser}</Box>
                     </Box>
+                </Grid>
+                <Grid size={{ xs: 3, sm: 2, md: 2 }}>
+                    <a href="/">
+                        <img src={logo} alt="Logo" className='logo'/> 
+                    </a>
                 </Grid>
             </Grid>
         </Box>
@@ -114,7 +106,7 @@ export function FooterAdmon() {
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 7}} className='borderRight'>
                     <Box className='tituloFooter'>
-                        <p>Sistema de Elecciones</p>
+                        <p>Sistema de Elecciones COOPIGON</p>
                     </Box>
                 </Grid>
                  <Grid size={{ xs: 12, sm: 5 }}>

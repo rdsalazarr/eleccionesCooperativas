@@ -15,23 +15,27 @@
     --colorBlanco: #ffffff;
     --colorfooter: #717471;
     --colorTitulos: #6a6969;
-    /*--colorPrincipal: #5AB7DE;
-    --colorTerciario: #2794C2;*/
-
+    --colorPrincipal: #019340;
+    --colorTerciario: #80c900;
+/*
     --colorPrincipal: #ec1c21;
-    --colorTerciario: #c33f3f;
+    --colorTerciario: #c33f3f;*/
 
     --colorFondoMenu:#F3F3F3;
     --colorTextoFooter: #666;
     --colorFondoCard: #fbfbfb;
     --colorFondoHome: #f1f1f1;
-     --colorSecundario: #ec1c21;
-    /*--colorSecundario: #2794C2;*/
+    /* --colorSecundario: #ec1c21;*/
+    --colorSecundario: #40ae20;
     --colorTextoAcceso: #004080;
     --colorFondoFooter: #e9ebed;
     --colorTituloAcceso: #003366;
     --colorTituloPiePagina: #003A78;
     --fuentePrincipal: "Lora", serif; 
+}
+
+html {
+    overflow-y: scroll;
 }
 
 body {
@@ -41,11 +45,11 @@ body {
     font-weight: 400;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
     line-height: 1.6;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 a{

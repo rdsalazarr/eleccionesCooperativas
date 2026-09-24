@@ -20,7 +20,7 @@ class EleccionDelegadoController extends Controller
 	{
 		try{
 			$tiposIdentificaciones = DB::table('tipoidentificacion')->select('tipideid','tipidenombre')->orderBy('tipidenombre')->get();
-            $eleccionDelegado      = DB::table('elecciondelegado')->select('eledeltitulo','eledelperiodo')->where('eledelanio', date('Y'))->first();	
+            $eleccionDelegado      = DB::table('elecciondelegado')->select('eledeltitulo','eledelperiodo')->where('eledelanio', date('Y'))->first();
 
 			return response()->json(['success' => true, "tiposIdentificaciones" => $tiposIdentificaciones, "eleccionDelegado" => $eleccionDelegado]);
 		}catch(Throwable $e){
@@ -165,7 +165,6 @@ class EleccionDelegadoController extends Controller
 
 			return response()->json(['success' => true, "data" => $data]);
 		}catch(Throwable $e){
-			dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message' => 'Error al obtener la información de los resultado de la elección de delegados']);
 		}

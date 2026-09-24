@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { Button, Grid, Box, TextField } from '@mui/material';
 import {ShowSnackbar} from '../../../../layout/snackBar';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -36,6 +36,14 @@ export default function Frm({data}){
             setLoader(false);
         })
     }
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoader(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     if(loader){
         return <LoaderModal />

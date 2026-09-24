@@ -13,13 +13,14 @@
     --border:#E4EBE2;
     --text:var(--negro);
     --shadow:0 10px 30px rgba(5,139,74,.08);
+    --shadow-lg:0 25px 60px rgba(5,139,74,.15);
     --radius:16px;
 }
 
 body{
     background:radial-gradient(1200px 600px at 10% -10%, #E1F4DE 0%, transparent 60%),
-               radial-gradient(1000px 500px at 110% 10%, #FFF8DC 0%, transparent 55%),
-               var(--bg);
+            radial-gradient(1000px 500px at 110% 10%, #FFF8DC 0%, transparent 55%),
+            var(--bg);
     color:var(--text);
     padding:24px 16px 60px;
 }
@@ -177,6 +178,14 @@ h1{
     line-height:1.15;
 }
 
+.subTituloCategoria{
+    color:var(--muted);
+    font-size:15.5px;
+    line-height:1.6;
+    margin-bottom:32px;
+    max-width:600px;
+}
+
 .tituloEleccion {
     margin: 0 0  30px;
     text-align: center;
@@ -210,9 +219,9 @@ h1{
     font-size: 15px;
     font-weight: 500;
     color: var(--text);
-    transition: border-color .25s ease,
-                background-color .25s ease,
-                box-shadow .25s ease;
+    transition:border-color .25s ease,
+               background-color .25s ease,
+               box-shadow .25s ease;
 }
 
 .campoEleccion .MuiOutlinedInput-notchedOutline {
@@ -245,9 +254,7 @@ h1{
     font-size: 14px;
     font-weight: 500;
     color: var(--muted);
-    transition:
-        color .2s ease,
-        font-size .2s ease;
+    transition: color .2s ease, font-size .2s ease;
 }
 
 .campoEleccion .MuiInputLabel-root.Mui-focused {
@@ -559,7 +566,7 @@ h1{
 }
 
 .candidato.selected .avatar {
-    background: linear-gradient(135deg, var(--verde-oscuro),#036b39);
+    background: linear-gradient(135deg, var(--verde-oscuro), #036b39);
     color: #fff;
 }
 
@@ -606,7 +613,7 @@ h1{
 .candidato.blanco.selected {
     border-style: dashed;
     border-color: var(--verde-oscuro);
-    background: linear-gradient(135deg, var(--verde-50), #fff);
+    background: linear-gradient(135deg, var(--verde-50), #fff );
 }
 
 .candidato.blanco .avatar {
@@ -625,6 +632,12 @@ h1{
     margin: 0;
     font-size: 13px;
     color: #d32f2f;
+}
+
+.acciones-votacion {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
 }
 
 .confirmacionVoto {
@@ -668,7 +681,7 @@ h1{
     text-align: left;
     border: 2px solid var(--verde-oscuro);
     border-radius: 18px;
-    background:linear-gradient(135deg, var(--verde-50), #fff);
+    background:linear-gradient(135deg, var(--verde-50), #fff );
     box-shadow: 0 12px 28px rgba(5, 139, 74, .12);
     animation: confirmacionEntrada .45s ease both;
 }
@@ -818,12 +831,14 @@ h1{
             translateY(8px)
             scale(.9);
     }
+
     70% {
         opacity: 1;
         transform:
             translateY(-1px)
             scale(1.03);
     }
+
     100% {
         opacity: 1;
 
@@ -854,6 +869,7 @@ h1{
     }
 }
 
+
 @keyframes confirmacionEntrada {
     from {
         opacity: 0;
@@ -861,6 +877,7 @@ h1{
             translateY(12px)
             scale(.98);
     }
+
     to {
         opacity: 1;
         transform:
@@ -912,18 +929,22 @@ h1{
     .informacionCandidato h3 {
         font-size: 14px;
     }
+
     .tituloEleccion {
         margin-bottom: 24px;
         font-size: 23px;
     }
+
     .tituloEleccion span {
         display: block;
         margin-top: 4px;
         margin-left: 0;
     }
+
     .containerElecciones{
         width: 98%;
     }
+
     .confirmacionVoto h2 {
         font-size: 22px;
     }
@@ -936,9 +957,11 @@ h1{
         width: 75px;
         height: 75px;
     }
+
     .votoSeleccionadoInfo h3 {
         font-size: 17px;
     }
+
     .votoSeleccionadoCheck {
         position: absolute;
         top: 10px;

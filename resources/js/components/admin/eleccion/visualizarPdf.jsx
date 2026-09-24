@@ -5,7 +5,6 @@ import {LoaderModal} from "../../layout/loader";
 import { Grid } from '@mui/material';
 
 export default function VisualizarPdf({id, ruta}){
-    console.log(id);
 
     const [loader, setLoader] = useState(false); 
     const [pdf, setPdf] = useState(null);

@@ -118,7 +118,6 @@ class CargarAsociadoController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Proceso realizado con éxito']);
         } catch (Throwable $e) {
-            dd($e);
             Log::error('Error al procesar asociados temporales', [
                 'message' => $e->getMessage(),
                 'file'    => $e->getFile(),

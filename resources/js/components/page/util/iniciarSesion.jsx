@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid, Card, CardContent, Button, TextField } from "@mui/material";
 import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -19,10 +19,10 @@ const schema = yup.object({
         password: yup.string().required("Campo obligatorio").min(6, "Debe tener mínimo 6 caracteres"),
     });
 
-export default function IniciarSesion() {
+export default function IniciarSesion({cargador = true}) {
 
     const [showPassword, setShowPassword] = useState(false);
-    const [loader, setLoader] = useState(false);
+    const [loader, setLoader] = useState(cargador);
 
     const { register, handleSubmit,setValue, watch, formState: { errors } }
           = useForm({ resolver: yupResolver(schema), defaultValues: { usuario: "rsalazar",  password: "123456" }
@@ -59,6 +59,14 @@ export default function IniciarSesion() {
             setLoader(false);
         }
     };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoader(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     if (loader) return <Loader />;
 

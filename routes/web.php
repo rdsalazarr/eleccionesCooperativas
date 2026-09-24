@@ -43,6 +43,7 @@ Route::get('/admin', [FrondController::class, 'admin']);
 Route::get('/login', [FrondController::class, 'admin']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::match(array('GET', 'POST'),'/logout',[LoginController::class, 'logout'])->name('logout');
+Route::get('/consultar/informacion/general/elecciones',[FrondController::class, 'informacion']);
 
 Route::post('/consultar/asociados/activo', [EleccionDelegadoController::class, 'consultar']);
 Route::post('/registrar/elecccion/delegado', [EleccionDelegadoController::class, 'registrar']);
@@ -50,10 +51,9 @@ Route::get('/generar/informe/resultado/delegado/pdf', [EleccionDelegadoControlle
 Route::post('/obtener/resultado/eleccion/delegado', [EleccionDelegadoController::class, 'resultados']);
 Route::post('/consultar/informacion/elecciones/delegado', [EleccionDelegadoController::class, 'index']);
 
-
 Route::post('/consultar/delegados/activo', [EleccionOrganosControlController::class, 'consultar']);
+Route::post('/registrar/organos/eleccion', [EleccionOrganosControlController::class, 'registrar']);
 Route::post('/consultar/informacion/organos/eleccion', [EleccionOrganosControlController::class, 'index']);
-
 
 Route::middleware(['auth'])->group(function () {//'revalidate',
     Route::get('dashboard', [DashboardController::class, 'index']);

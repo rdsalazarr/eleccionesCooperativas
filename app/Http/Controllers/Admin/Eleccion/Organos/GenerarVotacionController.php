@@ -123,7 +123,6 @@ class GenerarVotacionController extends Controller
             DB::commit();
           	return response()->json(['success' => true, 'message' => 'Proceso realizado con éxito']);
 		} catch (Throwable $e){
-            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al abrir las elecciones del tipo de órgano ']);
 		}
