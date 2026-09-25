@@ -58,7 +58,7 @@ export default function List(){
                             {tipo: 'B', icono : 'add',            color: 'green',  funcion : (data)=>{edit(data, 0)} },
                             {tipo: 'B', icono : 'picture_as_pdf', color: 'orange', funcion : (data)=>{edit(data, 1)} },
                         ]}
-                        funciones={{orderBy: true,search: true, pagination: true}}
+                        funciones={{orderBy: false, search: false, pagination: false}}
                     />
                 </Box>
 

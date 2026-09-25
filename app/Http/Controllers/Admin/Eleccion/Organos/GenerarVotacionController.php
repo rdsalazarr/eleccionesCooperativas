@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Admin\Eleccion\Organos;
 use App\Models\Gestionar\OrganoEleccionTipoOrgano;
 use App\Models\Eleccion\Organos\Participante;
 use App\Services\VotacionDelegadoService;
+use App\Models\Gestionar\TipoOrgano;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Util\GenerarPdf;
-use App\Util\General;
 use Throwable, DB, Log;
+use App\Util\General;
 use App\Util\Empresa;
 use Carbon\Carbon;
 
@@ -20,7 +21,7 @@ class GenerarVotacionController extends Controller
         try{
 
             $anioActual = date('Y');
-    	    $titulo 	= 'No existen elecciones disponibles'; 
+    	    $titulo 	= 'No existen elecciones disponibles';
             $organoEleccion = DB::table('organoeleccion')->select('orgeletitulo')->where('orgeleanio', $anioActual)->where('orgeleactivo', true)->first();
             if($organoEleccion){
                 $titulo = 'Generar elecciones para '.$organoEleccion->orgeletitulo;
@@ -69,18 +70,19 @@ class GenerarVotacionController extends Controller
             $empresa        = Empresa::informacion();
             $tipoOrgano     = DB::table('tipoorgano')->select('tiporgnombre')->where('tiporgid', $request->codigo)->first();
             $nombreTpOrgano = $tipoOrgano->tiporgnombre;
-            $titulo         = mb_strtoupper('LISTA DE ASPIRANTE INSCRITOS PARA EL '.$tipoOrgano->tiporgnombre.' '.date('Y') ,'UTF-8');
+            $articulo       = ($request->codigo === 2) ? 'LA ' : 'EL ';
+            $titulo         = mb_strtoupper('LISTA DE ASPIRANTE INSCRITOS PARA '.$articulo.$tipoOrgano->tiporgnombre.' '.date('Y') ,'UTF-8');
 
             $participantes = DB::table('organoeleccionparticipante as oep')
-                                ->select('oep.orelpaid','oep.deleid','oep.orelpaordenparticipacion', 'd.deledocumento',
-                                        DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre, d.deleprimerapellido, d.delesegundoapellido) as nombreCompleto"))
-                                ->join('delegado as d', 'd.deleid', '=', 'oep.deleid')
-                                ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oep.orgeleid')
-                                ->whereNot('oep.orelpaordenparticipacion', '100')
-                                ->where('oep.tiporgid', $request->codigo)
-                                ->where('oe.orgeleactivo', true)
-                                ->orderBy('oep.orelpaordenparticipacion')
-                                ->get();
+                                    ->select('oep.orelpaid','oep.deleid','oep.orelpaordenparticipacion', 'd.deledocumento',
+                                            DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre, d.deleprimerapellido, d.delesegundoapellido) as nombreCompleto"))
+                                    ->join('delegado as d', 'd.deleid', '=', 'oep.deleid')
+                                    ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oep.orgeleid')
+                                    ->whereNot('oep.orelpaordenparticipacion', '100')
+                                    ->where('oep.tiporgid', $request->codigo)
+                                    ->where('oe.orgeleactivo', true)
+                                    ->orderBy('oep.orelpaordenparticipacion')
+                                    ->get();
 
             $data = [
                 'nombreTpOrgano' => $nombreTpOrgano,
@@ -136,6 +138,9 @@ class GenerarVotacionController extends Controller
             $organoEleccionTipoOrgano->oreltofechahoracierre = Carbon::now();
             $organoEleccionTipoOrgano->save();
 
+            //Inactivo el tipo de organo que estaba activo
+            TipoOrgano::where('tiporgactivo', true)->update(['tiporgactivo' => 0]);
+
             DB::commit();
           	return response()->json(['success' => true, 'message' => 'Proceso realizado con éxito']);
 		} catch (Throwable $e){
@@ -153,11 +158,11 @@ class GenerarVotacionController extends Controller
             $siglaEmpresa = $empresa->emprsigla;
 
             $tipoOrgano = DB::table('tipoorgano as to')
-                            ->select('oe.orgeleid','oe.orgelelugar', 'oe.orgeletitulo','to.tiporgnombre','oeto.oreltofechahorainicio')
-                            ->join('organoelecciontipoorgano as oeto', 'oeto.tiporgid', '=', 'to.tiporgid') 
-                            ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oeto.orgeleid')  
-                            ->where('oeto.oreltoid', $request->codigo)
-                            ->first();
+                                ->select('oe.orgeleid','oe.orgelelugar', 'oe.orgeletitulo','to.tiporgnombre','oeto.oreltofechahorainicio')
+                                ->join('organoelecciontipoorgano as oeto', 'oeto.tiporgid', '=', 'to.tiporgid')
+                                ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oeto.orgeleid')
+                                ->where('oeto.oreltoid', $request->codigo)
+                                ->first();
 
             $jurados = DB::table('organoeleccionjurado as oej')
                                 ->select('d.deledocumento as documento','oej.oreljuesjurado',
@@ -169,14 +174,15 @@ class GenerarVotacionController extends Controller
                                 ->orderByDesc('oej.oreljuesjurado')
                                 ->get();
 
-            $acta = DB::table('acta')->select('actatitulo','actacontenido')->where('actaid', 5)->first(); 
+            $acta           = DB::table('acta')->select('actatitulo','actacontenido')->where('actaid', 5)->first();
 
-            $tituloPdf      = str_replace('anio', date("Y"), $acta->actatitulo);
-            $lugarEvento    = $tipoOrgano->orgelelugar;
-            $tipoEleccion   = $tipoOrgano->tiporgnombre;
-            $tituloEleccion = $tipoOrgano->orgeletitulo;
-            $horaInicio     = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio);
-            $fechanicio     = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio, false);
+            $tituloPdf       = str_replace('anio', date("Y"), $acta->actatitulo);
+            $lugarEvento     = $tipoOrgano->orgelelugar;
+            $tipoEleccion    = $tipoOrgano->tiporgnombre;
+            $tituloEleccion  = $tipoOrgano->orgeletitulo;
+            $fechaHoraInicio = $tipoOrgano->oreltofechahorainicio;
+            $horaInicio      = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio);
+            $fechaInicio     = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio, false);
 
             //Obtengo los jurados y testigos
             $nombreJurados  = '';
@@ -197,7 +203,7 @@ class GenerarVotacionController extends Controller
 
             $data = [
                     'tipoEleccion' => mb_strtoupper($tipoEleccion,'UTF-8'),
-                    'fechanicio'   => $fechanicio,
+                    'fechaInicio'  => $fechaInicio,
                     'contenido'    => $contenido,
                     'tituloPdf'    => $tituloPdf,
                     'jurados'      => $jurados
@@ -207,6 +213,7 @@ class GenerarVotacionController extends Controller
 
 			return response()->json(['success' => true, "data" => $dataPdf]);
 		} catch (Throwable $e){
+            dd($e);
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de acta de apertura ']);
 		}
@@ -338,7 +345,7 @@ class GenerarVotacionController extends Controller
             $tituloPdf      = str_replace('ó', 'o', $tituloPdf);
 
             //Obtengo los jurados y testigos
-            $nombreJurados = '';
+            $nombreJurados  = '';
             $nombreTestigos = '';
             foreach ($jurados as $jurado) { 
                 if($jurado->oreljuesjurado){

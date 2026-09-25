@@ -32,8 +32,6 @@ const schema = yup.object({
 
 export default function Frm({data, tipo}){
 
-    console.log(data);
-
     const { register, handleSubmit, getValues, setError, clearErrors, reset, control, setValue, formState: { errors } } = useForm({
                 resolver: yupResolver(schema),
                 defaultValues: tipo !== 'I'

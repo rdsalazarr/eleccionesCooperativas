@@ -58,6 +58,12 @@ table tbody {
     background-color: rgba(0, 0, 0, 0.075);
     transition: all 0.3s, left 0.3s;   
   }
+  .registroNoEncontrado{
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 700;
+    color:#8b8b8b ;
+  }
 }
 
 .tableAdicional {

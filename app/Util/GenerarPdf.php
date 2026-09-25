@@ -26,26 +26,11 @@ class GenerarPdf extends TCPDF
 
     public function Header()
     {
-        $parametros    = $this->parametrosHeader;
-		$nitEmpresa    = $parametros['nitEmpresa']    ?? '';
-        $nombreEmpresa = $parametros['nombreEmpresa'] ?? '';
-        $lemaEmpresa   = $parametros['lemaEmpresa']   ?? '';
-        $logoEmpresa   = $parametros['logoEmpresa']   ?? '';
-
-        $this->Image($logoEmpresa,30,4,25,22);
-        $this->SetY(6);
-        $this->SetX(40);
-        $this->SetFont('helvetica','B',14);
-        $this->Cell(140,5,$nombreEmpresa,0,0,'C');
-        $this->Ln(6); 
-        $this->SetX(40);
-        $this->SetFont('helvetica','',12);
-        $this->Cell(140,5,$lemaEmpresa,0,0,'C');
-        $this->Ln(6);
-        $this->SetX(40);
-        $this->Cell(140,5,$nitEmpresa,0,0,'C'); 
-        $this->Line(30, 28, 190, 28);//colocamos las lineas
-        $this->SetY(26);
+        $this->Image('images/headerDocumento.png', 30, 0, 186, 30);
+        $this->Image('images/logo.png', 20, 2, 25, 22);
+        $this->Image('images/logoFondo.png', 60, 80, 100, 130);
+        
+        $this->SetY(22);
         $this->SetX(178);
         $this->SetFont('helvetica','I',8);
         $this->SetTextColor(128);
@@ -54,24 +39,7 @@ class GenerarPdf extends TCPDF
 
 	public function Footer()
     {
-        $parametros       = $this->parametrosFooter;
-		$urlEmpresa       = $parametros['urlEmpresa']       ?? '';
-        $correoEmpresa    = $parametros['correoEmpresa']    ?? '';
-        $telefonosEmpresa = $parametros['telefonosEmpresa'] ?? '';
-        $direccionEmpresa = $parametros['direccionEmpresa'] ?? '';
-
-        $this->SetY(254);
-        $this->SetX(15);
-        $this->SetFont('helvetica','',10);
-        $this->SetTextColor(128);
-        $this->Line(30, 254, 190, 254);//colocamos la linea
-        $this->Cell(192,4,$direccionEmpresa,0,0,'C');
-        $this->Ln(4); 
-        $this->Cell(192,4,$correoEmpresa,0,0,'C');
-        $this->Ln(4); 
-        $this->Cell(192,4,$telefonosEmpresa,0,0,'C');
-        $this->Ln(4); 
-        $this->Cell(192,4,$urlEmpresa,0,0,'C');
+        $this->Image('images/piePagina.png', 20, 246, 180, 22);
     }
 
     public static function inscripcionDelegado($data, $empresa, $metodo = 'I')
@@ -162,7 +130,7 @@ class GenerarPdf extends TCPDF
         $tcpdf->setParametrosFooter($parametrosFijos); 
         $tcpdf->SetPrintHeader(true);
         $tcpdf->SetPrintFooter(true);
-        $tcpdf->SetMargins(20, 40, 20);
+        $tcpdf->SetMargins(20, 36, 20);
         $tcpdf->SetAutoPageBreak(true, 35);
 
         $tcpdf->SetAuthor($nombreEmpresa.' '.$siglaEmpresa);
@@ -711,11 +679,11 @@ class GenerarPdf extends TCPDF
 
     public static function actaApertura($data, $empresa, $metodo = 'I')
     {
-        $titulo     = $data['tipoEleccion'];
-        $fechanicio = $data['fechanicio'];
-        $contenido  = $data['contenido'];
-        $tituloPdf  = $data['tituloPdf'];
-        $jurados    = $data['jurados'];
+        $titulo      = $data['tipoEleccion'];
+        $fechaInicio = $data['fechaInicio'];
+        $contenido   = $data['contenido'];
+        $tituloPdf   = $data['tituloPdf'];
+        $jurados     = $data['jurados'];
 
         $nombreEmpresa   = $empresa->emprnombre;
         $siglaEmpresa    = $empresa->emprsigla;
@@ -751,7 +719,7 @@ class GenerarPdf extends TCPDF
         $tcpdf->Ln(4);
         $tcpdf->Cell(170,5,'ACTA APERTURA ELECCIONES',0,0,'C');
         $tcpdf->Ln(6); 
-        $tcpdf->Cell(170,5,'Fecha '.$fechanicio, 0,0,'C');
+        $tcpdf->Cell(170,5,'Fecha '.$fechaInicio, 0,0,'C');
         $tcpdf->Ln(16); 
         $tcpdf->SetFont('helvetica','',12);
         $tcpdf->MultiCell(0,4,$contenido."\n",0,'J',0);

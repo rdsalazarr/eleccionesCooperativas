@@ -48,15 +48,19 @@ class General
 	}
 
 	public static function formatearFecha($fecha){
+		if (empty($fecha)) return;
+
 		$separarFecha = explode('-',$fecha);
 		$anyo         = $separarFecha[0];
 		$mes          = $separarFecha[1];
 		$dia          = $separarFecha[2];
 		$mesEnLetra   = self::obtenerMes($mes);
-		return $dia." de ".$mesEnLetra." de ".$anyo; 
+		return $dia." de ".$mesEnLetra." de ".$anyo;
 	}
 
 	public static function formatearFechaHora($fecha, $mostrarHora = true){ //2015-08-09 09:45:08
+		if (empty($fecha)) return;
+
 		$separarfech = explode('-',$fecha);
 		$anyo        = $separarfech[0];
 		$mes         = $separarfech[1];

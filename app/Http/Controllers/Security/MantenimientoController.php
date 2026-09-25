@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Util\FileManager;
 use App\Util\GenerarPdf;
-use App\Util\General;
 use App\Util\Notificar;
+use App\Util\General;
 use App\Util\Empresa;
 use Carbon\Carbon;
 
@@ -22,15 +22,15 @@ class MantenimientoController extends Controller
         Artisan::call('route:clear');
         Artisan::call('view:cache'); 
         Artisan::call('config:cache');
-       // Artisan::call('route:cache');
+        //Artisan::call('route:cache');
         //Artisan::call('event:cache');
-       // Artisan::call('optimize');    
+        //Artisan::call('optimize');
         return "Datos eliminados";
     } 
 
     public function down()
     {
-        Artisan::call('down --secret="DEMOSIGEDAC2026"');
+        Artisan::call('down --secret="ELECCIONESCOOPERATIVA2026"');
         return response()->view('errors.503',['title' =>'Creando modo mantenimiento']);
     }
 
@@ -45,32 +45,20 @@ class MantenimientoController extends Controller
         $email             = 'rdsalazarr@ufpso.edu.co';
         $nombreUsuario     = 'RAMON DAVID SALAZAR RINCON';
         $siglaEmpresa      = 'IMPLESOFT';
-        $nombreEmpresa     = "IMPLESOFT S.A.S.";  
-        $usuarioSistema    = "RSALAZR";
+        $nombreEmpresa     = "IMPLESOFT S.A.S.";
+        $nickUsuario       = "RSALAZR";
         $contrasenaSistema = '123456789'; 
         $urlSistema        =  URL::to('/');
         $emailEmpresa      = '';
-        $nombreGerente     = 'PEDRO HERNANDEZ'; 
-        /*$informacioncorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificarRegistroUsuario')->first();
-        $buscar            = Array('nombreUsuario','siglaEmpresa','nombreEmpresa','usuarioSistema', 'contrasenaSistema','urlSistema','nombreGerente');
-        $remplazo          = Array($nombreUsuario, $siglaEmpresa, $nombreEmpresa, $usuarioSistema, $contrasenaSistema, $urlSistema, $nombreGerente);*/
-
-        $numeroDocumental = 'DOC-2024-0001';
-        $nombreJefe       = 'JUAN PEREZ';
-        $tipoclasificaciondocumental   = 'CONTRATO DE PRESTACION DE SERVICIOS';
-        $fechaDocumento   = '2024-06-15'; 
-
-        $informacioncorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificacionEnvioVerificacionDocumento')->first();
-        $buscar            = Array('numeroDocumental','nombreJefe',' tipoclasificaciondocumental','fechaDocumento', 'nombreUsuario','nombreEmpresa','nombreDependencia','tokenAcceso');
-        $remplazo          = Array($numeroDocumental, $nombreJefe, $tipoclasificaciondocumental, $fechaDocumento, $nombreGerente, $nombreEmpresa, 'desarrollo','abc4875');
-
-
-        $asunto          = str_replace($buscar,$remplazo,$informacioncorreo->innocoasunto);
-        $msg             = str_replace($buscar,$remplazo,$informacioncorreo->innococontenido); 
-        $enviarcopia     = $informacioncorreo->innocoenviarcopia;
-        $enviarpiepagina = $informacioncorreo->innocoenviarpiepagina;
-        $enviarcopia     = 0;
-        $enviarpiepagina = 1;
+        $informacioncorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificarRegistroUsuario')->first();
+        $buscar            = Array('nombreEmpresa','nombreUsuario','nickUsuario', 'contrasenaUsuario','urlSistema');
+       	$remplazo          = Array($nombreEmpresa, $nombreUsuario, $nickUsuario, $contrasenaSistema, $urlSistema);
+        $asunto            = str_replace($buscar,$remplazo,$informacioncorreo->innocoasunto);
+        $msg               = str_replace($buscar,$remplazo,$informacioncorreo->innococontenido); 
+        $enviarcopia       = $informacioncorreo->innocoenviarcopia;
+        $enviarpiepagina   = $informacioncorreo->innocoenviarpiepagina;
+        $enviarcopia       = 0;
+        $enviarpiepagina   = 1;
 
         $mensajeCorreo = ', '.Notificar::correo([$email], $asunto, $msg, [], $emailEmpresa, $enviarcopia, $enviarpiepagina, 'IMPLESOFT S.A.S.');
 

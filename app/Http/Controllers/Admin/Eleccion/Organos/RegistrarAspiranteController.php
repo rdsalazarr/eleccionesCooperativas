@@ -116,7 +116,8 @@ class RegistrarAspiranteController extends Controller
             $empresa        = Empresa::informacion();
             $tipoOrgano     = DB::table('tipoorgano')->select('tiporgnombre')->where('tiporgid', $request->codigo)->first();
             $nombreTpOrgano = $tipoOrgano->tiporgnombre;
-            $titulo         = mb_strtoupper('LISTA DE ASPIRANTE INSCRITOS PARA EL '.$tipoOrgano->tiporgnombre.' '.date('Y') ,'UTF-8');
+            $articulo       = ($request->codigo === 2) ? 'LA ' : 'EL ';
+            $titulo         = mb_strtoupper('LISTA DE ASPIRANTE INSCRITOS PARA '.$articulo.$tipoOrgano->tiporgnombre.' '.date('Y') ,'UTF-8');
 
             $participantes = DB::table('organoeleccionparticipante as oep')
                                 ->select('oep.orelpaid','oep.deleid','oep.orelpaordenparticipacion', 'd.deledocumento',
@@ -138,7 +139,7 @@ class RegistrarAspiranteController extends Controller
 			return response()->json(['success' => true, "data" => $dataPdf]);
 		} catch (Throwable $e){
 			Log::error($e->getMessage());
-			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF ']);
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de la lista de inscipción de aspirantes ']);
 		}
     }
 }

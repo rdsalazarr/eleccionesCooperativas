@@ -260,8 +260,9 @@ class RegistrarAspiranteController extends Controller
 
 			return response()->json(['success' => true, "data" => $dataPdf]);
 		} catch (Throwable $e){
+            dd($e);
 			Log::error($e->getMessage());
-			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF ']);
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de la lista de inscipción de delegados  ']);
 		}
     }
 

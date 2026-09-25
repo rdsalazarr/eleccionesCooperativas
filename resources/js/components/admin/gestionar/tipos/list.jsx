@@ -70,7 +70,7 @@ export default function List(){
                     <Table className={'tableGeneral'}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Nombre</TableCell>
+                                <TableCell>Nombre</TableCell> 
                                 <TableCell>Votos por persona</TableCell>
                                 <TableCell>Total principales</TableCell>
                                 <TableCell>Total suplente</TableCell>
@@ -80,7 +80,8 @@ export default function List(){
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        { data.map((res, a) => {
+                        { data.length > 0 ?
+                            data.map((res, a) => {
                             return(
                                 <TableRow key={'rowD-' +a} >
                                     <TableCell>
@@ -118,6 +119,11 @@ export default function List(){
                                 </TableRow>
                                 );
                             })
+                        : <TableRow>
+                                <TableCell colSpan={7} className='registroNoEncontrado'>
+                                    <b>No existen registros para mostrar</b>
+                                </TableCell> 
+                            </TableRow>
                         }
                         </TableBody>
                     </Table>
