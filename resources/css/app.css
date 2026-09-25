@@ -15,23 +15,30 @@
     --colorBlanco: #ffffff;
     --colorfooter: #717471;
     --colorTitulos: #6a6969;
+    /*
     --colorPrincipal: #019340;
     --colorTerciario: #80c900;
-/*
+    --colorBannerDos: #FFF8DC;
+    --colorBannerUno: #E1F4DE;
+    --colorBannerTres: #F5F8F4;
+    */
+    --colorBannerDos: #ec1c21;
+    --colorBannerUno: #ec1c21;
     --colorPrincipal: #ec1c21;
-    --colorTerciario: #c33f3f;*/
+    --colorTerciario: #c33f3f;
+    --colorBannerTres: #c33f3f;
 
     --colorFondoMenu:#F3F3F3;
     --colorTextoFooter: #666;
     --colorFondoCard: #fbfbfb;
     --colorFondoHome: #f1f1f1;
-    /* --colorSecundario: #ec1c21;*/
-    --colorSecundario: #40ae20;
+    --colorSecundario: #ec1c21;
+    /*--colorSecundario: #40ae20;*/
     --colorTextoAcceso: #004080;
     --colorFondoFooter: #e9ebed;
     --colorTituloAcceso: #003366;
     --colorTituloPiePagina: #003A78;
-    --fuentePrincipal: "Lora", serif; 
+    --fuentePrincipal: "Lora", serif;
 }
 
 html {

@@ -69,7 +69,11 @@ class EleccionDelegadoController extends Controller
                 $aspirantes = DB::table('elecciondelegadoaspirante')
                                         ->select('eldeasid','eldeasimagen','eldeasdocumento',
                                             DB::raw("CONCAT(LPAD(eldeasnumero,  2, 0)) as eldeasnumero"),
-                                            DB::raw("CONCAT('".URL::to('/')."/archivos/images/aspirante/', eldeasimagen ) as rutaFoto"),
+											DB::raw("CASE 
+														WHEN eldeasimagen IS NOT NULL AND eda.eldeasimagen <> ''
+														THEN CONCAT('" . URL::to('/') . "/archivos/images/aspirante/', eldeasimagen)
+														ELSE NULL
+													END AS rutaFoto"),
                                             DB::raw("CONCAT_WS(' ', eldeasprimernombre, eldeassegundonombre, eldeasprimerapellido, eldeassegundoapellido ) as nombreCompleto"))
                                         ->where('agenid', $asociado->agenid)
                                         ->where('eldeasesvotoblanco', false)
@@ -126,7 +130,11 @@ class EleccionDelegadoController extends Controller
 		$aspirante = DB::table('elecciondelegadoaspirante')
                         ->select('eldeasid','eldeasimagen',
                             DB::raw("CONCAT(LPAD(eldeasnumero,  2, 0)) as eldeasnumero"),
-                            DB::raw("CONCAT('".URL::to('/')."/archivos/images/aspirante/', eldeasimagen ) as rutaFoto"),
+                            DB::raw("CASE 
+										WHEN eldeasimagen IS NOT NULL AND eda.eldeasimagen <> ''
+										THEN CONCAT('" . URL::to('/') . "/archivos/images/aspirante/', eldeasimagen)
+										ELSE NULL
+									END AS rutaFoto"),
                             DB::raw("CONCAT_WS(' ', eldeasprimernombre, eldeassegundonombre, eldeasprimerapellido, eldeassegundoapellido ) as nombreCompleto"))
                         ->where('eldeasid', $request->candidato)->first();	
 

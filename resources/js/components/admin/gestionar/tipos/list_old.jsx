@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
-import { Box, Card, Typography, Icon, Switch, Table, TableHead, TableBody, TableRow, TableCell} from '@mui/material';
+import { Box, Card, Typography, Icon, Table, TableHead, TableBody, TableRow, TableCell} from '@mui/material';
+import TablaGeneral from '../../../layout/tablaGeneral';
 import {ShowSnackbar} from '../../../layout/snackBar';
 import { ModalDefault } from '../../../layout/modal';
 import {LoaderModal} from "../../../layout/loader";
@@ -29,18 +30,6 @@ export default function List(){
         setModal({open: true, vista: tipo, data:data, titulo: tituloModal[tipo], tamano: (tipo === 2 ) ? 'smallFlot' :  'mediumFlot'});
     }
 
-    const cambiarEstado = (id, estado) =>{
-        setLoader(true);
-        instance.post('/admin/tipo/organo/cambiar/estado',{codigo:id, estado:estado}).then(res=>{
-            (res.success) ? inicio() : null;
-            let icono = (res.success) ? 'success' : 'error';
-            ShowSnackbar(res.message, icono);
-            setTimeout(() => {
-                setLoader(false);
-            }, 1000);
-        })
-    }
-
     const inicio = () =>{
         setLoader(true);
         instance.get('/admin/tipo/organo/list').then(res=>{
@@ -62,7 +51,17 @@ export default function List(){
             </Box>
             <Card className={'cardContainer'}>
                 <Box sx={{maxHeight: '35em', overflow:'auto'}} sm={{maxHeight: '35em', overflow:'auto'}}>
-
+                    <TablaGeneral
+                        datos={data}
+                        titulo={['Nombre','Votos por persona','Total principales', 'Total suplente', 'Activo','Actualizar','Eliminar']}
+                        ver={["tiporgnombre","tiporgvotosporpersona","tiporgtotalprincipales","tiporgtotalsuplente","estado"]}
+                        accion={[
+                            {tipo: 'T', icono : 'add',    color: 'green',  funcion : (data)=>{edit(data,0)} },
+                            {tipo: 'B', icono : 'edit',   color: 'orange', funcion : (data)=>{edit(data,1)} },
+                            {tipo: 'B', icono : 'delete', color: 'red',    funcion : (data)=>{edit(data,2)} },
+                        ]}
+                        funciones={{orderBy: false, search: false, pagination:false}}
+                    />
                     <Icon className={'icon top green'}
                         onClick={() => {edit({}, 0);}}
                         >add</Icon>
@@ -87,23 +86,16 @@ export default function List(){
                                         {res.tiporgnombre}
                                     </TableCell> 
                                     <TableCell>
-                                        {res.tiporgvotosporpersona}
+                                            {res.tiporgvotosporpersona}
                                     </TableCell>
                                     <TableCell>
-                                        {res.tiporgtotalprincipales}
+                                            {res.tiporgtotalprincipales}
                                     </TableCell> 
                                     <TableCell>
-                                        {res.tiporgtotalsuplente}
+                                            {res.tiporgtotalsuplente}
                                     </TableCell>
                                     <TableCell>
-                                        <Switch
-                                            checked={Number(res.tiporgactivo) === 1}
-                                            color="secondary"
-                                            onChange={(e) => {
-                                                const estado = e.target.checked ? 1 : 0;
-                                                cambiarEstado(res.tiporgid, estado);
-                                            }}
-                                        />
+                                            {res.estado}
                                     </TableCell>
                                     <TableCell className='cellCenter'>
                                         <Icon key={'iconDelete'+a} className={'icon top orange'}

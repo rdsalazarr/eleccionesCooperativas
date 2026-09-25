@@ -22,6 +22,7 @@ class DelegadosController extends Controller
                             DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre ) as nombres"),
                             DB::raw("CONCAT_WS(' ', d.deleprimerapellido, d.delesegundoapellido) as apellidos"))
                         ->join('agencia as a', 'a.agenid', '=', 'd.agenid')
+                        ->whereNot('d.deleid', '1')
                         ->orderBy('d.agenid')
                         ->orderBy('d.delenumero')
                         ->get();
@@ -94,7 +95,7 @@ class DelegadosController extends Controller
             $agencias = DB::table('agencia')->select('agenid', 'agennombre')->orderBy('agennombre')->get();
             foreach ($agencias as $agencia) {
                 $agencia->delegados = DB::table('delegado')
-                            ->select('deledocumento as documento','delenumero as numeroInscripcion',
+                                    ->select('deledocumento as documento','delenumero as numeroInscripcion',
                                      DB::raw("CONCAT_WS(' ', deleprimernombre, delesegundonombre, deleprimerapellido, delesegundoapellido) as nombreCompleto"))
                                     ->where('deleactivo', true)
                                     ->where('agenid', $agencia->agenid)->get();

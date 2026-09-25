@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {Card, CardContent, Typography, Grid, Button, Box} from "@mui/material";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import DescriptionIcon from '@mui/icons-material/Description';
 import {ShowSnackbar} from '../../../../layout/snackBar';
 import { ModalDefault } from '../../../../layout/modal';
@@ -16,13 +17,13 @@ import OpenElecciones from './openElecciones';
 
 export default function AbrirVotacion(){
 
-    const [modal, setModal] = useState({open : false, vista:5, titulo:'', tamano:'bigFlot'});
+    const [modal, setModal] = useState({open : false, vista:6, titulo:'', tamano:'bigFlot'});
     const [eleccionId, setEleccionId] = useState(null);
     const [loader, setLoader] = useState(true);
     const [data, setData] = useState([]);
 
     const cerrarModal = () =>{
-        setModal({open : false, vista:5,  titulo:'', tamano:'bigFlot'});
+        setModal({open : false, vista:6,  titulo:'', tamano:'bigFlot'});
     }
 
     const modales = [
@@ -30,13 +31,14 @@ export default function AbrirVotacion(){
                         <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/inicio/PDF' /> ,
                         <CerrarElecciones id={eleccionId} cerrarModal={cerrarModal} />,
                         <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/generar/acta/cierre/PDF' /> ,
+                        <VisualizarPdf id={eleccionId} ruta='/admin/eleccion/delegado/imprimir/resultados/PDF' /> ,
                         <PublicarResultados id={eleccionId} cerrarModal={cerrarModal} />
                     ];
 
     const tituloModal = ['','Generar acta de inicio en formato PDF','', 'Generar acta de cierre en formato PDF'];
 
     const abrirModal = ( tipo) =>{
-        setModal({open: true, vista: tipo, titulo: tituloModal[tipo], tamano: (tipo === 1 || tipo === 3) ? 'mediumFlotPdf': 'smallFlot'});
+        setModal({open: true, vista: tipo, titulo: tituloModal[tipo], tamano: (tipo === 1 || tipo === 3 || tipo === 4) ? 'mediumFlotPdf': 'smallFlot'});
     }
 
     const inicio = () =>{
@@ -61,7 +63,7 @@ export default function AbrirVotacion(){
             <Card elevation={0} sx={{border: '1px solid',borderColor: 'divider', borderRadius: 3 }}>
                 <CardContent>
                     <Grid container spacing={1.5}>
-                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                             <Button fullWidth className="btnElecciones btnAbrir"
                                 startIcon={<LockOpenIcon />}
                                 onClick={() => abrirModal(0)}
@@ -71,7 +73,7 @@ export default function AbrirVotacion(){
                             </Button>
                         </Grid>
 
-                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                             <Button fullWidth className="btnElecciones btnActa"
                                 startIcon={<DescriptionIcon />}
                                 onClick={() => abrirModal(1)}
@@ -81,7 +83,7 @@ export default function AbrirVotacion(){
                             </Button>
                         </Grid>
 
-                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                             <Button fullWidth className="btnElecciones btnCerrar"
                                 startIcon={<LockIcon />}
                                 onClick={() => abrirModal(2)}
@@ -91,7 +93,7 @@ export default function AbrirVotacion(){
                             </Button>
                         </Grid>
 
-                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                             <Button fullWidth className="btnElecciones btnActa"
                                 startIcon={<AssignmentTurnedInIcon />}
                                 onClick={() => abrirModal(3)}
@@ -101,10 +103,20 @@ export default function AbrirVotacion(){
                             </Button>
                         </Grid>
 
-                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+                            <Button fullWidth className="btnElecciones btnPdf"
+                                startIcon={<FormatListBulletedIcon />}
+                                onClick={() => abrirModal(4)}
+                                sx={{ py: 1.5 }} 
+                                disabled={!data.habilitarActaCierre}>
+                                Imprimir resultados
+                            </Button>
+                        </Grid>
+
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                             <Button fullWidth className="btnElecciones btnPublicar"
                                 startIcon={<CampaignIcon />}
-                                onClick={() => abrirModal(4)}
+                                onClick={() => abrirModal(5)}
                                 sx={{ py: 1.5 }} 
                                 disabled={!data.habilitarPublicarResultados}>
                                 Publicar resultados
@@ -118,7 +130,7 @@ export default function AbrirVotacion(){
             <ModalDefault
                 title   = {modal.titulo}
                 content = {modales[modal.vista]}
-                close   = {() =>{cerrarModal(), [0, 2, 4].includes(modal.vista) ? inicio() : null;}}
+                close   = {() =>{cerrarModal(), [0, 2, 5].includes(modal.vista) ? inicio() : null;}}
                 tam     = {modal.tamano}
                 abrir   = {modal.open}
             />

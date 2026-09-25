@@ -106,13 +106,13 @@ export function FooterAdmon() {
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 7}} className='borderRight'>
                     <Box className='tituloFooter'>
-                        <p>Sistema de Elecciones COOPIGON</p>
+                        <p>Sistema insticucional de elecciones de COOPIGON</p>
                     </Box>
                 </Grid>
                  <Grid size={{ xs: 12, sm: 5 }}>
                     <Box className='derechosReservados'>
                         <span className='implesoft'>
-                            Todos los derechos Reservados | Copyright Coopigon | Diseño y desarrollo <a href='https://implesoft.com/' target="_black" title="Implesoft.com" >Implesoft</a> © 2019 - {anioActual}
+                            Todos los derechos reservados | Copyright COOPIGON | Diseño y desarrollo <a href='https://implesoft.com/' target="_black" title="Implesoft.com" >Implesoft</a> © 2019 - {anioActual}
                         </span>
                     </Box>
                 </Grid>

@@ -18,14 +18,13 @@ const schema = yup.object({
 
 export default function Perfil(){
 
-       const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
                 resolver: yupResolver(schema),
                 defaultValues: {documento:'', nombre:'', apellido: '', correo: '',  nickUsuario:'' }
             }); 
 
     const [habilitado, setHabilitado] = useState(true);
     const [loader, setLoader] = useState(true);
-    const [data, setData] = useState([]);
 
     const onSubmit = (formValues) => {
         setLoader(true);
@@ -39,7 +38,7 @@ export default function Perfil(){
 
     const inicio = () =>{
         setLoader(true);
-        instance.get('/admin/usuario/consultar/perfil').then(res=>{
+        instance.post('/admin/usuario/consultar/perfil').then(res=>{
             if(res.success) {
                 const data = res.data;
                 setValue('documento', data.usuadocumento);
@@ -47,7 +46,6 @@ export default function Perfil(){
                 setValue('nickUsuario', data.usuanick);
                 setValue('nombre', data.usuanombre);
                 setValue('correo', data.usuaemail);
-                setData(data);
             } else {
                 ShowSnackbar(res.message, 'error');
             } 

@@ -1,7 +1,9 @@
 import {useState, useEffect} from 'react';
 import {createRoot} from "react-dom/client";
-import { Card, CardContent, Box, Grid, Button, TextField } from '@mui/material';
+import { Card, CardContent, Box, Grid, Button, TextField, InputAdornment, IconButton } from '@mui/material';
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {Header, Footer, Contador } from "../layout/general";
+import Visibility from "@mui/icons-material/Visibility";
 import { SnackbarSettings } from "../layout/snackBar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ThemeProvider } from '@mui/material/styles';
@@ -24,6 +26,8 @@ export default function Reset(){
     const { register, handleSubmit, formState: { errors } } = 
            useForm({ resolver: yupResolver(schema), defaultValues: { password: "",  repPassword: "" } });
 
+    const [mostrarRepPassword, setMostrarRepPassword] = useState(false);
+    const [mostrarPassword, setMostrarPassword] = useState(false);
     const [dataUsuario, setDataUsuario] = useState([]);
     const [success, setSuccess] = useState(false);
     const [loader, setLoader] = useState(true);
@@ -33,7 +37,7 @@ export default function Reset(){
         instance.post('/admin/usuario/actualizar/password', data).then(res => {
             let icono = (res.success) ? 'success' : 'error';
             ShowSnackbar(res.message, icono);
-            if(res.success) setSuccess(true);
+            setSuccess(res.success);
             setLoader(false);
         });
     }
@@ -44,7 +48,7 @@ export default function Reset(){
 
     useEffect(() => {
        setLoader(true);
-        instance.get('/admin/usuario/data').then(res=>{
+        instance.post('/admin/usuario/data').then(res=>{
             setDataUsuario(res.dataUsuario);
             setLoader(false);
         })
@@ -55,12 +59,12 @@ export default function Reset(){
     }
 
     return(
-        <Box>
+       <Box className="contenedorApp">
             <Header />
             <SnackbarSettings>
                 <ThemeProvider theme={generalTema}>
 
-                    <Box className='container'>
+                    <Box className='container' style={{marginTop: '2.1em'}}>
                         <Grid container spacing={3}>
                             <Grid size={{ xs: 12, sm: 12, md: 7, lg: 8}} style={{textAlign: 'justify'}}>
                                 <h1 className='titleInicio'>¡Bienvenido al sistema, {dataUsuario.nombreCompleto}!</h1>
@@ -89,26 +93,59 @@ export default function Reset(){
                                                 <Grid size={{ xs: 12 }}>
                                                     <TextField
                                                         label="Contraseña"
-                                                        type="password"
+                                                        type={mostrarPassword ? "text" : "password"}
                                                         fullWidth
                                                         variant="standard"
-                                                        autoComplete="Nueva contraseña"
+                                                        autoComplete="new-password"
                                                         {...register("password")}
+                                                        onCopy={(e) => e.preventDefault()}
+                                                        onCut={(e) => e.preventDefault()}
+                                                        onPaste={(e) => e.preventDefault()}
                                                         error={!!errors.password}
                                                         helperText={errors.password?.message}
+                                                        slotProps={{
+                                                            input: {
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end">
+                                                                        <IconButton
+                                                                            onClick={() => setMostrarPassword(prev => !prev)}
+                                                                            edge="end"
+                                                                            aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                                                        >
+                                                                            {mostrarPassword ? <VisibilityOff /> : <Visibility />}
+                                                                        </IconButton>
+                                                                    </InputAdornment>
+                                                                )
+                                                            }
+                                                        }}
                                                     />
                                                 </Grid>
 
                                                 <Grid size={{ xs: 12 }}>
                                                     <TextField
                                                         label="Repita la contraseña"
-                                                        type="password"
+                                                        type={mostrarRepPassword ? "text" : "password"}
                                                         fullWidth
                                                         variant="standard"
-                                                        autoComplete="Repita la contraseña"
+                                                        autoComplete="new-password"
                                                         {...register("repPassword")}
                                                         error={!!errors.repPassword}
                                                         helperText={errors.repPassword?.message}
+                                                        slotProps={{
+                                                            input: {
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end">
+                                                                        <IconButton
+                                                                            onClick={() => setMostrarRepPassword(prev => !prev)}
+                                                                            edge="end"
+                                                                            aria-label={mostrarRepPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                                                        >
+                                                                            {mostrarRepPassword ? <VisibilityOff /> : <Visibility />}
+                                                                        </IconButton>
+                                                                    </InputAdornment>
+                                                                )
+                                                            }
+                                                        }}
                                                     />
                                                 </Grid>
 
@@ -123,7 +160,7 @@ export default function Reset(){
 
                                 {(success) ? 
                                     <Box>
-                                        <h1 className='titleInicio' style={{color: '#e92908'}}>Redireccionando en (<Contador tiempoInicial={4} onTiempoFinalizado={redireccionarUrl} /> )</h1>   
+                                        <h1 className='titleInicio' style={{color: '#e92908'}}>Redireccionando en (<Contador tiempoInicial={6} onTiempoFinalizado={redireccionarUrl} /> )</h1>   
                                     </Box>
                                 : null}
 

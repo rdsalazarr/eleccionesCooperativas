@@ -37,19 +37,18 @@ use App\Http\Controllers\Admin\Eleccion\Organos\GenerarVotacionController;
 use App\Http\Controllers\Admin\Eleccion\Organos\JuradosController as JuradosOrganosController;
 use App\Http\Controllers\Admin\Eleccion\Organos\RegistrarAspiranteController as AspiranteOrganoControlController;
 
-
 Route::get('/', [FrondController::class, 'index']);
 Route::get('/admin', [FrondController::class, 'admin']);
 Route::get('/login', [FrondController::class, 'admin']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::match(array('GET', 'POST'),'/logout',[LoginController::class, 'logout'])->name('logout');
-Route::get('/consultar/informacion/general/elecciones',[FrondController::class, 'informacion']);
+Route::get('/consultar/informacion/general/elecciones',[FrondController::class, 'informacion'])->middleware(['verifySource']);
 
 Route::post('/consultar/asociados/activo', [EleccionDelegadoController::class, 'consultar']);
 Route::post('/registrar/elecccion/delegado', [EleccionDelegadoController::class, 'registrar']);
-Route::get('/generar/informe/resultado/delegado/pdf', [EleccionDelegadoController::class, 'imprimir']);
 Route::post('/obtener/resultado/eleccion/delegado', [EleccionDelegadoController::class, 'resultados']);
 Route::post('/consultar/informacion/elecciones/delegado', [EleccionDelegadoController::class, 'index']);
+Route::get('/generar/informe/resultado/delegado/pdf', [EleccionDelegadoController::class, 'imprimir']);//->middleware(['verifySource']);
 
 Route::post('/consultar/delegados/activo', [EleccionOrganosControlController::class, 'consultar']);
 Route::post('/registrar/organos/eleccion', [EleccionOrganosControlController::class, 'registrar']);
@@ -59,7 +58,7 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
     Route::get('dashboard', [DashboardController::class, 'index']);
     Route::get('reset', [DashboardController::class, 'reset']);
     Route::post('admin/generar/menu', [DashboardController::class, 'menu']);
-    Route::get('admin/welcome', [DashboardController::class, 'welcome']);//->middleware(['verifySource'])
+    Route::get('admin/welcome', [DashboardController::class, 'welcome'])->middleware(['verifySource']);
     Route::post('admin/consultar/informacion/usuario', [DashboardController::class, 'informacion']);
 
     Route::middleware(['preload'])->group(function (){//para recargar la pagina con f5
@@ -71,64 +70,65 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
     });
 
     Route::prefix('admin')->group(function(){
-        Route::get('/modulo/list', [ModuloController::class, 'index']);//->middleware(['security:admin/configurar/menu','verifySource']);
+        Route::get('/modulo/list', [ModuloController::class, 'index'])->middleware(['security:admin/configurar/menu','verifySource']);
         Route::post('/modulo/salve', [ModuloController::class, 'salve']);
         Route::post('/modulo/destroy', [ModuloController::class, 'destroy']);
 
-        Route::get('/funcionalidad/list', [FuncionalidadController::class, 'index']);//->middleware(['security:admin/configurar/menu','verifySource']);
+        Route::get('/funcionalidad/list', [FuncionalidadController::class, 'index'])->middleware(['security:admin/configurar/menu','verifySource']);
         Route::post('/funcionalidad/listar/modulos', [FuncionalidadController::class, 'modulos']);
         Route::post('/funcionalidad/salve', [FuncionalidadController::class, 'salve']);
         Route::post('/funcionalidad/destroy', [FuncionalidadController::class, 'destroy']);
 
-        Route::get('/rol/list', [RolController::class, 'index']);//->middleware(['security:admin/configurar/roles','verifySource']);
+        Route::get('/rol/list', [RolController::class, 'index'])->middleware(['security:admin/configurar/roles','verifySource']);
         Route::post('/rol/listar/funcionalidad', [RolController::class, 'funcionalidades']);
         Route::post('/rol/salve', [RolController::class, 'salve']);
         Route::post('/rol/destroy', [RolController::class, 'destroy']);
 
-        Route::get('/notificacion/correo/list', [NotificacionCorreoController::class, 'index']);//->middleware(['security:admin/configurar/correo','verifySource']);
+        Route::get('/notificacion/correo/list', [NotificacionCorreoController::class, 'index'])->middleware(['security:admin/configurar/correo','verifySource']);
         Route::post('/notificacion/correo/salve', [NotificacionCorreoController::class, 'salve']);
         Route::post('/notificacion/correo/destroy', [NotificacionCorreoController::class, 'destroy']);
 
-        Route::get('/configuracion/correo/list', [ConfiguracionCorreoController::class, 'index']);//->middleware(['security:admin/configurar/correo','verifySource']);
+        Route::get('/configuracion/correo/list', [ConfiguracionCorreoController::class, 'index'])->middleware(['security:admin/configurar/correo','verifySource']);
         Route::post('/configuracion/correo/salve', [ConfiguracionCorreoController::class, 'salve']);
 
-        Route::get('/empresa/list', [EmpresaController::class, 'index']);//->middleware(['security:admin/configurar/empresa','verifySource']);
+        Route::get('/empresa/list', [EmpresaController::class, 'index'])->middleware(['security:admin/configurar/empresa','verifySource']);
         Route::post('/empresa/salve', [EmpresaController::class, 'salve']);
 
-        Route::get('/acta/list', [ActaController::class, 'index']);//->middleware(['security:admin/configurar/acta','verifySource']);
+        Route::get('/acta/list', [ActaController::class, 'index'])->middleware(['security:admin/configurar/acta','verifySource']);
         Route::post('/acta/salve', [ActaController::class, 'salve']);
         Route::post('/acta/destroy', [ActaController::class, 'destroy']);
 
-        Route::post('/usuario/list', [UsuarioController::class, 'index']);//->middleware(['security:admin/gestionar/usuario','verifySource']);
+        Route::post('/usuario/list', [UsuarioController::class, 'index'])->middleware(['security:admin/gestionar/usuario','verifySource']);
         Route::post('/usuario/list/datos', [UsuarioController::class, 'datos']);
         Route::post('/usuario/salve', [UsuarioController::class, 'salve']);
         Route::post('/usuario/destroy', [UsuarioController::class, 'destroy']);
 
-        Route::get('/usuario/data', [PerfilUsuarioController::class, 'index']);
-        Route::get('/usuario/consultar/perfil', [PerfilUsuarioController::class, 'perfil']);
+        Route::post('/usuario/data', [PerfilUsuarioController::class, 'index']);
+        Route::post('/usuario/consultar/perfil', [PerfilUsuarioController::class, 'perfil']);
         Route::post('/usuario/actualizar/perfil', [PerfilUsuarioController::class, 'updatePerfil']);
         Route::post('/usuario/actualizar/password', [PerfilUsuarioController::class, 'updatePassword']);
 
-        Route::get('/tipo/organo/list', [TipoOrganoController::class, 'index']);//->middleware(['security:admin/configurar/tipos','verifySource']);
-        Route::post('/tipo/organo/salve', [TipoOrganoController::class, 'salve']);
+        Route::get('/tipo/organo/list', [TipoOrganoController::class, 'index'])->middleware(['security:admin/gestionar/tipos','verifySource']);
+        Route::post('/tipo/organo/cambiar/estado', [TipoOrganoController::class, 'cambiarEstado']);
+        Route::post('/tipo/organo/salve', [TipoOrganoController::class, 'salve']);       
         Route::post('/tipo/organo/destroy', [TipoOrganoController::class, 'destroy']);
 
-        Route::get('/organo/eleccion/list', [OrganoEleccionController::class, 'index']);//->middleware(['security:admin/configurar/organos','verifySource']);
+        Route::get('/organo/eleccion/list', [OrganoEleccionController::class, 'index'])->middleware(['security:admin/gestionar/organosEleccion','verifySource']);
         Route::post('/organo/eleccion/list/datos', [OrganoEleccionController::class, 'datos']);
         Route::post('/organo/eleccion/salve', [OrganoEleccionController::class, 'salve']);
         Route::post('/organo/eleccion/destroy', [OrganoEleccionController::class, 'destroy']);
 
-        Route::post('/cargar/asociados/salve', [CargarAsociadoController::class, 'procesarArchivo']);//->middleware(['security:admin/gestionar/cargarAsociado']);
+        Route::post('/cargar/asociados/salve', [CargarAsociadoController::class, 'procesarArchivo'])->middleware(['security:admin/gestionar/cargarAsociado']);
         Route::post('/cargar/asociados/verificar', [CargarAsociadoController::class, 'verificar']);
         Route::post('/cargar/asociados/procesar', [CargarAsociadoController::class, 'procesar']);
 
-        Route::get('/asociados/list', [AsociadoController::class, 'index']);//->middleware(['security:admin/gestionar/asociado','verifySource']);
+        Route::get('/asociados/list', [AsociadoController::class, 'index'])->middleware(['security:admin/gestionar/asociados','verifySource']);
         Route::post('/asociados/list/datos', [AsociadoController::class, 'datos']);
         Route::post('/asociados/salve', [AsociadoController::class, 'salve']);
         Route::post('/asociados/destroy', [AsociadoController::class, 'destroy']);
 
         Route::prefix('eleccion/delegado')->group(function(){
-            Route::get('/gestion/list', [GestionController::class, 'index']);//->middleware(['security:admin/eleccion/delegado/gestion','verifySource']);
+            Route::get('/gestion/list', [GestionController::class, 'index'])->middleware(['security:admin/eleccion/delegado/gestion','verifySource']);
             Route::post('/gestion/asignar/jurados/list', [GestionController::class, 'juradosAsignados']);
             Route::post('/gestion/asignar/jurados/salve', [GestionController::class, 'asignarJurados']);
             Route::post('/gestion/list/datos', [GestionController::class, 'datos']);
@@ -136,44 +136,46 @@ Route::middleware(['auth'])->group(function () {//'revalidate',
             Route::post('/gestion/visualizar', [GestionController::class, 'show']);
             Route::post('/gestion/destroy', [GestionController::class, 'destroy']);
 
-            Route::get('/registrar/aspirante/list', [RegistrarAspiranteController::class, 'index']);//->middleware(['security:admin/eleccion/delegado/registrarAspirante','verifySource']);
+            Route::get('/registrar/aspirante/list', [RegistrarAspiranteController::class, 'index'])->middleware(['security:admin/eleccion/delegado/registrarAspirante','verifySource']);
             Route::post('/registrar/aspirante/list/datos', [RegistrarAspiranteController::class, 'datos']);
             Route::post('/registrar/aspirante/salve', [RegistrarAspiranteController::class, 'salve']);
             Route::post('/registrar/aspirante/ver/PDF', [RegistrarAspiranteController::class, 'showPdf']);
             Route::post('/registrar/aspirante/imprimir/lista',[RegistrarAspiranteController::class, 'imprimirLista']);    
 
-            Route::get('/abrir/votacion/list', [AbrirVotacionController::class, 'index']);//->middleware(['security:admin/eleccion/delegado/abrirVotacion','verifySource']);
+            Route::get('/abrir/votacion/list', [AbrirVotacionController::class, 'index'])->middleware(['security:admin/eleccion/delegado/abrirVotacion','verifySource']);
             Route::post('/procesar/evento', [AbrirVotacionController::class, 'procesarEvento']);
             Route::post('/generar/acta/inicio/PDF', [AbrirVotacionController::class, 'actaInicio']);
             Route::post('/generar/acta/cierre/PDF', [AbrirVotacionController::class, 'actaCierre']);
+            Route::post('/imprimir/resultados/PDF', [AbrirVotacionController::class, 'imprimirResultados']);
 
-            Route::get('/imprimir/actas/list', [ImprimirActasVotacionController::class, 'index']);//->middleware(['security:admin/eleccion/delegado/imprimirActas','verifySource']);
+            Route::get('/imprimir/actas/list', [ImprimirActasVotacionController::class, 'index'])->middleware(['security:admin/eleccion/delegado/imprimirActas','verifySource']);
             Route::post('/imprimir/actas/inicio/PDF', [ImprimirActasVotacionController::class, 'actaInicio']);
             Route::post('/imprimir/actas/cierre/PDF', [ImprimirActasVotacionController::class, 'actaCierre']);
 
-            Route::get('/boletin/list', [BoletinVotacionController::class, 'index']);//->middleware(['security:admin/eleccion/delegado/boletinVotacion','verifySource']);
+            Route::get('/boletin/list', [BoletinVotacionController::class, 'index'])->middleware(['security:admin/eleccion/delegado/boletinVotacion','verifySource']);
             Route::post('/boletin/salve', [BoletinVotacionController::class, 'salve']);
             Route::post('/boletin/imprimir/PDF', [BoletinVotacionController::class, 'imprimir']);
         });
 
         Route::prefix('organos/eleccion')->group(function(){
-            Route::get('/delegados/list', [DelegadosController::class, 'index']);//->middleware(['security:admin/organos/eleccion/delegados','verifySource']);
+            Route::get('/delegados/list', [DelegadosController::class, 'index'])->middleware(['security:admin/organos/eleccion/delegados','verifySource']);
             Route::post('/delegados/list/datos', [DelegadosController::class, 'datos']);
             Route::post('/delegados/salve', [DelegadosController::class, 'salve']);
             Route::post('/delegados/imprimir/PDF', [DelegadosController::class, 'imprimirLista']);
 
-            Route::post('/generar/token/salve', [GenerarTokenController::class, 'salve']);//->middleware(['security:admin/organos/eleccion/generarToken','verifySource']);
+            Route::get('/verificar/generacion/token', [GenerarTokenController::class, 'index'])->middleware(['security:admin/organos/eleccion/generarToken','verifySource']);
+            Route::post('/generar/token/salve', [GenerarTokenController::class, 'salve']);
             Route::post('/imprimir/token/PDF', [GenerarTokenController::class, 'showPdf']);
 
-            Route::get('/jurados/list', [JuradosOrganosController::class, 'index']);//->middleware(['security:admin/organos/eleccion/jurados','verifySource']);
+            Route::get('/jurados/list', [JuradosOrganosController::class, 'index'])->middleware(['security:admin/organos/eleccion/jurados','verifySource']);
             Route::post('/jurados/salve', [JuradosOrganosController::class, 'salve']);
 
-            Route::get('/aspirantes/list', [AspiranteOrganoControlController::class, 'index']);//->middleware(['security:admin/organos/eleccion/aspirantes','verifySource']);
+            Route::get('/aspirantes/list', [AspiranteOrganoControlController::class, 'index'])->middleware(['security:admin/organos/eleccion/aspirantes','verifySource']);
             Route::post('/aspirantes/list/datos', [AspiranteOrganoControlController::class, 'datos']);
             Route::post('/aspirantes/salve', [AspiranteOrganoControlController::class, 'salve']);
             Route::post('/aspirantes/imprimir/PDF', [AspiranteOrganoControlController::class, 'imprimirLista']);
 
-            Route::get('/generar/votacion/list', [GenerarVotacionController::class, 'index']);//->middleware(['security:admin/organos/eleccion/generarVotacion','verifySource']);
+            Route::get('/generar/votacion/list', [GenerarVotacionController::class, 'index'])->middleware(['security:admin/organos/eleccion/generarVotacion','verifySource']);
             Route::post('/generar/votacion/abrir', [GenerarVotacionController::class, 'abrir']);
             Route::post('/generar/votacion/cerrar', [GenerarVotacionController::class, 'cerrar']); 
             Route::post('/generar/votacion/imprimir/lista/PDF', [GenerarVotacionController::class, 'imprimirLista']);

@@ -28,6 +28,16 @@ $transitionSmooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin: 0 auto;
 }
 
+.titleInicio{
+  margin: 0.5em;
+  text-align: center;
+  color: $colorPrincipal; 
+  text-shadow: -0.03em 0.03em $colorTerciario, -0.08em 0.08em #e7dcd7;
+  font-weight: bold;
+  font-family: $fuentePrincipal;  
+  margin-bottom: 0.5em;
+}
+
 .tituloContenido{
   font-family: Oswald;
   color: $grisOscuro;

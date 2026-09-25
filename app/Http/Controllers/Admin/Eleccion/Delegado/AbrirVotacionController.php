@@ -180,7 +180,24 @@ class AbrirVotacionController extends Controller
 			return response()->json(['success' => true, "data" => $dataPdf]);
 		} catch (Throwable $e){
 			Log::error($e->getMessage());
-			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de acta de cierre ']);
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de acta de cierre de la elección de delegados ']);
+		}
+	}
+
+    public function imprimirResultados(Request $request, VotacionDelegadoService $service)
+	{
+		$request->validate(['codigo' => 'required']);
+		try {
+
+            $empresa = Empresa::informacion();
+            $data    = $service->resultadosEleccionDelegados();
+
+            $dataPdf = GenerarPdf::resultadosEleccionDelegados($data, $empresa, 'S');
+
+        	return response()->json(['success' => true, "data" => $dataPdf]);
+		} catch (Throwable $e){
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error al generar el PDF de los resultado de la elección de delegados']);
 		}
 	}
 }

@@ -63,6 +63,7 @@ class UsuarioController extends Controller
             'apellido'        => 'required|string|min:3|max:50',
             'nickUsuario'     => 'required|string|min:4|max:20|unique:usuario,usuanick,'.$usuario->usuaid.',usuaid', 
             'correo'          => 'required|email|string|max:80|unique:usuario,usuaemail,'.$usuario->usuaid.',usuaid',
+			'agencia'         => 'required|numeric',
 			'cambiarPassword' => 'required|numeric',
 			'bloqueado'       => 'required|numeric',
             'estado'          => 'required|numeric',
@@ -74,8 +75,9 @@ class UsuarioController extends Controller
 
 			$nombres                = mb_strtoupper($request->nombre,'UTF-8');
             $apellidos              = mb_strtoupper($request->apellido,'UTF-8');
-			$nickUsuario            = $request->nickUsuario;
+			$nickUsuario            = mb_strtoupper($request->nickUsuario,'UTF-8');
 			$usuario->usuadocumento = $request->documento;
+			$usuario->agenid        = $request->agencia;
 			$usuario->usuanombre    = $nombres;
 			$usuario->usuaapellidos = $apellidos;
 			$usuario->usuaemail     = $request->correo;
@@ -117,9 +119,10 @@ class UsuarioController extends Controller
 				$email             = $request->correo;
 				$contrasenaSistema = $request->documento;
 				$urlSistema        = URL::to('/');
-				$empresa           = DB::table('empresa')->select('emprcorreo','emprsigla')->where('emprid', 1)->first();
+				$empresa           = DB::table('empresa')->select('emprcorreo','emprnombre','emprsigla')->where('emprid', 1)->first();
 				$emailEmpresa 	   = $empresa->emprcorreo;
-				$nombreEmpresa     = $empresa->emprsigla;
+				$nombreEmpresa     = $empresa->emprnombre;
+				$siglaEmpresa      = $empresa->emprsigla;
 				$informacionCorreo = DB::table('informacionnotificacioncorreo')->where('innoconombre', 'notificarRegistroUsuario')->first();
 				$buscar            = Array('nombreEmpresa','nombreUsuario','nickUsuario', 'contrasenaUsuario','urlSistema');
         		$remplazo          = Array($nombreEmpresa, $nombreUsuario, $nickUsuario, $contrasenaSistema, $urlSistema);
@@ -127,7 +130,7 @@ class UsuarioController extends Controller
 				$msg               = str_replace($buscar, $remplazo, $informacionCorreo->innococontenido);
 				$enviarcopia       = $informacionCorreo->innocoenviarcopia;
 				$enviarpiepagina   = $informacionCorreo->innocoenviarpiepagina;
-				$mensajeCorreo     = ', se ha enviado notificación al correo '.Notificar::correo([$email], $asunto, $msg, [], $emailEmpresa, $enviarcopia, $enviarpiepagina, $nombreEmpresa);
+				$mensajeCorreo     = ', se ha enviado notificación al correo '.Notificar::correo([$email], $asunto, $msg, [], $emailEmpresa, $enviarcopia, $enviarpiepagina, $siglaEmpresa);
 			}
 
             DB::commit();

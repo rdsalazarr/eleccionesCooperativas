@@ -425,7 +425,7 @@ class MantenimientoController extends Controller
         $buscar         = Array('tipoEleccion ','anio');
         $remplazo       = Array($tipoEleccion, date("Y"));
         $titlePdf       = str_replace( $buscar, $remplazo, $acta->actatitulo);
-        $horaCierre     = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio); //oreltofechahoracierre
+        $horaCierre     = General::formatearFechaHora($tipoOrgano->oreltofechahoracierre);
         $fechaEleccion  = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio, false);
         $tituloPdf      = 'Acta_escrutinio_'.str_replace(' ', '_',  mb_strtolower($tipoEleccion,'UTF-8'));
         $tituloPdf      = str_replace('ó', 'o', $tituloPdf);
@@ -558,7 +558,7 @@ class MantenimientoController extends Controller
         $buscar         = Array('tipoEleccion ','anio');
         $remplazo       = Array(mb_strtoupper($tipoEleccion,'UTF-8'), date("Y")); 
         $titlePdf       = str_replace( $buscar, $remplazo, $acta->actatitulo);
-        $horaCierre     = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio); //oreltofechahoracierre
+        $horaCierre     = General::formatearFechaHora($tipoOrgano->oreltofechahoracierre);
         $fechaEleccion  = General::formatearFechaHora($tipoOrgano->oreltofechahorainicio, false);
         $buscar         = Array('horaCierre','lugarEvento','tipoEleccion','tituloEleccion');
         $remplazo       = Array($horaCierre, $lugarEvento, $tipoEleccion, $tituloEleccion); 

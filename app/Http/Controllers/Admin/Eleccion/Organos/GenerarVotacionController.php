@@ -75,12 +75,10 @@ class GenerarVotacionController extends Controller
                                 ->select('oep.orelpaid','oep.deleid','oep.orelpaordenparticipacion', 'd.deledocumento',
                                         DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre, d.deleprimerapellido, d.delesegundoapellido) as nombreCompleto"))
                                 ->join('delegado as d', 'd.deleid', '=', 'oep.deleid')
+                                ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oep.orgeleid')
+                                ->whereNot('oep.orelpaordenparticipacion', '100')
                                 ->where('oep.tiporgid', $request->codigo)
-                                ->whereIn('oep.orgeleid', function($query) {
-                                    $query->select('orgeleid')->from('organoeleccion')
-                                            ->where('orgeleanio', date('Y'))
-                                            ->where('orgeleactivo', true);
-                                    })
+                                ->where('oe.orgeleactivo', true)
                                 ->orderBy('oep.orelpaordenparticipacion')
                                 ->get();
 
@@ -219,7 +217,7 @@ class GenerarVotacionController extends Controller
 		$request->validate(['codigo' => 'required']);
 		try {
 
-            $empresa = Empresa::informacion();
+            $empresa    = Empresa::informacion();
 
             $tipoOrgano = DB::table('tipoorgano as to')
                                 ->select('oeto.tiporgid', 'oeto.orgeleid', 'to.tiporgnombre','to.tiporgtotalprincipales','to.tiporgtotalsuplente')

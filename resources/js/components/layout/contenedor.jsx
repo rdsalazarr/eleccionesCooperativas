@@ -125,7 +125,7 @@ const ItemMenu = ({ route, text, icon }) => {
 };
 
 const menuComponente = [
-    /*{id:1,componente : <Menu />},
+    {id:1,componente : <Menu />},
     {id:2,componente : <Roles />},
     {id:3,componente : <Correo />},
     {id:4,componente : <Empresa />},
@@ -154,49 +154,47 @@ const menuComponente = [
     {id:23,componente : <EnConstruccion />},
     {id:24,componente : <EnConstruccion />},
     {id:25,componente : <EnConstruccion />},
-*/
 ];
 
 const componenteMenu = [
     {   nombre: 'Configurar',
         icono : 'settings_applications',
         itemMenu: [
-            {ruta : 'admin/configurar/menu',    menu: 'Menú',    icono : 'menu',            componente : <Menu /> },
-            {ruta : 'admin/configurar/roles',   menu: 'Roles',   icono : 'people',          componente : <Roles /> },
-            {ruta : 'admin/configurar/correo',  menu: 'Correo',  icono : 'alternate_email', componente : <Correo /> },
-            {ruta : 'admin/configurar/empresa', menu: 'Empresa', icono : 'business',        componente : <Empresa /> },
-            {ruta : 'admin/configurar/acta',    menu: 'Acta',    icono : 'menu_book',       componente : <Acta /> },
+            {menu: 'Menú',    ruta : 'admin/configurar/menu',    icono : 'menu',            componente : <Menu /> },
+            {menu: 'Roles',   ruta : 'admin/configurar/roles',   icono : 'people',          componente : <Roles /> },
+            {menu: 'Correo',  ruta : 'admin/configurar/correo',  icono : 'alternate_email', componente : <Correo /> },
+            {menu: 'Empresa', ruta : 'admin/configurar/empresa', icono : 'business',        componente : <Empresa /> },
+            {menu: 'Acta',    ruta : 'admin/configurar/acta',    icono : 'menu_book',       componente : <Acta /> },
         ]
     },
     {   nombre: 'Gestionar',
         icono : 'content_paste_search',
         itemMenu: [
-            {ruta : 'admin/gestionar/usuario',         menu: 'Usuario',             icono : 'account_circle',  componente : <Usuario /> },
-            {ruta : 'admin/gestionar/tipos',           menu: 'Tipos de Órganos',    icono : 'schema',          componente : <Tipos /> },
-            {ruta : 'admin/gestionar/organosEleccion', menu: 'Órganos de Elección', icono : 'account_box',     componente : <OrganosEleccion /> },
-            {ruta : 'admin/gestionar/cargarAsociado',  menu: 'Cargar asociados',    icono : 'import_contacts', componente : <CargarAsociados /> },
-            {ruta : 'admin/gestionar/asociados',       menu: 'Asociados ',          icono : 'assignment',      componente : <Asociados /> },
+            {menu: 'Usuario',             ruta : 'admin/gestionar/usuario',         icono : 'account_circle',  componente : <Usuario /> },
+            {menu: 'Tipos de Órganos',    ruta : 'admin/gestionar/tipos',           icono : 'schema',          componente : <Tipos /> },
+            {menu: 'Órganos de Elección', ruta : 'admin/gestionar/organosEleccion', icono : 'account_box',     componente : <OrganosEleccion /> },
+            {menu: 'Cargar Asociados',    ruta : 'admin/gestionar/cargarAsociado',  icono : 'import_contacts', componente : <CargarAsociados /> },
+            {menu: 'Asociados',           ruta : 'admin/gestionar/asociados',       icono : 'assignment',      componente : <Asociados /> },
         ]
     },
     {   nombre: 'Elección Delegados',
         icono : 'analytics', 
         itemMenu: [
-            {ruta : 'admin/eleccion/delegado/gestion',            menu: 'Gestión ',             icono : 'menu_book',    componente : <GestionEleccionesDelegado /> },
-            {ruta : 'admin/eleccion/delegado/registrarAspirante', menu: 'Registrar Aspirante',  icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
-            {ruta : 'admin/eleccion/delegado/abrirVotacion',      menu: 'Abrir Votacion ',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
-            {ruta : 'admin/eleccion/delegado/imprimirActas',      menu: 'Imprimir Actas ',      icono : 'announcement', componente : <ImprimirActas /> },
-            {ruta : 'admin/eleccion/delegado/boletinVotacion',    menu: 'Boletín de Votación ', icono : 'cloud_sync',   componente : <BoletinVotacion /> },
+            {menu: 'Gestión',              ruta : 'admin/eleccion/delegado/gestion',            icono : 'menu_book',    componente : <GestionEleccionesDelegado /> },
+            {menu: 'Registrar Aspirante',  ruta : 'admin/eleccion/delegado/registrarAspirante', icono : 'how_to_reg',   componente : <RegistrarAspirante /> },
+            {menu: 'Abrir Votación',       ruta : 'admin/eleccion/delegado/abrirVotacion',      icono : 'storage',      componente : <AbrirVotacionDelegados /> },
+            {menu: 'Imprimir Actas',       ruta : 'admin/eleccion/delegado/imprimirActas',      icono : 'announcement', componente : <ImprimirActas /> },
+            {menu: 'Boletín de Votación',  ruta : 'admin/eleccion/delegado/boletinVotacion',    icono : 'cloud_sync',   componente : <BoletinVotacion /> },
         ]
     } ,
     {   nombre: 'Órgano Elección',
         icono : 'library_books',
         itemMenu: [
-            {ruta : 'admin/organos/eleccion/delegados',       menu: 'Delegados',        icono : 'person',         componente : <Delegados /> },
-            {ruta : 'admin/organos/eleccion/generarToken',    menu: 'Generar Token',    icono : 'token',          componente : <GenerarToken /> },
-            {ruta : 'admin/organos/eleccion/aspirantes',      menu: 'Aspirantes ',      icono : 'wc',             componente : <RegistrarAspiranteOrganosEleccion /> },
-            {ruta : 'admin/organos/eleccion/jurados',         menu: 'Jurados',          icono : 'assignment_add', componente : <JuradosOrganosEleccion /> },            
-            {ruta : 'admin/organos/eleccion/generarVotacion', menu: 'Generar Votación', icono : 'how_to_vote',    componente : <GenerarVotacionOrganosEleccion /> },
-            
+            {menu: 'Delegados',        ruta : 'admin/organos/eleccion/delegados',       icono : 'person',         componente : <Delegados /> },
+            {menu: 'Generar Token',    ruta : 'admin/organos/eleccion/generarToken',    icono : 'token',          componente : <GenerarToken /> },
+            {menu: 'Aspirantes',       ruta : 'admin/organos/eleccion/aspirantes',      icono : 'wc',             componente : <RegistrarAspiranteOrganosEleccion /> },
+            {menu: 'Jurados',          ruta : 'admin/organos/eleccion/jurados',         icono : 'assignment_add', componente : <JuradosOrganosEleccion /> },            
+            {menu: 'Generar Votación', ruta : 'admin/organos/eleccion/generarVotacion', icono : 'how_to_vote',    componente : <GenerarVotacionOrganosEleccion /> },            
         ]
     } 
 ];
@@ -236,17 +234,17 @@ export default function Contenedor() {
                     <Box className='containerAdmin' style={{ marginTop: '2em' }}>
                         <Routes >
                             <Route exact={`true`} path="/dashboard" element={<Welcome usuario={usuario} />} />
-                            {/*componente.map(item=>{
+                            {componente.map(item=>{
                                 return item.itemMenu.map((res, i) =>{
                                     const resultado = menuComponente.find( resul => resul.id === parseInt(res.id));
                                     return (<Route key={'R-'+res.ruta} exact = {`true`} path={'/'+res.ruta} element={resultado.componente} ></Route>)
                                 }
-                            )})*/}
-                            {componenteMenu.map(item=>{
+                            )})}
+                            {/*componenteMenu.map(item=>{
                                 return item.itemMenu.map((res, i) =>{
                                     return (<Route key={'R-'+res.ruta} exact = {`true`} path={'/'+res.ruta} element={res.componente}></Route>)
                                 }
-                            )})}
+                            )})*/}
                             <Route exact={`true`} path="/admin/miPerfil" element={<MiPerfil />} />
                         </Routes>
                     </Box>
@@ -257,12 +255,12 @@ export default function Contenedor() {
                     <HeaderMenu open={open} setOpen={setOpen} />
                     <Divider />
                     <ItemMenu route={'dashboard'} text={'Inicio'} icon={'home'} />
-                    {/*componente.map((res, i)=>{
-                        return <ListMenu res={res} j={i} menuAbierto={menuAbierto} setMenuAbierto={setMenuAbierto} openMenu={open} setOpenMenu={setOpen} key ={'list'+ i} />
-                    })*/}
-                    {componenteMenu.map((res, i) => {
+                    {componente.map((res, i)=>{
                         return <ListMenu res={res} j={i} menuAbierto={menuAbierto} setMenuAbierto={setMenuAbierto} openMenu={open} setOpenMenu={setOpen} key ={'list'+ i} />
                     })}
+                    {/*componenteMenu.map((res, i) => {
+                        return <ListMenu res={res} j={i} menuAbierto={menuAbierto} setMenuAbierto={setMenuAbierto} openMenu={open} setOpenMenu={setOpen} key ={'list'+ i} />
+                    })*/}
                     <ItemMenu route={'admin/miPerfil'} text={'Mi perfil'} icon={'person'} />
                     <ItemMenu route={'logout'} text={'Salir'} icon={'exit_to_app'} />
                 </Drawer>

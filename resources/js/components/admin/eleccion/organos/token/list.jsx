@@ -3,6 +3,7 @@ import {Card, CardContent, Typography, Grid, Button, Box} from "@mui/material";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { ModalDefault } from '../../../../layout/modal';
 import {LoaderModal} from "../../../../layout/loader";
+import instance from '../../../../layout/instance';
 import TokenIcon from '@mui/icons-material/Token';
 import VisualizarPdf from '../../visualizarPdf';
 import GenerarToken from './generarToken';
@@ -10,7 +11,8 @@ import GenerarToken from './generarToken';
 export default function List(){
 
     const [modal, setModal] = useState({open : false, vista:2, titulo:'', tamano:'bigFlot'});
-    const [loader, setLoader] = useState(true);
+    const [habilitarBoton, sethabilitarBoton] = useState(false);
+    const [loader, setLoader] = useState(true);    
 
     const cerrarModal = () =>{
         setModal({open : false, vista:2,  titulo:'', tamano:'bigFlot'});
@@ -21,19 +23,22 @@ export default function List(){
                         <VisualizarPdf id={''} ruta='/admin/organos/eleccion/imprimir/token/PDF' />
                     ];
 
-    const tituloModal = ['', 'Generar token de delegados activos en formato PDF'];
+    const tituloModal = ['', 'Visualizar token de delegados activos en formato PDF'];
 
     const abrirModal = (tipo) =>{
         setModal({open: true, vista: tipo, titulo: tituloModal[tipo], tamano: tipo === 0 ? 'smallFlot' : 'mediumFlotPdf'});
     }
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
+    const inicio = () =>{
+        setLoader(true);
+        instance.get('/admin/organos/eleccion/verificar/generacion/token').then(res=>{
+            (res.success) ? sethabilitarBoton(res.data) : ShowSnackbar(res.message, 'error');
             setLoader(false);
-        }, 300);
+        })
+    }
 
-        return () => clearTimeout(timer);
-    }, []);
+    useEffect(()=>{inicio();}, []);
+    
 
     if(loader){
         return <LoaderModal />
@@ -52,7 +57,8 @@ export default function List(){
                             <Button fullWidth className="btnElecciones btnActa"
                                 startIcon={<TokenIcon />}
                                 onClick={() => abrirModal(0)}
-                                sx={{ py: 1.5 }}>
+                                sx={{ py: 1.5 }}
+                                disabled={habilitarBoton}>
                                 Generar token
                             </Button>
                         </Grid>

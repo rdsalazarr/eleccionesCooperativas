@@ -2,6 +2,9 @@ $tituloPiePagina: var(--colorTituloPiePagina);
 $fondoFooter:     var(--colorFondoFooter);
 $textoFooter:     var(--colorTextoFooter);
 $colorSecundario: var(--colorSecundario);
+$colorBannerTres: var(--colorBannerTres);
+$colorBannerDos:  var(--colorBannerDos);
+$colorBannerUno:  var(--colorBannerUno);
 $colorTerciario:  var(--colorTerciario);
 $colorPrincipal:  var(--colorPrincipal);
 $colorBlanco:     var(--colorBlanco);
@@ -11,9 +14,9 @@ $grisClaro:       var(--grisClaro);
 
 .banner {
     width: 100%;
-    background:radial-gradient(1200px 600px at 10% -10%, #E1F4DE 0%, transparent 60%),
-               radial-gradient(1000px 500px at 110% 10%, #FFF8DC 0%, transparent 55%),
-               #F5F8F4;
+    background:radial-gradient(1200px 600px at 10% -10%, $colorBannerUno 0%, transparent 60%),
+               radial-gradient(1000px 500px at 110% 10%, $colorBannerDos 0%, transparent 55%),
+               $colorBannerTres;
     min-height: 5.5em;
     padding-top: 8px;
     margin: 0;
@@ -55,18 +58,7 @@ $grisClaro:       var(--grisClaro);
 }
 
 .piePagina {
-    /*position: fixed;
-    bottom: 0; 
-    left: 0;
-    width: 100%; 
-    border-top: 3px solid $colorSecundario; 
-    border-radius: 10px 10px 0 0; 
-    background: $fondoFooter; 
-    color: $textoFooter; 
-    z-index: 999999; 
-    padding: 1.5rem 0 0.5rem; 
-    font-weight: 600; */
-      width: 100%;
+    width: 100%;
     border-top: 3px solid $colorSecundario;
     border-radius: 10px 10px 0 0;
     background: $fondoFooter;
@@ -114,9 +106,9 @@ $grisClaro:       var(--grisClaro);
     top: 0;
     left: 0;
     width: 100%;
-    background:radial-gradient(1200px 600px at 10% -10%, #E1F4DE 0%, transparent 80%),
-               radial-gradient(1000px 500px at 110% 10%, #FFF8DC 0%, transparent 20%),
-               #F5F8F4;
+    background:radial-gradient(1200px 600px at 10% -10%, $colorBannerUno 0%, transparent 80%),
+               radial-gradient(1000px 500px at 110% 10%, $colorBannerDos 0%, transparent 20%),
+               $colorBannerTres;
     height: 5em;
     z-index: 99;
     box-shadow: rgba(128, 128, 128, 0.2) 0px 2px 1px -1px, rgba(128, 128, 128, 0.14) 0px 1px 1px 0px, rgba(128, 128, 128, 0.12) 0px 1px 3px 0px;

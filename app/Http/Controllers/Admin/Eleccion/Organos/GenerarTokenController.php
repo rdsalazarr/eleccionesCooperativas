@@ -10,6 +10,25 @@ use Throwable, DB, Log;
 
 class GenerarTokenController extends Controller
 {
+    public function index()
+	{
+        try{
+		   $data = DB::table('organoelecciontipoorgano as ete')
+                            ->join('tipoorgano as to', 'to.tiporgid', '=', 'ete.tiporgid')
+                            ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'ete.orgeleid')
+                            ->where('oe.orgeleactivo', true)
+                            ->where('to.tiporgactivo', true)
+                            ->whereNotNull('ete.oreltofechahorainicio')
+                            ->whereNull('ete.oreltofechahoracierre')
+                            ->exists();
+
+			return response()->json(['success' => true, "data" => $data]);
+		}catch(Throwable $e){
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message' => 'Error al obtener la validación de la generación de token']);
+		}
+	}
+
     public function salve(Request $request)
     {
         DB::beginTransaction();

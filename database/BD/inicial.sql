@@ -16,6 +16,52 @@ INSERT INTO acta (actaid, actatitulo, actacontenido, created_at, updated_at) VAL
 INSERT INTO elecciondelegado (eledelid, eledelanio, eledeltitulo, eledelperiodo, eledelhorainicio, eledelhoracierre, eledelabrireleccion, eledelcerrareleccion, eledelpublicareleccion, created_at, updated_at) VALUES
 (1, '2026', 'ELECCIONES DELEGADOS PARA EL PERIODO', '2027 - 2030', '08:00', '16:00', 0, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO elecciondelegadoaspirante (eldeasid, eledelid, tipideid, agenid, eldeasdocumento, eldeasnumero, eldeasfechahora, eldeasprimernombre, eldeassegundonombre, eldeasprimerapellido, eldeassegundoapellido, eldeascorreo, eldeastelefono, eldeasimagen, eldeasactivo, eldeasesvotoblanco, created_at, updated_at) VALUES
-(1, 1, 2, 1, '1', 0, CURRENT_TIMESTAMP, 'VOTO', NULL, 'EN BLANCO', NULL, NULL, NULL, NULL, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 1, 1, 2, '1', 0, CURRENT_TIMESTAMP, 'VOTO', NULL, 'EN BLANCO', NULL, NULL, NULL, NULL, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO funcionalidad (funcid, moduid, funcnombre, functitulo, funcruta, funcicono, funcorden, funcactiva, created_at, updated_at) VALUES
+(1, 1, 'Menú', 'Gestionar menú', 'admin/configurar/menu', 'menu', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, 'Roles', 'Gestionar roles', 'admin/configurar/roles', 'people', 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 1, 'Correo', 'Gestionar correo', 'admin/configurar/correo', 'alternate_email', 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 1, 'Empresa', 'Gestionar empresa', 'admin/configurar/empresa', 'business', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 1, 'Actas', 'Gestionar actas', 'admin/configurar/acta', 'menu_book', 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 2, 'Usuario', 'Gestionar usuario', 'admin/gestionar/usuario', 'account_circle', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 2, 'Tipos de Órganos', 'Gestionar tipos de órganos', 'admin/gestionar/tipos', 'schema', 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 2, 'Órganos de Elección', 'Gestionar órganos de elección', 'admin/gestionar/organosEleccion', 'account_box', 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 2, 'Cargar Asociados', 'Cargar asociados', 'admin/gestionar/cargarAsociado', 'import_contacts', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 2, 'Asociados', 'Gestionar asociados', 'admin/gestionar/asociados', 'assignment', 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(11, 3, 'Gestión', 'Gestionar gestión de elección de delegados', 'admin/eleccion/delegado/gestion', 'menu_book', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(12, 3, 'Registrar Aspirantes', 'Registrar aspirantes', 'admin/eleccion/delegado/registrarAspirante', 'how_to_reg', 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(13, 3, 'Abrir Votación', 'Abrir votación', 'admin/eleccion/delegado/abrirVotacion', 'storage', 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(14, 3, 'Imprimir Actas', 'Imprimir actas', 'admin/eleccion/delegado/imprimirActas', 'announcement', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(15, 3, 'Boletín de Votación', 'Boletín de votación', 'admin/eleccion/delegado/boletinVotacion', 'cloud_sync', 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(16, 4, 'Delegados', 'Gestionar delegados', 'admin/organos/eleccion/delegados', 'person', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(17, 4, 'Generar Token', 'Generar token', 'admin/organos/eleccion/generarToken', 'token', 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(18, 4, 'Aspirantes', 'Gestionar aspirantes', 'admin/organos/eleccion/aspirantes', 'wc', 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(19, 4, 'Jurados', 'Gestionar jurados', 'admin/organos/eleccion/jurados', 'assignment_add', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(20, 4, 'Generar Votación', 'Generar votación', 'admin/organos/eleccion/generarVotacion', 'how_to_vote', 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO rol (rolid, rolnombre, rolactivo, created_at, updated_at) VALUES
+(1, 'Administrador', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO rolfuncionalidad (rolfunid, rolfunrolid, rolfunfuncid) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3),
+(4, 1, 4),
+(5, 1, 5),
+(6, 1, 6),
+(7, 1, 7),
+(8, 1, 8),
+(9, 1, 9),
+(10, 1, 10),
+(11, 1, 11),
+(12, 1, 12),
+(13, 1, 13),
+(14, 1, 14),
+(15, 1, 15),
+(16, 1, 16),
+(17, 1, 17),
+(18, 1, 18),
+(19, 1, 19),
+(20, 1, 20);
+
+INSERT INTO usuariorol (usurolid, usurolusuaid, usurolrolid) VALUES
+(1, 1, 1);

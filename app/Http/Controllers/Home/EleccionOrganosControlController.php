@@ -58,13 +58,11 @@ class EleccionOrganosControlController extends Controller
             $tipoOrgano = DB::table('tipoorgano as to')
 							->select('ete.orgeleid','to.tiporgid','to.tiporgnombre','to.tiporgvotosporpersona')
 							->join('organoelecciontipoorgano as ete', 'ete.tiporgid', '=', 'to.tiporgid')
-							->whereIn('ete.orgeleid', function($query){
-									$query->select('orgeleid')->from('organoeleccion')
-										->where('orgeleactivo', true);
-									})
+                            ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'ete.orgeleid')
 							->where('to.tiporgactivo', true)
-							->where('ete.oreltofechahorainicio', '!=', null)
-							->where('ete.oreltofechahoracierre', null)
+                            ->where('oe.orgeleactivo', true)
+                            ->whereNotNull('ete.oreltofechahorainicio')
+                            ->whereNull('ete.oreltofechahoracierre')
 							->first();
             if(!$tipoOrgano){
                 return response()->json(['success' => false, 'message' =>'No existe ningún tipo de órgano disponible para realizar este proceso']);

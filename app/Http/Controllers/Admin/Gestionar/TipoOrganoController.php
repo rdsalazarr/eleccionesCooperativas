@@ -16,9 +16,13 @@ class TipoOrganoController extends Controller
 		try{
 			$data = DB::table('tipoorgano')
 						->select('tiporgid','tiporgnombre','tiporgvotosporpersona','tiporgtotalprincipales','tiporgtotalsuplente', 'tiporglogo', 'tiporgactivo',
-                        DB::raw("if(tiporgactivo = 1,'Sí', 'No') as estado"),
-                        DB::raw("CONCAT('".URL::to('/')."/archivos/images/tipoOrganos/', tiporglogo ) as rutaLogo"))
-						->orderBy('tiporgnombre')->get();
+                            DB::raw("if(tiporgactivo = 1,'Sí', 'No') as estado"),
+                            DB::raw("CASE 
+                                        WHEN tiporglogo IS NOT NULL AND tiporglogo <> ''
+                                        THEN CONCAT('" . URL::to('/') . "/archivos/images/tipoOrganose/', tiporglogo)
+                                        ELSE NULL
+                                    END AS rutaLogo"))
+						->orderBy('tiporgid')->get();
 
 			return response()->json(['success' => true, "data" => $data]);
 		}catch(Throwable $e){
@@ -38,6 +42,7 @@ class TipoOrganoController extends Controller
             'estado'         => 'required'
         ]); 
 
+        DB::beginTransaction();
 		try {
 
             $id         = $request->codigo;	
@@ -65,10 +70,39 @@ class TipoOrganoController extends Controller
             $tipoOrgano->tiporgactivo           = $request->estado;
 			$tipoOrgano->save();
 
+            if ((int) $request->estado === 1) {
+                TipoOrgano::where('tiporgid', '!=', $request->codigo)->update(['tiporgactivo' => 0]);
+            }
+
+            DB::commit();
 			return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito']);
 		} catch (Throwable $e){
+            DB::rollback();
 			Log::error($e->getMessage());
 			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en el registro de los tipos de órganos ']);
+		}
+	}
+    
+    public function cambiarEstado(Request $request)
+	{
+		$request->validate(['codigo' => 'required', 'estado' => 'required']);
+        DB::beginTransaction();
+        try {
+
+            if ((int) $request->estado === 1) {
+                TipoOrgano::where('tiporgid', '!=', $request->codigo)->update(['tiporgactivo' => 0]);
+            }
+
+            $tipoOrgano               = TipoOrgano::findOrFail($request->codigo);
+            $tipoOrgano->tiporgactivo = $request->estado;
+			$tipoOrgano->save();
+
+            DB::commit();
+    		return response()->json(['success' => true, 'message' => 'Registro almacenado con éxito']);
+		} catch (Throwable $e){
+            DB::rollback();
+			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message'=> 'Ocurrio un error en actualizar el tipo de órgano ']);
 		}
 	}
 

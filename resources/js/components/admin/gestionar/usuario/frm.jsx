@@ -12,18 +12,18 @@ import * as yup from "yup";
 
 const schema = yup.object({
         documento:        yup.string().required('El número de documento es obligatorio').min(6, 'El número de documento debe tener al menos 6 caracteres').max(15, 'El número de documento no puede exceder los 15 caracteres'),
-        nombre:           yup.string().required('El nombre es obligatorio').min(4, 'El nombre de usuario debe tener al menos 4 caracteres').max(50, 'El nombre de usuario no puede exceder los 50 caracteres'),
+        nombre:           yup.string().required('El nombre es obligatorio').min(3, 'El nombre de usuario debe tener al menos 3 caracteres').max(50, 'El nombre de usuario no puede exceder los 50 caracteres'),
         apellido:         yup.string().required('El apellido es obligatorio').min(4, 'El apellido de usuario debe tener al menos 4 caracteres').max(50, 'El apellido de usuario no puede exceder los 50 caracteres'),        
         nickUsuario:      yup.string().required('El nick de usuario es obligatorio').min(6, 'El nick de usuario debe tener al menos 6 caracteres').max(15, 'El nick de usuario no puede exceder los 15 caracteres'),
         correo:           yup.string().required("El campo correo es requerido").email("Debe ser un correo válido"),
         cambiarPassword:  yup.string().when('tipo', {
                                     is: (val) => val === 'U',
-                                    then: (schema) => schema.required('El campo cambiar password es requerido'),
+                                    then: (schema) => schema.required('El campo cambiar clave es requerido'),
                                     otherwise: (schema) => schema.notRequired()
                                 }),
         bloqueado:        yup.string().when('tipo', {
                                     is: (val) => val === 'U', 
-                                    then: (schema) => schema.required('El campo cambiar password es requerido'),
+                                    then: (schema) => schema.required('El campo usuario bloqueado es requerido'),
                                     otherwise: (schema) => schema.notRequired()
                                 }),
         estado:           yup.string().required('El campo estado es obligatorio'),
@@ -31,6 +31,8 @@ const schema = yup.object({
     });
 
 export default function Frm({data, tipo}){
+
+    console.log(data);
 
     const { register, handleSubmit, getValues, setError, clearErrors, reset, control, setValue, formState: { errors } } = useForm({
                 resolver: yupResolver(schema),
@@ -55,12 +57,13 @@ export default function Frm({data, tipo}){
             setError('rol', {type: 'manual',  message: 'Debe seleccionar un rol' });
             return;
         }
-        clearErrors('rol');
 
         if (rolesUsuario.some(rolUsua => rolUsua.rol == rolSeleccionado)) {
-            ShowSnackbar('Este registro ya fue adicionado', 'error');
+            setError('rol', {type: 'manual',  message: 'Este registro ya fue adicionado' });
             return;
         }
+
+        clearErrors('rol');
 
         const resultRoles   = roles.filter((rol) => rol.rolid == rolSeleccionado);
         let newRolesUsuario = [...rolesUsuario];
@@ -156,7 +159,11 @@ export default function Frm({data, tipo}){
                         label="Nombre (s)"
                         fullWidth
                         variant="standard"
-                        {...register("nombre")}
+                        {...register("nombre", {
+                            onChange: (e) => {
+                                e.target.value = e.target.value.toUpperCase();
+                            }
+                        })}
                         error={!!errors.nombre}
                         helperText={errors.nombre?.message}
                     />
@@ -167,7 +174,11 @@ export default function Frm({data, tipo}){
                         label="Apellido (s)"
                         fullWidth
                         variant="standard"
-                        {...register("apellido")}
+                        {...register("apellido", {
+                            onChange: (e) => {
+                                e.target.value = e.target.value.toUpperCase();
+                            }
+                        })}
                         error={!!errors.apellido}
                         helperText={errors.apellido?.message}
                     />
@@ -178,7 +189,11 @@ export default function Frm({data, tipo}){
                         label="Nick usuario"
                         fullWidth
                         variant="standard"
-                        {...register("nickUsuario")}
+                        {...register("nickUsuario", {
+                            onChange: (e) => {
+                                e.target.value = e.target.value.toUpperCase();
+                            }
+                        })}
                         error={!!errors.nickUsuario}
                         helperText={errors.nickUsuario?.message}
                     />
@@ -206,10 +221,6 @@ export default function Frm({data, tipo}){
                                 fullWidth
                                 variant="standard"
                                 {...field}
-                                onBlur={(e) => {
-                                    field.onBlur();
-                                    buscarPersona(e.target.value);
-                                }}
                                 error={!!errors.agencia}
                                 helperText={errors.agencia?.message}
                             >

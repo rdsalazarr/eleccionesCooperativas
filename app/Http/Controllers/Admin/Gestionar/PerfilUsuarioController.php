@@ -102,6 +102,7 @@ class PerfilUsuarioController extends Controller
 			$usuario                      = User::findOrFail(Auth::id());
 			$usuario->password            = bcrypt($request->password);
 			$usuario->usuacambiarpassword = false;
+			$usuario->save();
 
 			DB::commit();
 			return response()->json(['success' => true, 'message' => 'Contraseña modificada con éxito por favor cierra sesión y vuelve a ingresar al sistema']);

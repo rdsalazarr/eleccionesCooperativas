@@ -89,7 +89,7 @@ class Notificar
 							border-radius: 10px;
 							overflow: hidden;
 							border-left: 4px solid #019340;
-							box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+							box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 						}
 						.encabezado {
 							background: linear-gradient(135deg, #019340 0%, #40ae20 100%);

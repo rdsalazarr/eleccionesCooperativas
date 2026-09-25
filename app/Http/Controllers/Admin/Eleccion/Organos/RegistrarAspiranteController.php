@@ -43,13 +43,14 @@ class RegistrarAspiranteController extends Controller
                                 ->select('deleid','deledocumento',
                                     DB::raw("CONCAT_WS(' ', deleprimernombre, delesegundonombre, deleprimerapellido, delesegundoapellido) as nombreCompleto"))
                                 ->where('deleactivo', true)
-                                ->where('deleid', '<>', 1)
+                                ->whereNot('deleid', '1')
                                 ->get();
 
             $delegadosParticipantes = DB::table('organoeleccionparticipante as oep')
                                             ->select('oep.orelpaid','oep.deleid','oep.orelpaordenparticipacion', 'd.deledocumento',
                                                     DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre, d.deleprimerapellido, d.delesegundoapellido) as nombreCompleto"))
                                             ->join('delegado as d', 'd.deleid', '=', 'oep.deleid')
+                                            ->whereNot('oep.orelpaordenparticipacion', '100')
                                             ->where('oep.tiporgid', $request->tipoOrgano)
                                             ->where('oep.orgeleid', $request->organoEleccion)
                                             ->orderBy('oep.orelpaordenparticipacion')
@@ -121,12 +122,8 @@ class RegistrarAspiranteController extends Controller
                                 ->select('oep.orelpaid','oep.deleid','oep.orelpaordenparticipacion', 'd.deledocumento',
                                         DB::raw("CONCAT_WS(' ', d.deleprimernombre, d.delesegundonombre, d.deleprimerapellido, d.delesegundoapellido) as nombreCompleto"))
                                 ->join('delegado as d', 'd.deleid', '=', 'oep.deleid')
-                                ->where('oep.tiporgid', $request->codigo)
-                                ->whereIn('oep.orgeleid', function($query) {
-                                    $query->select('orgeleid')->from('organoeleccion')
-                                            ->where('orgeleanio', date('Y'))
-                                            ->where('orgeleactivo', true);
-                                    })
+                                ->join('organoeleccion as oe', 'oe.orgeleid', '=', 'oep.orgeleid')
+                                ->where('oep.tiporgid', $request->codigo) 
                                 ->orderBy('oep.orelpaordenparticipacion')
                                 ->get();
 

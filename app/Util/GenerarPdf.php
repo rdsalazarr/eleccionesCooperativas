@@ -376,7 +376,7 @@ class GenerarPdf extends TCPDF
 
             $votosBlanco = 0;
             if($agencia->totalVotosBlanco){
-                $votosBlanco = $agencia->totalVotosBlanco->votosBlanco;
+                $votosBlanco = $agencia->totalVotosBlanco->totalVotos;
             }
 
             $tcpdf->Ln(6);
@@ -479,7 +479,7 @@ class GenerarPdf extends TCPDF
             $tcpdf->Ln(5);
             $tcpdf->Cell(170,5,$nitEmpresa,0,0,'C');
             $tcpdf->Ln(10);
-            $tcpdf->MultiCell(170,4,$agencia->titulo,0,'C',0);
+            $tcpdf->MultiCell(170,4,ucfirst($agencia->titulo),0,'C',0);
             $tcpdf->Ln(8);
             $tcpdf->SetFont('helvetica','',12);
             $tcpdf->Cell(20,6,'', 0,0,'C');
